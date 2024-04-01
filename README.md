@@ -12,3 +12,6 @@ Please join the server below for any support needed for the app. Eventually a wi
 
 Support Discord: [The Sea Tavern](https://www.piplup.net)
 
+# Self Compiling
+If you plan to self compile, or compile for alternate platforms you will need to use this PKHeX.Core https://github.com/santacrab2/PKHeX/tree/MoveInfo . It is the same as official PKHeX except that I have added the resources for the move information exclusive to this app (Move category, attack power, accuracy are all displayed on the move tab).
+
