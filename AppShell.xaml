@@ -103,7 +103,9 @@
         <Tab Icon="language.png" Title="LiveHex" x:Name="livehextab" Route="livehextab">
             <ShellContent Title="LiveHex" ContentTemplate="{DataTemplate local:LiveHex}"/>
         </Tab>
-        <ShellContent Title="Save Editors" ContentTemplate="{DataTemplate local:SaveEditors}"/>
+        <Tab Title="Save Editors">
+            <ShellContent Title="Save Editors" ContentTemplate="{DataTemplate local:SaveEditors}"/>
+        </Tab>
     </FlyoutItem>
    
 </Shell>

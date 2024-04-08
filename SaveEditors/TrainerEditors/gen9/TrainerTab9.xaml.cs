@@ -20,7 +20,7 @@ public partial class TrainerTab9 : TabbedPage
         trainertab9.Children.Add(new TrainerImages());
         if (((SAV9SV)MainPage.sav).SaveRevision >= 2)
             trainertab9.Children.Add(TE9B);
-        trainertab9.Children.Add(new SavePage());
+        trainertab9.Children.Add(new SavePage9());
         trainertab9.Children.Add(new cancelpage());
     }
 }
@@ -37,9 +37,9 @@ public class cancelpage : ContentPage
     }
 }
 
-public class SavePage : ContentPage 
+public class SavePage9 : ContentPage 
 {
-    public SavePage()
+    public SavePage9()
     {
         this.Title = "Save";
     }

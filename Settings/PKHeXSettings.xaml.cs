@@ -40,9 +40,13 @@ public partial class PKHeXSettings : ContentPage
 
 			return grid;
         });
-        GenericCollectionSelector.SelectedSource = JsonSerializer.Deserialize<ObservableCollection<MoveType>>(Preferences.Get("RandomTypes", string.Empty));
-        foreach (var removeType in GenericCollectionSelector.SelectedSource)
-            GenericCollectionSelector.MoveTypeOptionsSource.Remove(removeType);
+        try
+        {
+            GenericCollectionSelector.SelectedSource = JsonSerializer.Deserialize<ObservableCollection<MoveType>>(Preferences.Get("RandomTypes", string.Empty));
+            foreach (var removeType in GenericCollectionSelector.SelectedSource)
+                GenericCollectionSelector.MoveTypeOptionsSource.Remove(removeType);
+        }
+        catch (Exception) { }
 		PKHeXSettingsCollection.ItemsSource = props;
     }
 	public string LastBox = "";

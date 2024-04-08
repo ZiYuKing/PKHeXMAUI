@@ -1,4 +1,5 @@
-﻿using PKHeX.Core;
+﻿
+using PKHeX.Core;
 using PKHeX.Core.AutoMod;
 using Syncfusion.Maui.DataSource.Extensions;
 using System.Windows.Input;
@@ -13,6 +14,7 @@ public partial class AppShell : Shell
         InitializeComponent();
         
         TheShell.ItemTemplate = new FlyoutCollectionSelector();
+        TheShell.MenuItemTemplate = new FlyoutCollectionSelector();
     }
 	public static SaveFile AppSaveFile { get; set; }
     public BoxManipulator manip = new BoxManipulatorMAUI();
@@ -592,7 +594,9 @@ public class FlyoutCollectionSelector : DataTemplateSelector
         button.SetBinding(ImageButton.CommandParameterProperty,"Title");
         button.Clicked += ((AppShell)AppShell.Current).DropdownExpansion;
         grid.Add(button, 1);
-        return grid;
+        Border border = new() { Stroke = Colors.White, BackgroundColor = Colors.Transparent };
+        border.Content = grid;
+        return border;
     });
     public DataTemplate MenuItemDataTemplate = new DataTemplate(() =>
     {
@@ -606,7 +610,26 @@ public class FlyoutCollectionSelector : DataTemplateSelector
         Image icon = new() { HorizontalOptions = LayoutOptions.Start, HeightRequest = 25, WidthRequest = 25 };
         icon.SetBinding(Image.SourceProperty, "Icon");
         grid.Add(icon);
-        return grid;
+        Border border = new() { Stroke = Colors.White, BackgroundColor = Colors.Transparent};
+        border.Content = grid;
+        return border;
+    });
+    public DataTemplate MenuItemDataTemplate2 = new DataTemplate(() =>
+    {
+        Grid grid = new() { Padding = 15 };
+        grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
+        grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+        Label label = new() { TextColor = Colors.White, HorizontalOptions = LayoutOptions.Center };
+        label.SetBinding(Label.TextProperty, "Title");
+        grid.Add(label);
+        Image icon = new() { HorizontalOptions = LayoutOptions.Start, HeightRequest = 25, WidthRequest = 25 };
+        icon.SetBinding(Image.SourceProperty, "Icon");
+        grid.Add(icon);
+        Border border = new() { Stroke = Colors.White, BackgroundColor = Colors.Transparent};
+        border.Margin = new Thickness(20, 0, 20, 0);
+        border.Content = grid;
+        return border;
     });
     protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
     {
@@ -626,7 +649,7 @@ public class FlyoutCollectionSelector : DataTemplateSelector
         }
         else
         {
-            return MenuItemDataTemplate;
+            return MenuItemDataTemplate2;
         }
     }
 }
