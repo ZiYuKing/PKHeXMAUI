@@ -187,4 +187,14 @@ public partial class TrainerEditor9Misc : ContentPage
         FashionButton.IsEnabled = false;
         DisplayAlert("Fashion", "All Fashion Unlocked", "cancel");
     }
+
+    public void SaveTEMisc()
+    {
+        var parsed = float.TryParse(TrainerXCoordinateEditor.Text, out var result);
+        SAV.X = parsed ? result : SAV.X;
+        parsed = float.TryParse(TrainerYCoordinateEditor.Text, out result);
+        SAV.Y = parsed ? result : SAV.Y;
+        parsed = float.TryParse(TrainerZCoordinateEditor.Text, out result);
+        SAV.Z = parsed ? result : SAV.Z;
+    }
 }

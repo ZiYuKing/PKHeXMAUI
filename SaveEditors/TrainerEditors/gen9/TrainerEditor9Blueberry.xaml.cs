@@ -58,4 +58,15 @@ public partial class TrainerEditor9Blueberry : ContentPage
         ThrowStyleButton.IsEnabled = false;
         DisplayAlert("ThrowStyles", "All ThrowStyles Unlocked", "cancel");
     }
+
+    public void SaveTE9Blueberry()
+    {
+        var parsed = uint.TryParse(BPEditor.Text, out var result);
+        SAV.BlueberryPoints = parsed ? result : SAV.BlueberryPoints;
+        parsed = uint.TryParse(SQEditor.Text, out result);
+        SAV.BlueberryQuestRecord.QuestsDoneSolo = parsed ? result : SAV.BlueberryQuestRecord.QuestsDoneSolo;
+        parsed = uint.TryParse(GQEditor.Text, out result);
+        SAV.BlueberryQuestRecord.QuestsDoneGroup = parsed ? result : SAV.BlueberryQuestRecord.QuestsDoneGroup;
+        SAV.ThrowStyle = (ThrowStyle9)ThrowStylePicker.SelectedIndex + 1;
+    }
 }

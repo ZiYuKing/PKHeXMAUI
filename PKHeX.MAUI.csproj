@@ -290,6 +290,12 @@
 	  <MauiXaml Update="SaveEditors\Save Editors.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen8a\TrainerEditor8a.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen8a\TrainerTab8a.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="SaveEditors\TrainerEditors\gen9\TrainerEditor9.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
