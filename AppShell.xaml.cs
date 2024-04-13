@@ -104,29 +104,10 @@ public partial class AppShell : Shell
             case PartyTab:
                 ((PartyTab)TheShell.CurrentPage).fillParty();
                 break;
-        }
-        if (TheShell.CurrentPage.GetType() == typeof(BoxTab))
-        {
-            boxexpanded = true;
-            Shell.SetFlyoutItemIsVisible(DeleteBoxes, true);
-            Shell.SetFlyoutItemIsVisible(SortBoxes, true);
-            Shell.SetFlyoutItemIsVisible(SortBoxesAdvanced, true);
-            Shell.SetFlyoutItemIsVisible(ModifyBoxes, true);
-            ((BoxTab)TheShell.CurrentPage).fillbox();
-            
-        }
-        else
-        {
-            boxexpanded = false;
 
-            DeleteExpanded = true;
-            DeleteClicked(sender, e);
-            SortExpanded = true;
-            SortClick(sender, e);
-            SortAdvancedExpanded = true;
-            SortBoxesAdvancedClicked(sender, e);
-            ModifyExpanded = true;
-            ModifyBoxesClicked(sender, e);
+        }
+        if (TheShell.CurrentPage.GetType() != typeof(BoxTab))
+        {
             try
             {
                 ((BoxTab)TheShell.CurrentPage).boxview.SelectedItem = null;
