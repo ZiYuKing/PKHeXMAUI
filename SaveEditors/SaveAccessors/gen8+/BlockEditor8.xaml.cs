@@ -235,5 +235,4 @@ namespace PKHeXMAUI
             return filteredlist;
         }
     }
-    public partial class BlockEditor8tab { }
 }

@@ -17,7 +17,20 @@ public partial class SaveEditors : ContentPage
 
     private void OpenBlockEditor(object sender, EventArgs e)
     {
-        Navigation.PushModalAsync(new BlockDataTab());
+        switch (MainPage.sav)
+        {
+            case SAV5BW s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
+            case SAV5B2W2 s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
+            case SAV6XY s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
+            case SAV6AO s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
+            case SAV6AODemo s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
+            case SAV7SM s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
+            case SAV7USUM s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
+            case SAV7b s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
+            case ISCBlockArray: Navigation.PushModalAsync(new BlockDataTab()); break;
+
+        }
+        
     }
     private void ToggleControls()
     {

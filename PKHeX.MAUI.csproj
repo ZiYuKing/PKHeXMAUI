@@ -296,6 +296,9 @@
 	  <MauiXaml Update="SaveEditors\Save Editors.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\SaveAccessors\SavAccessorGUI.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="SaveEditors\TrainerEditors\gen8a\TrainerEditor8a.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -323,5 +326,9 @@
 	  <MauiXaml Update="Settings\LegalitySettings.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="SaveEditors\TrainerEditors\gen8b\" />
 	</ItemGroup>
 </Project>
