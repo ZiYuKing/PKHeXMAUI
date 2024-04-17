@@ -9,12 +9,19 @@ public partial class SavAccessorGUI : ContentPage
     private readonly SaveBlockMetadata<BlockInfo> Metadata;
     private IDataIndirect CurrentBlock = null!;
 
-    public SavAccessorGUI(SaveFile sav, ISaveBlockAccessor<BlockInfo> accessor)
+    public SavAccessorGUI(SaveFile sav, ISaveBlockAccessor<BlockInfo>? accessor)
 	{
 		InitializeComponent();
-        Metadata = new SaveBlockMetadata<BlockInfo>(accessor);
-        BlockKey_Picker.ItemsSource = Metadata.GetSortedBlockList().ToArray();
-
+        if (accessor is not null)
+        {
+            Metadata = new SaveBlockMetadata<BlockInfo>(accessor);
+            BlockKey_Picker.ItemsSource = Metadata.GetSortedBlockList().ToArray();
+        }
+        else
+        {
+            BlockKey_Picker.IsVisible = false;
+            UpdateSimpleBlockSummaryControls(sav);
+        }
     }
     private void UpdateBlockSummaryControls(IDataIndirect obj)
     {
@@ -70,18 +77,72 @@ public partial class SavAccessorGUI : ContentPage
             }
         }
     }
+    private void UpdateSimpleBlockSummaryControls(SaveFile obj)
+    {
+        BlockStack.Clear();
+
+        if (obj != null)
+        {
+            var props = ReflectUtil.GetPropertiesCanWritePublicDeclared(obj.GetType());
+            if (props.Count() > 1)
+            {
+                int row = 0;
+                foreach (var prop in props)
+                {
+                    var pi = obj.GetType().GetProperty(prop);
+                    try
+                    {
+                        if (IsNumericType(pi.GetValue(obj)))
+                        {
+                            var propLabel = new Label() { Text = prop };
+                            BlockStack.Add(propLabel, 0, row);
+                            var BlockEntry = new Entry();
+                            BlockEntry.BindingContext = obj;
+                            try { BlockEntry.SetBinding(Entry.TextProperty, prop, BindingMode.TwoWay); }
+                            catch (Exception) { BlockStack.Remove(propLabel); continue; }
+                            BlockStack.Add(BlockEntry, 1, row);
+                            row++;
+                        }
+                        else
+                        {
+                            var propLabel = new Label() { Text = prop };
+                            BlockStack.Add(propLabel, 0, row);
+                            var BlockEntry = new Picker();
+                            BlockEntry.BindingContext = obj;
+                            try { BlockEntry.SetBinding(Picker.ItemsSourceProperty, prop, BindingMode.TwoWay); }
+                            catch (Exception) { BlockStack.Remove(propLabel); continue; }
+                            BlockStack.Add(BlockEntry, 1, row);
+                            row++;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        var propLabel = new Label() { Text = prop };
+                        BlockStack.Add(propLabel, 0, row);
+                        var BlockEntry = new Picker();
+                        BlockEntry.BindingContext = obj;
+                        try { BlockEntry.SetBinding(Picker.ItemsSourceProperty, prop, BindingMode.TwoWay); }
+                        catch (Exception) { BlockStack.Remove(propLabel); continue; }
+                        BlockStack.Add(BlockEntry, 1, row);
+                        row++;
+                    }
+                }
+                return;
+            }
+        }
+    }
     private void Update_BlockCV(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
     {
-        if (((SfComboBox)sender).SelectedItem is not null)
-        {
-            var name = ((SfComboBox)sender).SelectedItem as string;
-            CurrentBlock = Metadata.GetBlock(name);
-            UpdateBlockSummaryControls(CurrentBlock);
-        }
-        else
-        {
-            BlockStack.Clear();
-        }
+            if (((SfComboBox)sender).SelectedItem is not null)
+            {
+                var name = ((SfComboBox)sender).SelectedItem as string;
+                CurrentBlock = Metadata.GetBlock(name);
+                UpdateBlockSummaryControls(CurrentBlock);
+            }
+            else
+            {
+                BlockStack.Clear();
+            }
     }
     public static bool IsNumericType(object o)
     {

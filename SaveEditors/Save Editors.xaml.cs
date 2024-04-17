@@ -19,6 +19,10 @@ public partial class SaveEditors : ContentPage
     {
         switch (MainPage.sav)
         {
+            case SAV1 s: Navigation.PushModalAsync(new SavAccessorGUI(s, null)); break;
+            case SAV2 s: Navigation.PushModalAsync(new SavAccessorGUI(s, null)); break;
+            case SAV3 s: Navigation.PushModalAsync(new SavAccessorGUI(s, null)); break;
+            case SAV4 s: Navigation.PushModalAsync(new SavAccessorGUI(s, null)); break;
             case SAV5BW s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
             case SAV5B2W2 s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
             case SAV6XY s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
