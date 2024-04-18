@@ -1,3 +1,4 @@
+using Octokit;
 using PKHeX.Core;
 using System.Xml.Serialization;
 
@@ -147,7 +148,100 @@ public partial class TrainerEditor1 : ContentPage
 
     private void SaveTE1(object sender, EventArgs e)
     {
+        if (SAV.OT != OTNameEntry.Text)
+            SAV.OT = OTNameEntry.Text;
+        SAV.Gender = (byte)OTGenderPicker.SelectedIndex;
+        var parsed = ushort.TryParse(TIDEntry.Text, out var result);
+        if (parsed) SAV.TID16 = result;
+        parsed = ushort.TryParse(SIDEntry.Text, out result);
+        if (parsed) SAV.SID16 = result;
+        parsed = uint.TryParse(OTMoneyEntry.Text, out var uresult);
+        if (parsed) SAV.Money = uresult;
+        parsed = int.TryParse(HrsEntry.Text, out var iresult);
+        if (parsed) SAV.PlayedHours = iresult;
+        parsed = int.TryParse(MinsEntry.Text, out iresult);
+        if (parsed) SAV.PlayedMinutes = iresult;
+        parsed = int.TryParse(SecEntry.Text, out iresult);
+        if (parsed) SAV.PlayedSeconds = iresult;
 
+        int badgeval = 0;
+        for (int i = 0; i < cba.Length; i++)
+            badgeval |= (cba[i].IsChecked ? 1 : 0) << i;
+        if(SAV is SAV1 sav1)
+        {
+            parsed = uint.TryParse(CoinsEntry.Text, out uresult);
+            if (parsed) sav1.Coin = (uint)Math.Clamp(uresult, 0, SAV.MaxCoins);
+            sav1.Badges = badgeval & 0xFF;
+            parsed = byte.TryParse(PFEntry.Text, out var bresult);
+            if (parsed) sav1.PikaFriendship = Math.Clamp(bresult, (byte)0, (byte)255);
+            parsed = ushort.TryParse(PBEntry.Text, out result);
+            if (parsed) sav1.PikaBeachScore = Math.Clamp(result, (ushort)0, (ushort)9999);
+            sav1.BattleEffects = UseBattleEffectsCB.IsChecked;
+            sav1.BattleStyleSwitch = BattleStylePicker.SelectedIndex == 0;
+            sav1.Sound = SoundTypePicker.SelectedIndex;
+            sav1.TextSpeed = TextSpeedPicker.SelectedIndex;
+
+        }
+        if(SAV is SAV2 sav2)
+        {
+            parsed = uint.TryParse(CoinsEntry.Text, out uresult);
+            if (parsed) sav2.Coin = (uint)Math.Clamp(uresult, 0, SAV.MaxCoins);
+            sav2.Badges = badgeval & 0xFFFF;
+            sav2.BattleEffects = UseBattleEffectsCB.IsChecked;
+            sav2.BattleStyleSwitch = BattleStylePicker.SelectedIndex == 0;
+            sav2.Sound = SoundTypePicker.SelectedIndex > 0 ? 2 : 0;
+            sav2.TextSpeed = TextSpeedPicker.SelectedIndex;
+        }
+        if(SAV is SAV3 sav3)
+        {
+            sav3.Badges = badgeval & 0xFF;
+        }
+        if(SAV is SAV4 sav4)
+        {
+            parsed = int.TryParse(CurrentMapEntry.Text, out iresult);
+            if (parsed && iresult != sav4.M) sav4.M = iresult;
+            parsed = int.TryParse(XCoordEntry.Text, out iresult);
+            if (parsed && iresult != sav4.X) sav4.X = iresult;
+            parsed = int.TryParse(YCoordinate.Text, out iresult);
+            if (parsed && iresult != sav4.Y) sav4.Y = iresult;
+            parsed = int.TryParse(ZCoordEntry.Text, out iresult);
+            if (parsed && iresult != sav4.Z) sav4.Z = iresult;
+            sav4.Badges = badgeval & 0xFF;
+            if (sav4 is SAV4HGSS hgss)
+            {
+                hgss.Badges16 = badgeval >> 8;
+            }
+            var country = (ComboItem)CountryPicker.SelectedItem;
+            if (country is not null)
+                sav4.Country = country.Value;
+            var region = (ComboItem)RegionPicker.SelectedItem;
+            if (region is not null)
+                sav4.Region = region.Value;
+        }
+        if(SAV is SAV5 s)
+        {
+            var pd = s.PlayerPosition;
+            parsed = int.TryParse(CurrentMapEntry.Text, out iresult);
+            if (parsed && iresult != pd.M) pd.M = iresult;
+            parsed = int.TryParse(XCoordEntry.Text, out iresult);
+            if (parsed && iresult != pd.X) pd.X = iresult;
+            parsed = int.TryParse(YCoordinate.Text, out iresult);
+            if (parsed && iresult != pd.Y) pd.Y = iresult;
+            parsed = int.TryParse(ZCoordEntry.Text, out iresult);
+            if (parsed && iresult != pd.Z) pd.Z = iresult;
+            s.Misc.Badges = badgeval & 0xFF;
+            parsed = int.TryParse(BPEntry.Text, out iresult);
+            if (parsed) s.BattleSubway.BP = Math.Clamp(iresult,0,s.MaxCoins);
+            var country = (ComboItem)CountryPicker.SelectedItem;
+            if (country is not null)
+                s.Country = country.Value;
+            var region = (ComboItem)RegionPicker.SelectedItem;
+            if (region is not null)
+                s.Region = region.Value;
+        }
+        SAV.SecondsToStart = (uint)DateUtil.GetSecondsFrom2000(GSDatePicker.Date, GSDatePicker.Date.AddSeconds(GSTimerPicker.Time.TotalSeconds));
+        SAV.SecondsToFame = (uint)DateUtil.GetSecondsFrom2000(HOFDatePicker.Date, HOFDatePicker.Date.AddSeconds(HOFTimePicker.Time.TotalSeconds));
+        Navigation.PopModalAsync();
     }
 
     private void UpdateRegions(object sender, EventArgs e)
