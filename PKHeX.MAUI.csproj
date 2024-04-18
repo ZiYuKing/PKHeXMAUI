@@ -299,6 +299,9 @@
 	  <MauiXaml Update="SaveEditors\SaveAccessors\SavAccessorGUI.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen1\TrainerEditor1.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="SaveEditors\TrainerEditors\gen8a\TrainerEditor8a.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -9,7 +9,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Trainer Name:"/>
+            <Label Text="Trainer Name:" HorizontalOptions="End" VerticalOptions="Center"/>
             <Entry Grid.Column="1" x:Name="OTName"/>
         </Grid>
         <Grid Padding="10">
@@ -24,15 +24,15 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="SID:"/>
+            <Label Text="SID:" VerticalOptions="Center" HorizontalOptions="End"/>
             <Entry Grid.Column="1" x:Name="TE8aSIDEntry"/>
-            <Label Grid.Column="2" Text="$:"/>
+            <Label Grid.Column="2" Text="$:" HorizontalOptions="End" VerticalOptions="Center"/>
             <Entry Grid.Column="3" x:Name="TE8aMoneyEntry"/>
             <Button Grid.Column="4" Text="+" Clicked="MaxMoney"/>
-            <Label Text="TID:" Grid.Row="1"/>
+            <Label Text="TID:" Grid.Row="1" HorizontalOptions="End" VerticalOptions="Center"/>
             <Entry Grid.Row="1" Grid.Column="1" x:Name="TE8aTIDEntry"/>
             <Picker Grid.Row="1" Grid.Column="2" x:Name="TE8aGenderPicker"/>
-            <Label Grid.Row="1" Grid.Column="3" Text="Language:"/>
+            <Label Grid.Row="1" Grid.Column="3" Text="Language:" HorizontalOptions="End" VerticalOptions="Center"/>
             <Picker Grid.Row="1" Grid.Column="4" x:Name="TE8aLanguagePicker"/>
         </Grid>
         <Grid Padding="10">
@@ -46,13 +46,13 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Current Merit Points:"/>
+            <Label Text="Current Merit Points:" HorizontalOptions="End" VerticalOptions="Center"/>
             <Entry Grid.Column="1" x:Name="TE8aCMPEntry"/>
-            <Label Grid.Row="1" Text="Earned Merit Points:"/>
+            <Label Grid.Row="1" Text="Earned Merit Points:" HorizontalOptions="End" VerticalOptions="Center"/>
             <Entry Grid.Row="1" Grid.Column="1" x:Name="TE8aEMPEntry"/>
-            <Label Grid.Row="2" Text="Galaxy Rank:"/>
+            <Label Grid.Row="2" Text="Galaxy Rank:" HorizontalOptions="End" VerticalOptions="Center"/>
             <Entry Grid.Row="2" Grid.Column="1" x:Name="TE8aGREntry"/>
-            <Label Grid.Row="3" Text="Satchel Upgrades:"/>
+            <Label Grid.Row="3" Text="Satchel Upgrades:" HorizontalOptions="End" VerticalOptions="Center"/>
             <Entry Grid.Row="3" Grid.Column="1" x:Name="TE8aSUEntry"/>
         </Grid>
         <Grid Padding="10">
@@ -64,11 +64,11 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Hrs:"/>
+            <Label Text="Hrs:" HorizontalOptions="End" VerticalOptions="Center"/>
             <Entry Grid.Column="1" x:Name="TE8aHPEntry"/>
-            <Label Text="Min:" Grid.Column="2"/>
+            <Label Text="Min:" Grid.Column="2" HorizontalOptions="End" VerticalOptions="Center"/>
             <Entry Grid.Column="3" x:Name="TE8aMPEntry"/>
-            <Label Text="Sec:" Grid.Column="4"/>
+            <Label Text="Sec:" Grid.Column="4" HorizontalOptions="End" VerticalOptions="Center"/>
             <Entry Grid.Column="5" x:Name="TE8aSPEntry"/>
         </Grid>
         <Grid Padding="10">
@@ -81,10 +81,10 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label Text="Game Started:"/>
+            <Label Text="Game Started:" HorizontalOptions="End" VerticalOptions="Center"/>
             <DatePicker Grid.Column="1" x:Name="TE8aGSDatePicker"/>
             <TimePicker Grid.Column="2" x:Name="TE8aGSTimePicker"/>
-            <Label Text="Last Saved:" Grid.Row="1"/>
+            <Label Text="Last Saved:" Grid.Row="1" HorizontalOptions="End" VerticalOptions="Center"/>
             <DatePicker Grid.Row="1" Grid.Column="1" x:Name="TE8aLSDatePicker"/>
             <TimePicker Grid.Row="1" Grid.Column="2" x:Name="TE8aLSTimePicker"/>
         </Grid>
