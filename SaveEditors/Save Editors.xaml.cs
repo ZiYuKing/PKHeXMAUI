@@ -41,7 +41,7 @@ public partial class SaveEditors : ContentPage
         if (!MainPage.sav.State.Exportable || MainPage.sav is BulkStorage)
             return;
         Button_BlockData.IsVisible = true;
-        if (MainPage.sav is not SAV6 or SAV7 or SAV8BS or SAV8SWSH)
+        if (MainPage.sav is not SAV7 or SAV8BS or SAV8SWSH)
             TrainerInfoButton.IsVisible = true;
     }
 
@@ -49,8 +49,6 @@ public partial class SaveEditors : ContentPage
     {
         switch (MainPage.sav)
         {
-            case SAV9SV: Navigation.PushModalAsync(new TrainerTab9()); break;
-            case SAV8LA: Navigation.PushModalAsync(new TrainerTab8a()); break;
             case SAV1:
             case SAV2:
             case SAV3:
@@ -58,6 +56,9 @@ public partial class SaveEditors : ContentPage
             case SAV3Colosseum:
             case SAV4:
             case SAV5: Navigation.PushModalAsync(new TrainerEditor1()); break;
+            case SAV6: Navigation.PushModalAsync(new TrainerTab6()); break;
+            case SAV8LA: Navigation.PushModalAsync(new TrainerTab8a()); break;
+            case SAV9SV: Navigation.PushModalAsync(new TrainerTab9()); break;
         }
     }
 }

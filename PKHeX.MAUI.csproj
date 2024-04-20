@@ -84,11 +84,8 @@
 		<MauiImage Include="Resources\Images\SVItemSprites\*" />
 		<MauiImage Include="Resources\Images\ItemSprites\*" />
 		<MauiImage Include="Resources\Images\teratypes\*" />
+		<MauiImage Include="Resources\Images\Trainer Sprites\*" />
 		
-		
-		 
-		
-
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
@@ -178,12 +175,6 @@
 	  </Reference>
 	  <Reference Include="PKHeX.Core.Injection">
 	    <HintPath>deps\PKHeX.Core.Injection.dll</HintPath>
-	  </Reference>
-	  <Reference Include="PKHeX.Drawing">
-	    <HintPath>..\PKHeX\PKHeX.Drawing.PokeSprite\bin\Release\net8.0-windows\PKHeX.Drawing.dll</HintPath>
-	  </Reference>
-	  <Reference Include="PKHeX.Drawing.PokeSprite">
-	    <HintPath>..\PKHeX\PKHeX.Drawing.PokeSprite\bin\Release\net8.0-windows\PKHeX.Drawing.PokeSprite.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 
@@ -299,7 +290,25 @@
 	  <MauiXaml Update="SaveEditors\SaveAccessors\SavAccessorGUI.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="SaveEditors\TrainerEditors\gen1\TrainerEditor1.xaml">
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen1-5\TrainerEditor1.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen6\TrainerEditor6.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen6\TrainerEditor6Appearance.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen6\TrainerEditor6BadgeMap.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen6\TrainerEditor6Maison.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen6\TrainerEditor6Multiplayer.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen6\TrainerTab6.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="SaveEditors\TrainerEditors\gen8a\TrainerEditor8a.xaml">
