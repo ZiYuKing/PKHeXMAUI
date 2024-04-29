@@ -36,9 +36,9 @@
             <Label Text="5:" Grid.Row="7" VerticalOptions="Center"/>
             <Entry x:Name="SS5" Grid.Row="7" Grid.Column="1"/>
             <CheckBox x:Name="MegaEvolutionCheck" Grid.Row="8"/>
-            <Label Text="Mega Evolution Unlocked" Grid.Row="8" Grid.Column="1"/>
+            <Label Text="Mega Evolution Unlocked" Grid.Row="8" Grid.Column="1" VerticalOptions="Center"/>
             <CheckBox x:Name="RayquazeMECheck" Grid.Row="9"/>
-            <Label Text="Mega Rayquaza Unlocked" Grid.Row="9" Grid.Column="1" x:Name="MERayquazaLabel"/>
+            <Label Text="Mega Rayquaza Unlocked" Grid.Row="9" Grid.Column="1" x:Name="MERayquazaLabel" VerticalOptions="Center"/>
         </Grid>
     </VerticalStackLayout>
 </ContentPage>

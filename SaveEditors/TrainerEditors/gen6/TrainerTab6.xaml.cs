@@ -29,6 +29,8 @@ public partial class TrainerTab6 : TabbedPage
         }
         if (SAV is SAV6XY)
             trainertab6.Children.Add(TEA6);
+        trainertab6.Children.Add(new SavePage6());
+        trainertab6.Children.Add(new cancelpage());
     }
 }
 public class SavePage6 : ContentPage

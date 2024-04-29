@@ -224,6 +224,9 @@
 	  <Compile Update="SaveEditors\Save Editors.xaml.cs">
 	    <DependentUpon>Save Editors.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="SaveEditors\TrainerEditors\gen7\Trainertab7.xaml.cs">
+	    <DependentUpon>Trainertab7.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Settings\LegalitySettings.xaml.cs">
 	    <DependentUpon>LegalitySettings.xaml</DependentUpon>
 	  </Compile>
@@ -311,6 +314,21 @@
 	  <MauiXaml Update="SaveEditors\TrainerEditors\gen6\TrainerTab6.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen7\TrainerEditor7.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen7\TrainerEditor7BattleTree.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen7\TrainerEditor7Map.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen7\TrainerEditor7Misc.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen7\TrainerEditor7Ultra.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="SaveEditors\TrainerEditors\gen8a\TrainerEditor8a.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -333,6 +351,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="SaveEditors\TrainerEditors\gen9\TrainerTab9.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\TrainerEditors\gen7\Trainertab7.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Settings\LegalitySettings.xaml">
