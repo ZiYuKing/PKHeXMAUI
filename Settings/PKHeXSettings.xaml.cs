@@ -211,7 +211,7 @@ public class GenericCollectionSelector : DataTemplateSelector
     {
         if (sender is SfComboBox box)
         {
-                if (box.SelectedItem is Boolean)
+                if (box.SelectedItem is bool)
                     Preferences.Set(box.Placeholder, (bool)box.SelectedItem);
                 else if (box.SelectedItem is GameVersion)
                     Preferences.Set(box.Placeholder, (int)(GameVersion)box.SelectedItem);

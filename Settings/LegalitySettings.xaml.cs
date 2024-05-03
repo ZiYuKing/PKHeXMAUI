@@ -28,5 +28,5 @@ public   bool CheckWordFilter { get => Preferences.Default.Get("CheckWordFilter"
     public Severity NicknamedAnotherSpecies { get => (Severity)Preferences.Default.Get("NicknamedAnotherSpecies", 0); }
     public Severity ZeroHeightWeight { get => (Severity)Preferences.Default.Get("ZeroHeightWeight", 0); }
     public Severity CurrentHandlerMismatch { get => (Severity)Preferences.Default.Get("CurrentHandlerMismatch", 0); }
-    public  bool CheckActiveHandler { get => Preferences.Default.Get("CheckActiveHandler", true); }
+    public  bool CheckActiveHandler { get => Preferences.Default.Get("CheckActiveHandler", false); }
 }

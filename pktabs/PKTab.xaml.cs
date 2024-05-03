@@ -11,7 +11,7 @@ namespace PKHeXMAUI;
 
 public partial class MainPage : ContentPage
 {
-    public static string Version = "v24.04.17";
+    public static string Version = "v24.05.01";
     public bool SkipTextChange = false;
     public static int[] NoFormSpriteSpecies = [664, 665, 744, 982, 855, 854, 869,892,1012,1013];
     public bool FirstLoad = true;
@@ -96,18 +96,17 @@ public partial class MainPage : ContentPage
         var startup = new LegalSettings();
         SaveFile.SetUpdatePKM = PSettings.SetUpdatePKM ? PKMImportSetting.Update : PKMImportSetting.Skip;
         ParseSettings.InitFromSaveFileData(sav);
-        typeof(ParseSettings).GetProperty(nameof(ParseSettings.CheckWordFilter))!.SetValue(null, startup.CheckWordFilter);
-        typeof(ParseSettings).GetProperty(nameof(ParseSettings.AllowGen1Tradeback))!.SetValue(null, startup.AllowGen1Tradeback);
-        typeof(ParseSettings).GetProperty(nameof(ParseSettings.NicknamedTrade))!.SetValue(null, startup.NicknamedTrade);
-        typeof(ParseSettings).GetProperty(nameof(ParseSettings.NicknamedMysteryGift))!.SetValue(null, startup.NicknamedMysteryGift);
-        typeof(ParseSettings).GetProperty(nameof(ParseSettings.RNGFrameNotFound3))!.SetValue(null, startup.RNGFrameNotFound);
-        typeof(ParseSettings).GetProperty(nameof(ParseSettings.Gen7TransferStarPID))!.SetValue(null, startup.Gen7TransferStarPID);
-        typeof(ParseSettings).GetProperty(nameof(ParseSettings.HOMETransferTrackerNotPresent))!.SetValue(null, startup.Gen8TransferTrackerNotPresent);
-        typeof(ParseSettings).GetProperty(nameof(ParseSettings.Gen8MemoryMissingHT))!.SetValue(null, startup.Gen8MemoryMissingHT);
-        typeof(ParseSettings).GetProperty(nameof(ParseSettings.NicknamedAnotherSpecies))!.SetValue(null, startup.NicknamedAnotherSpecies);
-        typeof(ParseSettings).GetProperty(nameof(ParseSettings.ZeroHeightWeight))!.SetValue(null, startup.ZeroHeightWeight);
-        typeof(ParseSettings).GetProperty(nameof(ParseSettings.CurrentHandlerMismatch))!.SetValue(null, startup.CurrentHandlerMismatch);
-        typeof(ParseSettings).GetProperty(nameof(ParseSettings.CheckActiveHandler))!.SetValue(null, startup.CheckActiveHandler);
+        ParseSettings.Settings.WordFilter.CheckWordFilter = startup.CheckWordFilter;
+        ParseSettings.Settings.Tradeback.AllowGen1Tradeback= startup.AllowGen1Tradeback;
+        ParseSettings.Settings.Nickname.Nickname12 = ParseSettings.Settings.Nickname.Nickname3 = ParseSettings.Settings.Nickname.Nickname4 = ParseSettings.Settings.Nickname.Nickname5 = ParseSettings.Settings.Nickname.Nickname6 = ParseSettings.Settings.Nickname.Nickname7 = ParseSettings.Settings.Nickname.Nickname7b = ParseSettings.Settings.Nickname.Nickname8 = ParseSettings.Settings.Nickname.Nickname8a = ParseSettings.Settings.Nickname.Nickname8b = ParseSettings.Settings.Nickname.Nickname9 = new NicknameRestriction() { NicknamedTrade = startup.NicknamedTrade, NicknamedMysteryGift = startup.NicknamedMysteryGift };
+        ParseSettings.Settings.FramePattern.RNGFrameNotFound3=startup.RNGFrameNotFound;
+        ParseSettings.Settings.Game.Gen7.Gen7TransferStarPID=startup.Gen7TransferStarPID;
+        ParseSettings.Settings.HOMETransfer.HOMETransferTrackerNotPresent=startup.Gen8TransferTrackerNotPresent;
+        ParseSettings.Settings.Game.Gen8.Gen8MemoryMissingHT=startup.Gen8MemoryMissingHT;
+        ParseSettings.Settings.Nickname.NicknamedAnotherSpecies=startup.NicknamedAnotherSpecies;
+        ParseSettings.Settings.HOMETransfer.ZeroHeightWeight=startup.ZeroHeightWeight;
+        ParseSettings.Settings.Handler.CurrentHandlerMismatch= startup.CurrentHandlerMismatch;
+        ParseSettings.Settings.Handler.CheckActiveHandler = startup.CheckActiveHandler;
     }
     public async void pk9picker_Clicked(object sender, EventArgs e)
     {
