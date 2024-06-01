@@ -95,7 +95,7 @@ public partial class TrainerEditor1 : ContentPage
             }
             CountryPicker.ItemsSource = Util.GetCountryRegionList("gen4_countries", GameInfo.CurrentLanguage);
             CountryPicker.ItemDisplayBinding = new Binding("Text");
-            CountryPicker.SelectedItem = Util.GetCountryRegionList("gen4_countries", GameInfo.CurrentLanguage).Select(z=>z.Value == sav4.Country);
+            CountryPicker.SelectedItem = Util.GetCountryRegionList("gen4_countries", GameInfo.CurrentLanguage).Find(z=>z.Value == sav4.Country);
         }
         if(SAV is SAV5 sav5)
         {
@@ -110,7 +110,8 @@ public partial class TrainerEditor1 : ContentPage
             ZCoordEntry.Text = pd.Z.ToString();
             badgeval = sav5.Misc.Badges;
             CountryPicker.ItemsSource = Util.GetCountryRegionList("gen5_countries", GameInfo.CurrentLanguage);
-            CountryPicker.SelectedItem = Util.GetCountryRegionList("gen5_countries", GameInfo.CurrentLanguage).Select(z => z.Value == sav5.Country);
+            CountryPicker.ItemDisplayBinding = new Binding("Text");
+            CountryPicker.SelectedItem = Util.GetCountryRegionList("gen5_countries", GameInfo.CurrentLanguage).Find(z => z.Value == sav5.Country);
 
         }
         for (int i = 0; i < cba.Length; i++)
@@ -254,14 +255,17 @@ public partial class TrainerEditor1 : ContentPage
                 RegionItems = Util.GetCountryRegionList("gen4_sr_default", GameInfo.CurrentLanguage);
             RegionPicker.ItemsSource = RegionItems;
             RegionPicker.ItemDisplayBinding = new Binding("Text");
+            RegionPicker.SelectedItem = (ComboItem)RegionItems.Find(z => z.Value == sav4.Region);
         }
-        if(SAV is SAV5)
+        if(SAV is SAV5 sav5)
         {
             var index = ((Picker)sender).SelectedIndex;
             var RegionItems = Util.GetCountryRegionList($"gen5_sr_{index:000}", GameInfo.CurrentLanguage);
             if (RegionItems.Count == 0)
                 RegionItems = Util.GetCountryRegionList("gen5_sr_default", GameInfo.CurrentLanguage);
             RegionPicker.ItemsSource = RegionItems;
+            RegionPicker.ItemDisplayBinding = new Binding("Text");
+            RegionPicker.SelectedItem = (ComboItem)RegionItems.Find(z => z.Value == sav5.Region);
         }
     }
 }
