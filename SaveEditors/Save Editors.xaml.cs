@@ -43,6 +43,8 @@ public partial class SaveEditors : ContentPage
         Button_BlockData.IsVisible = true;
         if (MainPage.sav is not SAV8BS or SAV8SWSH)
             TrainerInfoButton.IsVisible = true;
+        if (MainPage.sav is SAV1)
+            Button_EventFlags1.IsVisible = true;
     }
 
     private void OpenTrainerEditor(object sender, EventArgs e)
@@ -61,5 +63,10 @@ public partial class SaveEditors : ContentPage
             case SAV8LA: Navigation.PushModalAsync(new TrainerTab8a()); break;
             case SAV9SV: Navigation.PushModalAsync(new TrainerTab9()); break;
         }
+    }
+
+    private void OpenEventFlagEditor(object sender, EventArgs e)
+    {
+        Navigation.PushModalAsync(new EventFlags1((SAV1)MainPage.sav));
     }
 }

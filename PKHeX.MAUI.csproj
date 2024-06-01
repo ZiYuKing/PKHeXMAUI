@@ -281,6 +281,9 @@
 	  <MauiXaml Update="pktabs\StatsTab.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\Gen1\EventFlags1.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="SaveEditors\SaveAccessors\gen8+\BlockEditor8.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

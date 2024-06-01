@@ -5,6 +5,7 @@
              Title="Save Editors">
     <VerticalStackLayout>
         <Button x:Name="Button_BlockData" Text="Block Data" Clicked="OpenBlockEditor" IsVisible="false"/>
+        <Button x:Name="Button_EventFlags1" Text="Event Flags" Clicked="OpenEventFlagEditor" IsVisible="False"/>
         <Button Text="Inventory Editor" Clicked="OpenItems"/>
         <Button x:Name="TrainerInfoButton" Text="Trainer Info" IsVisible="false" Clicked="OpenTrainerEditor"/>
     </VerticalStackLayout>
