@@ -45,6 +45,9 @@ public partial class SaveEditors : ContentPage
             TrainerInfoButton.IsVisible = true;
         if (MainPage.sav is SAV1)
             Button_EventFlags1.IsVisible = true;
+        if (MainPage.sav is SAV1 or SAV2 or SAV3)
+            Button_Pokedex1.IsVisible = true;
+
     }
 
     private void OpenTrainerEditor(object sender, EventArgs e)
@@ -68,5 +71,10 @@ public partial class SaveEditors : ContentPage
     private void OpenEventFlagEditor(object sender, EventArgs e)
     {
         Navigation.PushModalAsync(new EventFlags1((SAV1)MainPage.sav));
+    }
+
+    private void OpenSimplePokedex(object sender, EventArgs e)
+    {
+        Navigation.PushModalAsync(new Pokedex1(MainPage.sav));
     }
 }
