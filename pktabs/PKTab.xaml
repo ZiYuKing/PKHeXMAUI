@@ -69,7 +69,7 @@
 
 
                 <!--nickname-->
-                <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="Nickname:" VerticalOptions="Center" HorizontalOptions="Start"></Label>
+                <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" x:Name="NicknameLabel" Text="Nickname:" VerticalOptions="Center" HorizontalOptions="Start"></Label>
                 <Editor Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" AutoSize="TextChanges" Text="Nickname" x:Name="nickname" VerticalOptions="Center" TextChanged="applynickname"></Editor>
                 <CheckBox Grid.Row="5" Grid.Column="4" VerticalOptions="Center" x:Name="nicknamecheck" CheckedChanged="nicknamechecker"/>
                 <!--EXP&level-->
@@ -94,7 +94,7 @@
                 <Label Grid.Row="12" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" Text="Ability:"></Label>
                 <Picker Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" VerticalOptions="Center" x:Name="abilitypicker" Title="Ability" SelectedIndexChanged="applyability"></Picker>
                 <!--friendship-->
-                <Label Grid.Row="13" Grid.Column="0" HorizontalOptions="Start" Grid.ColumnSpan="2" VerticalOptions="Center" Text="FriendShip:" x:Name="FriendshipLabel"></Label>
+                <Label Grid.Row="13" Grid.Column="0" HorizontalOptions="Start" Grid.ColumnSpan="2" VerticalOptions="Center" Text="Friendship:" x:Name="FriendshipLabel"></Label>
                 <Editor Grid.Row="13" Grid.Column="2"  HorizontalOptions="Start" VerticalOptions="Center" Text="0" x:Name="Friendshipdisplay" TextChanged="applyfriendship"></Editor>
                 <!--Language-->
                 <Label Text="Language:" Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="Start" VerticalOptions="Center"/>

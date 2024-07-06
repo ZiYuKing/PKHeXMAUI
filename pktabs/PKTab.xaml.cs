@@ -11,13 +11,15 @@ namespace PKHeXMAUI;
 
 public partial class MainPage : ContentPage
 {
-    public static string Version = "v24.06.02";
+    public static string Version = "v24.06.19";
     public bool SkipTextChange = false;
     public static int[] NoFormSpriteSpecies = [664, 665, 744, 982, 855, 854, 869,892,1012,1013];
     public bool FirstLoad = true;
     public static PokeSysBotMini Remote;
     public static bool ReadonChangeBox = Preferences.Get("ReadonChangeBox", true);
     public static bool InjectinSlot = Preferences.Get("InjectinSlot", true);
+    public static TextEditor TrashWindow;
+    public static bool EditingTrash = false;
     public MainPage()
 	{
         sav = AppShell.AppSaveFile;
@@ -28,8 +30,11 @@ public partial class MainPage : ContentPage
         var validvers = RamOffsets.GetValidVersions(sav);
         ICommunicator com = RamOffsets.IsSwitchTitle(sav) ? new SysBotMini() : new NTRClient();
         Remote = new PokeSysBotMini(validvers[^1], com, false);
-        InitializeComponent();
 
+        InitializeComponent();
+        var OpenTrash = new TapGestureRecognizer() { NumberOfTapsRequired = 2 };
+        OpenTrash.Tapped += OpenTrashEditor;
+        NicknameLabel.GestureRecognizers.Add(OpenTrash);
         ICommand refreshCommand = new Command(async () =>
         {
             await applymainpkinfo(pk);
@@ -176,7 +181,7 @@ public partial class MainPage : ContentPage
         foreach (var x in b.Contents)
         {
             var i = index++;
-            if (sav.IsSlotOverwriteProtected(sav.CurrentBox, i))
+            if (sav.IsBoxSlotOverwriteProtected(sav.CurrentBox, i))
             {
                 slotSkipped++;
                 continue;
@@ -229,7 +234,7 @@ public partial class MainPage : ContentPage
 
         specieslabel.SelectedItem = datasourcefiltered.Species.FirstOrDefault(z => z.Text== SpeciesName.GetSpeciesName(pkm.Species,2));
         displaypid.Text = $"{pkm.PID:X}";
-        nickname.Text = pkm.Nickname;
+        nickname.Text = pkm.IsNicknamed ? pkm.Nickname : SpeciesName.GetSpeciesName(pkm.Species, MainPage.sav.Language);
         exp.Text = $"{pkm.EXP}";
         leveldisplay.Text = $"{Experience.GetLevel(pkm.EXP, pkm.PersonalInfo.EXPGrowth)}";
         naturepicker.SelectedItem = datasourcefiltered.Natures.First(z => z.Value == (int)pkm.Nature);
@@ -848,4 +853,24 @@ public partial class MainPage : ContentPage
         e.Data.Properties.Add("PKM", pk);
         Shell.Current.GoToAsync("//BoxShell/boxtab/BoxPage");
     }
+    public async void OpenTrashEditor(object sender, TappedEventArgs e)
+    {
+        TrashWindow = new TextEditor(nickname.Text, pk.NicknameTrash, MainPage.sav, MainPage.sav.Generation);
+        await Navigation.PushModalAsync(TrashWindow);
+        Task.Run(()=>WaitForTrashToClose());
+    }
+    private void WaitForTrashToClose()
+    {
+        var trash = pk.NicknameTrash;
+        EditingTrash = true;
+        while (EditingTrash) { };
+        TrashWindow.FinalBytes.CopyTo(pk.NicknameTrash);
+        if (TrashWindow.FinalString != SpeciesName.GetSpeciesNameGeneration(pk.Species, pk.Language, pk.Format))
+            pk.SetNickname(TrashWindow.FinalString);
+        else
+            pk.ClearNickname();
+        
+        applymainpkinfo(pk);
+    }
+
 }

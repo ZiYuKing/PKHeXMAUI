@@ -11,7 +11,12 @@ public partial class OTTab : ContentPage
 	{
 		InitializeComponent();
         htlanguagepicker.ItemsSource = Enum.GetValues(typeof(LanguageID));
-
+        var OpenTrash = new TapGestureRecognizer() { NumberOfTapsRequired = 2 };
+        OpenTrash.Tapped += OpenTrashEditor;
+        OTLabel.GestureRecognizers.Add(OpenTrash);
+        var OpenHiddenTrash = new TapGestureRecognizer() { NumberOfTapsRequired = 2 };
+        OpenHiddenTrash.Tapped += OpenHiddenTrashEditor;
+        HTLabel.GestureRecognizers.Add(OpenHiddenTrash);
         CountryPicker.ItemsSource = Util.GetCountryRegionList("countries", GameInfo.CurrentLanguage);
         CountryPicker.ItemDisplayBinding= new Binding("Text");
         DSregionPicker.ItemsSource = datasourcefiltered.ConsoleRegions.ToList();
@@ -272,5 +277,37 @@ public partial class OTTab : ContentPage
             var subregion = (ComboItem)DSregionPicker.SelectedItem;
             regionOrigin.ConsoleRegion = (byte)subregion.Value;
         }
+    }
+    public async void OpenTrashEditor(object sender, TappedEventArgs e)
+    {
+        TrashWindow = new TextEditor(otdisplay.Text, pk.OriginalTrainerTrash, MainPage.sav, MainPage.sav.Generation);
+        await Navigation.PushModalAsync(TrashWindow);
+        Task.Run(() => WaitForTrashToClose());
+    }
+    private void WaitForTrashToClose()
+    {
+        var trash = pk.OriginalTrainerTrash;
+        EditingTrash = true;
+        while (EditingTrash) { };
+        TrashWindow.FinalBytes.CopyTo(pk.OriginalTrainerTrash);
+        pk.OriginalTrainerName = TrashWindow.FinalString;
+        applyotinfo(pk);
+        
+    }
+    public async void OpenHiddenTrashEditor(object sender, TappedEventArgs e)
+    {
+        TrashWindow = new TextEditor(htname.Text, pk.HandlingTrainerTrash, MainPage.sav, MainPage.sav.Generation);
+        await Navigation.PushModalAsync(TrashWindow);
+        Task.Run(() => WaitForHiddenTrashToClose());
+    }
+    private void WaitForHiddenTrashToClose()
+    {
+        var trash = pk.HandlingTrainerTrash;
+        EditingTrash = true;
+        while (EditingTrash) { };
+        TrashWindow.FinalBytes.CopyTo(pk.HandlingTrainerTrash);
+        pk.HandlingTrainerName = TrashWindow.FinalString;
+        applyotinfo(pk);
+
     }
 }

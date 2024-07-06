@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:inputs="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             x:Class="PKHeXMAUI.TextEditor"
+             Title="TextEditor">
+    <ScrollView>
+        <VerticalStackLayout>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Text="String" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    <Entry x:Name="StringEntry" Grid.Column="1"/>
+                    <CollectionView x:Name="StringHexCV" Grid.Row="1" Grid.ColumnSpan="2" HeightRequest="250"/>
+                    <CollectionView x:Name="SpecialStringCV" Grid.Row="2" Grid.ColumnSpan="2" HeightRequest="250"/>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Text="Trash Byte Layers" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    <Label Text="Species" Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <inputs:SfComboBox x:Name="SpeciesCombo" Grid.Row="1" Grid.Column="1"/>
+                    <Label Text="Language" Grid.Row="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    <Picker x:Name="LanguagePicker" Grid.Row="2" Grid.Column="1"/>
+                    <Label Text="Generation" Grid.Row="3" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    <Picker x:Name="GenerationPicker" Grid.Row="3" Grid.Column="1"/>
+                    <Button Text="Clear Trash" Grid.Row="4" Clicked="B_ClearTrash_Click"/>
+                    <Button Text="Apply Trash" Grid.Row="4" Grid.Column="1" Clicked="B_ApplyTrash_Click"/>
+                    <Button Text="Cancel" Clicked="CloseTextEditor" Grid.Row="5"/>
+                    <Button Text="Save" Grid.Row="5" Grid.Column="1" Clicked="B_Save_Click"/>
+                    
+                </Grid>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -49,13 +49,13 @@
                 <Image Source="a_egg.png" Grid.Column="0" Grid.Row="0" x:Name="eggsprite" HeightRequest="40" HorizontalOptions="Start" VerticalOptions="End" IsVisible="false"/>
                 <Image Grid.Column="0" Grid.Row="0" x:Name="itemsprite" HeightRequest="16" HorizontalOptions="End" VerticalOptions="End" IsVisible="false"/>
                 <!--OT-->
-                <Label Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" Text="Original Trainer" Grid.ColumnSpan="2"/>
+                <Label Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" Text="Original Trainer" Grid.ColumnSpan="2" />
                 <CheckBox Grid.Row="1" Grid.Column="2" HorizontalOptions="Start" VerticalOptions="Center" x:Name="OTcurrentcheck" CheckedChanged="MakeOTCurrent"/>
                 <Label Grid.Row="2" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" Text="SID:"/>
                 <Entry Grid.Row="2" Grid.Column="1" VerticalOptions="Center" ClearButtonVisibility="WhileEditing" x:Name="SIDdisplay" TextChanged="applySID"/>
                 <Label Grid.Row="2" Grid.Column="2" HorizontalOptions="Start" VerticalOptions="Center" Text="TID:"/>
                 <Entry Grid.Row="2" Grid.Column="3" VerticalOptions="Center" ClearButtonVisibility="WhileEditing" x:Name="TIDdisplay" TextChanged="applyTID"/>
-                <Label Grid.Row="3" Grid.Column="0"  VerticalOptions="Center" Text="OT:"/>
+                <Label Grid.Row="3" Grid.Column="0"  VerticalOptions="Center" Text="OT:" x:Name="OTLabel"/>
                 <Editor Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" VerticalOptions="Center" x:Name="otdisplay" TextChanged="applyot" AutoSize="TextChanges"/>
                 <Label Grid.Row="4" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" Text="OT Gender:" Grid.ColumnSpan="2"/>
                 <ImageButton HeightRequest="32" Grid.Row="4" Grid.Column="2" HorizontalOptions="Start" VerticalOptions="Center" x:Name="otgenderpicker" Clicked="applyotgender"/>
