@@ -380,7 +380,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="SaveEditors\TrainerEditors\gen1-5\" />
+	  <Folder Include="SaveEditors\Gen3\" />
 	  <Folder Include="SaveEditors\TrainerEditors\gen8b\" />
 	</ItemGroup>
 </Project>

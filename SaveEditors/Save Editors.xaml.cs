@@ -1,5 +1,5 @@
 using PKHeX.Core;
-
+using static PKHeXMAUI.MainPage;
 namespace PKHeXMAUI;
 
 public partial class SaveEditors : ContentPage
@@ -38,15 +38,17 @@ public partial class SaveEditors : ContentPage
     }
     private void ToggleControls()
     {
-        if (!MainPage.sav.State.Exportable || MainPage.sav is BulkStorage)
+        if (!sav.State.Exportable || sav is BulkStorage)
             return;
         Button_BlockData.IsVisible = true;
-        if (MainPage.sav is not SAV8BS or SAV8SWSH)
+        if (sav is not SAV8BS or SAV8SWSH)
             TrainerInfoButton.IsVisible = true;
-        if (MainPage.sav is SAV1)
+        if (sav is SAV1)
             Button_EventFlags1.IsVisible = true;
-        if (MainPage.sav is SAV1 or SAV2 or SAV3)
+        if (sav is SAV1 or SAV2 or SAV3)
             Button_Pokedex1.IsVisible = true;
+        if (sav is SAV2)
+            Button_RTCEditor.IsVisible = true;
 
     }
 
@@ -76,5 +78,24 @@ public partial class SaveEditors : ContentPage
     private void OpenSimplePokedex(object sender, EventArgs e)
     {
         Navigation.PushModalAsync(new Pokedex1(MainPage.sav));
+    }
+
+    private async void OpenRTCEditor(object sender, EventArgs e)
+    {
+        switch (sav.Generation)
+        {
+            case 2:
+                var sav2 = ((SAV2)sav);
+                var msg = MessageStrings.MsgSaveGen2RTCResetBitflag;
+                if (!sav2.Japanese) // show Reset Key for non-Japanese saves
+                    msg = string.Format(MessageStrings.MsgSaveGen2RTCResetPassword, sav2.ResetKey) + Environment.NewLine + Environment.NewLine + msg;
+                var dr = await DisplayAlert("Reset RTC", msg, "Yes", "cancel");
+                if (dr)
+                    sav2.ResetRTC();
+                break;
+            case 3:
+                
+                break;
+        }
     }
 }
