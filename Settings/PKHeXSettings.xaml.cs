@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using Syncfusion.Maui.Core.Internals;
 using System.Text.Json;
 using System.Runtime.Serialization.Json;
+using CommunityToolkit.Maui.Storage;
 
 namespace PKHeXMAUI;
 
@@ -274,6 +275,16 @@ public class GenericCollectionSelector : DataTemplateSelector
                             _ => ""
                         };
                         ToolTipProperties.SetText(editor, description);
+                        if(editor.Placeholder == "TrainerFolderPath")
+                        {
+                            var tap = new TapGestureRecognizer() { NumberOfTapsRequired = 1 };
+                            tap.Tapped +=async (s, e) => 
+                            {
+                                var path = await FolderPicker.PickAsync(CancellationToken.None);
+                                ((Editor)s).Text = $"{path.Folder.Path}/";
+                            };
+                            editor.GestureRecognizers.Add(tap);
+                        }
                     }
                 }
             }

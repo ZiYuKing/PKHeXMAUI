@@ -55,6 +55,8 @@ public class PluginSettings
     public static string DefaultOT { get => Preferences.Get("DefaultOT", "ALM"); }
     public static string DefaultTID { get => Preferences.Get("DefaultTID", "12345"); }
     public static string DefaultSID { get => Preferences.Get("DefaultSID", "54321"); }
+    public static bool UseTrainerData { get => Preferences.Get("UseTrainerData", false); }
+    public static string TrainerFolderPath { get => Preferences.Get("TrainerFolderPath", ""); }
     public static bool PrioritizeGame { get => Preferences.Default.Get("PrioritizeGame", false);  }
     public static GameVersion PrioritizeGameVersion { get => (GameVersion)Preferences.Default.Get("PrioritizeGameVersion", 50);  }
     public static bool SetAllLegalRibbons { get => Preferences.Default.Get("SetAllLegalRibbons", false);  }

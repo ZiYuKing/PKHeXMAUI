@@ -11,7 +11,7 @@ namespace PKHeXMAUI;
 
 public partial class MainPage : ContentPage
 {
-    public static string Version = "v24.06.19";
+    public static string Version = "v24.07.19";
     public bool SkipTextChange = false;
     public static int[] NoFormSpriteSpecies = [664, 665, 744, 982, 855, 854, 869,892,1012,1013];
     public bool FirstLoad = true;
@@ -77,7 +77,8 @@ public partial class MainPage : ContentPage
     public static void SetSettings()
     {
         APILegality.SetAllLegalRibbons = PluginSettings.SetAllLegalRibbons;
-        APILegality.UseTrainerData = false;
+        APILegality.UseTrainerData = PluginSettings.UseTrainerData;
+        var trainerfolder = PluginSettings.TrainerFolderPath;
         APILegality.AllowTrainerOverride = true;
         APILegality.SetMatchingBalls = PluginSettings.SetBallByColor;
         Legalizer.EnableEasterEggs = PluginSettings.EnableMemesForIllegalSets;
@@ -97,7 +98,30 @@ public partial class MainPage : ContentPage
         if (IsTIDdigits)
             TrainerSettings.DefaultTID16 = TID;
         TrainerSettings.Clear();
-        TrainerSettings.Register(TrainerSettings.DefaultFallback((GameVersion)sav.Version, (LanguageID)sav.Language));
+        if (!APILegality.UseTrainerData)
+            TrainerSettings.Register(TrainerSettings.DefaultFallback((GameVersion)sav.Version, (LanguageID)sav.Language));
+        else
+        {
+            if (Directory.Exists(trainerfolder))
+            {
+                var files = Directory.GetFiles(trainerfolder);
+                foreach (var file in files)
+                {
+                    if (!EntityDetection.IsSizePlausible(new FileInfo(file).Length))
+                    {
+                        break;
+                    }
+
+                    byte[] data = File.ReadAllBytes(file);
+                    EntityContext contextFromExtension = EntityFileExtension.GetContextFromExtension(file);
+                    PKM fromBytes = EntityFormat.GetFromBytes(data, contextFromExtension);
+                    if (fromBytes != null)
+                    {
+                        TrainerSettings.Register(new PokeTrainerDetails(fromBytes.Clone()));
+                    }
+                }
+            }
+        }
         var startup = new LegalSettings();
         SaveFile.SetUpdatePKM = PSettings.SetUpdatePKM ? PKMImportSetting.Update : PKMImportSetting.Skip;
         ParseSettings.InitFromSaveFileData(sav);
