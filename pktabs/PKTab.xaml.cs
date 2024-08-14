@@ -258,7 +258,7 @@ public partial class MainPage : ContentPage
 
         specieslabel.SelectedItem = datasourcefiltered.Species.FirstOrDefault(z => z.Text== SpeciesName.GetSpeciesName(pkm.Species,2));
         displaypid.Text = $"{pkm.PID:X}";
-        nickname.Text = pkm.IsNicknamed ? pkm.Nickname : SpeciesName.GetSpeciesName(pkm.Species, MainPage.sav.Language);
+        nickname.Text = pkm.IsNicknamed ? pkm.Nickname : SpeciesName.GetSpeciesName(pkm.Species, pk.Language);
         exp.Text = $"{pkm.EXP}";
         leveldisplay.Text = $"{Experience.GetLevel(pkm.EXP, pkm.PersonalInfo.EXPGrowth)}";
         naturepicker.SelectedItem = datasourcefiltered.Natures.First(z => z.Value == (int)pkm.Nature);
@@ -643,8 +643,16 @@ public partial class MainPage : ContentPage
 
     private void applylang(object sender, EventArgs e)
     {
-        if(!SkipTextChange)
-            pk.Language = languagepicker.SelectedIndex; checklegality();
+        if (!SkipTextChange)
+        {
+            pk.Language = languagepicker.SelectedIndex;
+            if (!pk.IsNicknamed)
+            {
+                nickname.Text = SpeciesName.GetSpeciesName(pk.Species, pk.Language);
+                pk.Nickname = nickname.Text;
+            }
+            checklegality();
+        }
     }
 
     private void refreshmain(object sender, EventArgs e)

@@ -242,7 +242,7 @@ public partial class TrainerEditor1 : ContentPage
         }
         DateTime Epoch2000 = new DateTime(2000, 1, 1);
         SAV.SecondsToStart = (uint)DateUtil.GetSecondsFrom2000(GSDatePicker.Date, Epoch2000.AddSeconds(GSTimerPicker.Time.TotalSeconds % 86400));
-        SAV.SecondsToFame = (uint)DateUtil.GetSecondsFrom2000(HOFDatePicker.Date, Epoch2000.AddSeconds(GSTimerPicker.Time.TotalSeconds % 86400));
+        SAV.SecondsToFame = (uint)DateUtil.GetSecondsFrom2000(HOFDatePicker.Date, Epoch2000.AddSeconds(HOFTimePicker.Time.TotalSeconds % 86400));
         Navigation.PopModalAsync();
     }
 
