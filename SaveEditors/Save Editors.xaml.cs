@@ -43,7 +43,7 @@ public partial class SaveEditors : ContentPage
         Button_BlockData.IsVisible = true;
         if (sav is not SAV8BS or SAV8SWSH)
             TrainerInfoButton.IsVisible = true;
-        if (sav is SAV1)
+        if (sav is SAV1 or SAV2)
             Button_EventFlags1.IsVisible = true;
         if (sav is SAV1 or SAV2 or SAV3)
             Button_Pokedex1.IsVisible = true;
@@ -72,7 +72,10 @@ public partial class SaveEditors : ContentPage
 
     private void OpenEventFlagEditor(object sender, EventArgs e)
     {
-        Navigation.PushModalAsync(new EventFlags1((SAV1)MainPage.sav));
+        if (sav is SAV1)
+            Navigation.PushModalAsync(new EventFlags1((SAV1)MainPage.sav));
+        else
+            Navigation.PushModalAsync(new EventFlags2Tab());
     }
 
     private void OpenSimplePokedex(object sender, EventArgs e)

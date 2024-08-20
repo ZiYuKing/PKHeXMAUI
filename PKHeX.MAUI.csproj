@@ -299,6 +299,12 @@
 	  <MauiXaml Update="SaveEditors\Gen1\Pokedex1.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\Gen2\EventConstants2.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\Gen2\EventFlags2.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="SaveEditors\SaveAccessors\gen8+\BlockEditor8.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -381,7 +387,6 @@
 
 	<ItemGroup>
 	  <Folder Include="SaveEditors\Gen3\" />
-	  <Folder Include="SaveEditors\Gen2\" />
 	  <Folder Include="SaveEditors\TrainerEditors\gen8b\" />
 	</ItemGroup>
 </Project>
