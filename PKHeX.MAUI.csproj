@@ -122,35 +122,6 @@
 	  <MauiAsset Remove="Resources\Assets\encounter_gem_paldea.pkl" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Remove="Resources\Images\generalicons\Bag_PCItems.png" />
-	  <None Remove="Resources\Images\generalicons\export.png" />
-	  <None Remove="Resources\Images\generalicons\language.png" />
-	  <None Remove="Resources\Images\generalicons\load.png" />
-	  <None Remove="Resources\Images\generalicons\main.png" />
-	  <None Remove="Resources\Images\generalicons\tr_129.png" />
-	  <None Remove="Resources\Images\generalicons\valid.png" />
-	  <None Remove="Resources\Images\generalicons\warn.png" />
-	  <None Remove="Resources\Images\iconp.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1009.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1010.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1011.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1012.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1013.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1014.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1015.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1016.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1017-4.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1017-5.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1017-6.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1017-7.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1017.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1017_1.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1017_2.png" />
-	  <None Remove="Resources\Images\SVSprites\a_1017_3.png" />
-	  <None Remove="Resources\Images\SVSprites\a_901_1.png" />
-	</ItemGroup>
-
 
 	<ItemGroup>
 	  <EmbeddedResource Include="Resources\Assets\AboutAssets.txt" />

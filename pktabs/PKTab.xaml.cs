@@ -11,7 +11,7 @@ namespace PKHeXMAUI;
 
 public partial class MainPage : ContentPage
 {
-    public static string Version = "v24.07.19";
+    public static string Version = "v24.08.20";
     public bool SkipTextChange = false;
     public static int[] NoFormSpriteSpecies = [664, 665, 744, 982, 855, 854, 869,892,1012,1013];
     public bool FirstLoad = true;
@@ -311,7 +311,7 @@ public partial class MainPage : ContentPage
         formpicker.Items.Clear();
         var str = GameInfo.Strings;
         var forms = FormConverter.GetFormList(pkm.Species, str.types, str.forms, GameInfo.GenderSymbolUnicode, pkm.Context);
-        if (forms[0] != "")
+        if (pkm.PersonalInfo.FormCount != 1)
         {
             formlabel.IsVisible = true;
             formpicker.IsVisible = true;
@@ -406,7 +406,7 @@ public partial class MainPage : ContentPage
                 pk.Form = 0;
             var str = GameInfo.Strings;
             var forms = FormConverter.GetFormList(pk.Species, str.types, str.forms, GameInfo.GenderSymbolUnicode, pk.Context);
-            if (forms[0] != "")
+            if (pk.PersonalInfo.FormCount != 1)
             {
                 formlabel.IsVisible = true;
                 formpicker.IsVisible = true;
