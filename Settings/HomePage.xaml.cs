@@ -15,7 +15,10 @@ public partial class HomePage : ContentPage
         SaveVersionPicker.ItemsSource = GameInfo.VersionDataSource.Where(z => !noSelectVersions.Contains((GameVersion)z.Value)).ToList();
         SaveVersionPicker.ItemDisplayBinding = new Binding("Text");
         SkipRefresh = true;
-        SaveVersionPicker.SelectedItem = GameInfo.VersionDataSource.FirstOrDefault(z =>(GameVersion) z.Value == MainPage.sav.Version);
+        var newVersion = MainPage.sav.Version;
+        if (newVersion == GameVersion.HGSS)
+            newVersion = MainPage.sav.Version.GetSingleVersion();
+        SaveVersionPicker.SelectedItem = GameInfo.VersionDataSource.FirstOrDefault(z =>(GameVersion)z.Value == newVersion);
         SkipRefresh = false;
     }
 
