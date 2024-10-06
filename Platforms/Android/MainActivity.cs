@@ -9,14 +9,18 @@ public class MainActivity : MauiAppCompatActivity
 {
     protected override void OnCreate(Bundle savedInstanceState)
     {
-        if (!Android.OS.Environment.IsExternalStorageManager)
+        try
         {
-            Intent intent = new Intent();
-            intent.SetAction(Android.Provider.Settings.ActionManageAppAllFilesAccessPermission);
-            Android.Net.Uri uri = Android.Net.Uri.FromParts("package", this.PackageName, null);
-            intent.SetData(uri);
-            StartActivity(intent);
+            if (!Android.OS.Environment.IsExternalStorageManager)
+            {
+                Intent intent = new Intent();
+                intent.SetAction(Android.Provider.Settings.ActionManageAppAllFilesAccessPermission);
+                Android.Net.Uri uri = Android.Net.Uri.FromParts("package", this.PackageName, null);
+                intent.SetData(uri);
+                StartActivity(intent);
+            }
         }
+        catch (Exception e) { };
         base.OnCreate(savedInstanceState);
     }
 }

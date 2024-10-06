@@ -48,7 +48,10 @@ public partial class SaveEditors : ContentPage
         if (sav is SAV1 or SAV2 or SAV3)
             Button_Pokedex1.IsVisible = true;
         if (sav is SAV2)
+        {
             Button_RTCEditor.IsVisible = true;
+            MailBoxButton.IsVisible = true;
+        }
 
     }
 
@@ -100,5 +103,10 @@ public partial class SaveEditors : ContentPage
                 
                 break;
         }
+    }
+
+    private void OpenMailBoxEditor(object sender, EventArgs e)
+    {
+        Navigation.PushModalAsync(new MailBox());
     }
 }

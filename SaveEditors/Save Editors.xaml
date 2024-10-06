@@ -10,6 +10,6 @@
         <Button Text="Inventory Editor" Clicked="OpenItems"/>
         <Button x:Name="Button_Pokedex1" Text="Pokedex" Clicked="OpenSimplePokedex" IsVisible="False"/>
         <Button x:Name="TrainerInfoButton" Text="Trainer Info" IsVisible="false" Clicked="OpenTrainerEditor"/>
-        
+        <Button x:Name="MailBoxButton" Text="Mail Box" IsVisible="False" Clicked="OpenMailBoxEditor"/>
     </VerticalStackLayout>
 </ContentPage>

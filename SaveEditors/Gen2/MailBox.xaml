@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PKHeXMAUI.MailBox"
+             Title="MailBox Editor">
+    <VerticalStackLayout>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Text="MailBox  (Party)"/>
+            <Label Text="MailBox (PC)" Grid.Column="1"/>
+            <CollectionView x:Name="MBP_CV" HeightRequest="150" Grid.Row="1"/>
+            <CollectionView x:Name="MBPC_CV" HeightRequest="150" Grid.Row="1" Grid.Column="1"/>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="MailBox (PC) Served:"/>
+                <Entry x:Name="MBServed" Grid.Column="1"/>
+            </Grid>
+            <Button Text="Delete" Grid.Row="2" Grid.Column="1"/>
+            <Label Text="Message" Grid.Row="3"/>
+            <Label Text="Author" Grid.Row="3" Grid.Column="1"/>
+            <Entry x:Name="Message1" Grid.Row="4"/>
+            <Entry x:Name="Message2" Grid.Row="5"/>
+            <Grid Grid.Row="4" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Entry x:Name="AuthorOT"/>
+                <Picker x:Name="AuthorLang" Grid.Column="1"/>
+                <Entry x:Name="AuthorSID" Grid.Row="1"/>
+                <CheckBox x:Name="UserEnteredCB" Grid.Row="1" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                <Label Text="User Entered" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"/>
+            </Grid>
+            <Label Text="Mail Type:" Grid.Row="6"/>
+            <Picker x:Name="MailTypePicker" Grid.Row="6" Grid.Column="1"/>
+            <Label Text="Appear PKM:" Grid.Row="7"/>
+            <Picker x:Name="AppearPKMPicker" Grid.Row="7" Grid.Column="1"/>
+            <Label Text="Held MailID" Grid.Row="8"/>
+            <CollectionView x:Name="HMID_CV" Grid.Row="8" Grid.Column="1" HeightRequest="150"/>
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>
