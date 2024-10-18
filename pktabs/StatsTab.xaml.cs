@@ -14,7 +14,9 @@ public partial class StatsTab : ContentPage
     public int maxEV = 252;
     public int maxAV = 200;
     public int maxGV = 10;
-	public StatsTab()
+    public List<ComboItem> types;
+
+    public StatsTab()
 	{
 		InitializeComponent();
         foreach (var ty in Enum.GetNames(typeof(MoveType)))
@@ -23,7 +25,10 @@ public partial class StatsTab : ContentPage
         foreach (var typ in Enum.GetNames(typeof(MoveType)))
             MainTeratypepicker.Items.Add(typ);
         MainTeratypepicker.Items.Add("Stellar");
-        HiddenPowerPicker.ItemsSource = Enum.GetValues(typeof(MoveType));
+        var hptypes = GameInfo.Strings.types.AsSpan(1, HiddenPower.TypeCount);
+        types = Util.GetCBList(hptypes);
+        HiddenPowerPicker.ItemsSource = types;
+        HiddenPowerPicker.ItemDisplayBinding = new Binding("Text");
         ICommand refreshCommand = new Command(async () =>
         {
             await applystatsinfo(pk);
@@ -170,7 +175,7 @@ public partial class StatsTab : ContentPage
         {
             HiddenPowerPicker.IsVisible = true;
             HiddenPLabel.IsVisible = true;
-            HiddenPowerPicker.SelectedItem = (MoveType)pkm.HPType;
+            HiddenPowerPicker.SelectedItem = types.Find(z => z.Value == pkm.HPType);
         }
         SkipEvent = false;
     }
@@ -676,8 +681,10 @@ public partial class StatsTab : ContentPage
     {
         if (!SkipEvent)
         {
-            pk.HPType = HiddenPowerPicker.SelectedIndex;
-            HiddenPower.SetIVs(HiddenPowerPicker.SelectedIndex, pk.IVs, pk.Context);
+            var hptype = ((ComboItem)HiddenPowerPicker.SelectedItem).Value;
+            pk.HPType = hptype;
+            HiddenPower.SetIVs(hptype, pk.IVs, pk.Context);
+            applystatsinfo(pk);
         }
     }
 }
