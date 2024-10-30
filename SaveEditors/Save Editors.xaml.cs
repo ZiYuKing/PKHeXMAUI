@@ -107,6 +107,6 @@ public partial class SaveEditors : ContentPage
 
     private void OpenMailBoxEditor(object sender, EventArgs e)
     {
-        Navigation.PushModalAsync(new MailBox());
+        Navigation.PushModalAsync(new MailBox(sav));
     }
 }

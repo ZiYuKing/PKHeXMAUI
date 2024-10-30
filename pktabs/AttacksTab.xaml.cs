@@ -179,22 +179,34 @@ public partial class AttacksTab : ContentPage
     private void applymove1ppups(object sender, EventArgs e)
     {
         if (!SkipEvent)
+        {
             pk.Move1_PPUps = move1ppups.SelectedIndex;
+            applyattackinfo(pk);
+        }
     }
     private void applymove2ppups(object sender, EventArgs e)
     {
         if (!SkipEvent)
+        {
             pk.Move2_PPUps = move2ppups.SelectedIndex;
+            applyattackinfo(pk);
+        }
     }
     private void applymove3ppups(object sender, EventArgs e)
     {
         if (!SkipEvent)
+        {
             pk.Move3_PPUps = move3ppups.SelectedIndex;
+            applyattackinfo(pk);
+        }
     }
     private void applymove4ppups(object sender, EventArgs e)
     {
         if (!SkipEvent)
+        {
             pk.Move4_PPUps = move4ppups.SelectedIndex;
+            applyattackinfo(pk);
+        }
     }
 
     private void openTReditor(object sender, EventArgs e)
