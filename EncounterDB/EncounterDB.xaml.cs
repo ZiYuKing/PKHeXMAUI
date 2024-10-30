@@ -26,7 +26,7 @@ public partial class EncounterDB : ContentPage
             image.SetBinding(Image.SourceProperty, "url");
             shinysp.SetBinding(Image.IsVisibleProperty, "EncounterInfo.IsShiny");
             Image EggSprite = new() { Source = "a_egg.png", HeightRequest=40, WidthRequest=40, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.End };
-            EggSprite.SetBinding(Image.IsVisibleProperty, "EncounterInfo.EggEncounter");
+            EggSprite.SetBinding(Image.IsVisibleProperty, "EncounterInfo.IsEgg");
             Image AlphaSprite = new() { Source = "ribbonmarkalpha.png", HeightRequest = 40, WidthRequest = 40, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Start };
             AlphaSprite.SetBinding(Image.IsVisibleProperty, "Alpha");
             Image BallSprite = new() { HeightRequest = 16, WidthRequest = 16, VerticalOptions = LayoutOptions.End, HorizontalOptions = LayoutOptions.Start };
