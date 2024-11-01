@@ -47,10 +47,12 @@ public partial class SaveEditors : ContentPage
             Button_EventFlags1.IsVisible = true;
         if (sav is SAV1 or SAV2 or SAV3)
             Button_Pokedex1.IsVisible = true;
-        if (sav is SAV2)
+        if (sav is SAV2 sav2)
         {
             Button_RTCEditor.IsVisible = true;
             MailBoxButton.IsVisible = true;
+            GSBallButton.IsVisible = sav.Version is GameVersion.C;
+            GSBallButton.IsEnabled = !sav2.IsEnabledGSBallMobileEvent;
         }
 
     }
@@ -108,5 +110,12 @@ public partial class SaveEditors : ContentPage
     private void OpenMailBoxEditor(object sender, EventArgs e)
     {
         Navigation.PushModalAsync(new MailBox(sav));
+    }
+
+    private void EnableGSBallEvent(object sender, EventArgs e)
+    {
+        var sav2 = sav as SAV2;
+        sav2.EnableGSBallMobileEvent();
+        GSBallButton.IsEnabled = false;
     }
 }
