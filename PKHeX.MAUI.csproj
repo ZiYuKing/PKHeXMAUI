@@ -293,6 +293,9 @@
 	  <MauiXaml Update="SaveEditors\Gen2\MailBox.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\Gen3\RTC3Editor.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="SaveEditors\SaveAccessors\gen8+\BlockEditor8.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -374,7 +377,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="SaveEditors\Gen3\" />
 	  <Folder Include="SaveEditors\TrainerEditors\gen8b\" />
 	</ItemGroup>
 </Project>

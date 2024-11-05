@@ -49,12 +49,12 @@ public partial class SaveEditors : ContentPage
             Button_Pokedex1.IsVisible = true;
         if (sav is SAV2 sav2)
         {
-            Button_RTCEditor.IsVisible = true;
             MailBoxButton.IsVisible = true;
             GSBallButton.IsVisible = sav.Version is GameVersion.C;
             GSBallButton.IsEnabled = !sav2.IsEnabledGSBallMobileEvent;
         }
-
+        if(sav is SAV2 or SAV3)
+            Button_RTCEditor.IsVisible = true;
     }
 
     private void OpenTrainerEditor(object sender, EventArgs e)
@@ -102,7 +102,7 @@ public partial class SaveEditors : ContentPage
                     sav2.ResetRTC();
                 break;
             case 3:
-                
+                Navigation.PushModalAsync(new RTC3Editor(sav));
                 break;
         }
     }
