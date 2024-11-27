@@ -1,6 +1,5 @@
 using CommunityToolkit.Maui.Storage;
 using PKHeX.Core;
-using Syncfusion.Maui.Inputs;
 using System.Security.Cryptography;
 namespace PKHeXMAUI
 {
@@ -19,11 +18,11 @@ namespace PKHeXMAUI
             SAV = sav;
             Metadata = new SCBlockMetadata(sav.Accessor, [], []);
             SortedBlockKeys = Metadata.GetSortedBlockKeyList().ToArray();
-            BlockKey_Picker.ItemsSource = SortedBlockKeys;
-            BlockKey_Picker.DisplayMemberPath = "Text";
+            BlockKey_Picker.ItemSource = SortedBlockKeys;
+            BlockKey_Picker.TextChanged += (s, e) => BlockDataFilter.GetMatchingIndexes(s, (TextChangedEventArgs)e);
         }
 
-        private void Update_BlockCV(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
+        private void Update_BlockCV(object sender, EventArgs e)
         {
             if (BlockKey_Picker.SelectedItem != null)
             {
@@ -50,15 +49,14 @@ namespace PKHeXMAUI
             if(CurrentBlock.Type.IsBoolean())
             {
                 BlockEditor_Hex.IsVisible = false;
-                var CB_TypeToggle = new SfComboBox();
-                CB_TypeToggle.ItemsSource = new[]
+                var CB_TypeToggle = new comboBox();
+                CB_TypeToggle.ItemSource = new[]
                 {
                     new ComboItem(nameof(SCTypeCode.Bool1), (int)SCTypeCode.Bool1),
                     new ComboItem(nameof(SCTypeCode.Bool2), (int)SCTypeCode.Bool2),
                 };
                 CB_TypeToggle.SelectedIndex = (int)CurrentBlock.Type - 1;
-                CB_TypeToggle.SelectionChanged += CB_TypeToggle_SelectionChanged;
-                CB_TypeToggle.DisplayMemberPath = "Text";
+                CB_TypeToggle.SelectedIndexChanged += CB_TypeToggle_SelectionChanged;
                 BlockStack.Add(CB_TypeToggle);
             }
             if (obj != null)
@@ -105,11 +103,11 @@ namespace PKHeXMAUI
             }
         }
 
-        private void CB_TypeToggle_SelectionChanged(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
+        private void CB_TypeToggle_SelectionChanged(object sender, EventArgs e)
         {
             var block = CurrentBlock;
             var cType = block.Type;
-            var cValue = (SCTypeCode)((ComboItem)((SfComboBox)sender).SelectedItem).Value;
+            var cValue = (SCTypeCode)((ComboItem)((comboBox)sender).SelectedItem).Value;
             if (cType == cValue)
                 return;
             block.ChangeBooleanType(cValue);
@@ -120,11 +118,7 @@ namespace PKHeXMAUI
         {
             Navigation.PopModalAsync();
         }
-        private void ChangeComboBoxFontColor(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            SfComboBox box = (SfComboBox)sender;
-            box.TextColor = box.IsDropDownOpen ? Colors.Black : Colors.White;
-        }
+
 
         private async void ExportBlocksFolder(object sender, EventArgs e)
         {
@@ -214,13 +208,14 @@ namespace PKHeXMAUI
             return option;
         }
     }
-    public class BlockDataFilter : IComboBoxFilterBehavior
+    public class BlockDataFilter 
     {
-        public List<int> GetMatchingIndexes(SfComboBox source, ComboBoxFilterInfo filterInfo)
+        public static void GetMatchingIndexes(object sender, TextChangedEventArgs filterInfo)
         {
+            comboBox source = (comboBox)sender;
             List<int> filteredlist = [];
-            List<ComboItem> SourceList = ((ComboItem[])source.ItemsSource).ToList();
-            var text = filterInfo.Text;
+            List<ComboItem> SourceList = ((ComboItem[])source.ItemSource).ToList();
+            var text = filterInfo.NewTextValue;
             if (text.Length == 8)
             {
                 var hex = (int)Util.GetHexValue(text);
@@ -228,11 +223,13 @@ namespace PKHeXMAUI
                 {
                     // Input is hexadecimal number, select the item
                     filteredlist.Add(BlockEditor8.SortedBlockKeys.ToList().IndexOf(BlockEditor8.SortedBlockKeys.ToList().Find(z => z.Value == hex)));
-                    return filteredlist;
+                    source.ItemSource = filteredlist;
+                    return;
                 }
             }
-            filteredlist.AddRange(from ComboItem item in BlockEditor8.SortedBlockKeys where item.Text.Contains(filterInfo.Text, StringComparison.InvariantCultureIgnoreCase) select BlockEditor8.SortedBlockKeys.ToList().IndexOf(item));
-            return filteredlist;
+            filteredlist.AddRange(from ComboItem item in BlockEditor8.SortedBlockKeys where item.Text.Contains(filterInfo.NewTextValue, StringComparison.InvariantCultureIgnoreCase) select BlockEditor8.SortedBlockKeys.ToList().IndexOf(item));
+            source.ItemSource= filteredlist;
+            return;
         }
     }
 }

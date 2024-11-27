@@ -1,5 +1,4 @@
 ﻿using PKHeX.Core;
-using Syncfusion.Maui.ListView;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
@@ -60,8 +59,7 @@ public partial class TextEditor : ContentPage
         });
         StringHexCV.ItemsLayout= new GridItemsLayout(4, ItemsLayoutOrientation.Vertical);
         StringHexCV.ItemsSource = TrashList;
-        SpeciesCombo.ItemsSource = GameInfo.SpeciesDataSource;
-        SpeciesCombo.DisplayMemberPath = "Text";
+        SpeciesCombo.ItemSource = (System.Collections.IList)GameInfo.SpeciesDataSource;
         SpeciesCombo.SelectedItem = GameInfo.SpeciesDataSource.First(z => z.Value == MainPage.pk.Species);
         GenerationPicker.ItemsSource = Enumerable.Range(1, 9).ToArray();
         GenerationPicker.SelectedIndex = MainPage.sav.Generation - 1;

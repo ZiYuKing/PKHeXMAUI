@@ -12,19 +12,25 @@ public partial class SearchSettings : ContentPage
 		InitializeComponent();
         var EncSpeciesList = datasourcefiltered.Species.ToList();
         EncSpeciesList.Insert(0, Any);
-        EncSpecies.ItemsSource = EncSpeciesList;
+        EncSpecies.DisplayMemberPath = "Text";
+        EncSpecies.ItemSource = EncSpeciesList;
         var EncMoveList = datasourcefiltered.Moves.ToList();
         EncMoveList.RemoveAt(0); EncMoveList.Insert(0, Any);
-        EncMove1.ItemsSource = EncMoveList;
-        EncMove2.ItemsSource = EncMoveList;
-        EncMove3.ItemsSource = EncMoveList;
-        EncMove4.ItemsSource = EncMoveList;
+        EncMove1.DisplayMemberPath = "Text";
+        EncMove1.ItemSource = EncMoveList;
+        EncMove2.DisplayMemberPath = "Text";
+        EncMove2.ItemSource = EncMoveList;
+        EncMove3.DisplayMemberPath = "Text";
+        EncMove3.ItemSource = EncMoveList;
+        EncMove4.DisplayMemberPath = "Text";
+        EncMove4.ItemSource = EncMoveList;
         var EncVersionList = datasourcefiltered.Games.ToList();
         EncVersionList.RemoveAt(EncVersionList.Count - 1); EncVersionList.Insert(0, Any);
-        EncVersion.ItemsSource = EncVersionList;
+        EncVersion.DisplayMemberPath= "Text";
+        EncVersion.ItemSource = EncVersionList;
         if(encSettings != null)
         {
-            EncSpecies.SelectedItem = datasourcefiltered.Species.First(z => (ushort)z.Value == encSettings.Species);
+            EncSpecies.SelectedItem = datasourcefiltered.Species.FirstOrDefault(z => (ushort)z.Value == encSettings.Species);
             if (encSettings.Moves.Count >0)
                 EncMove1.SelectedItem = EncMoveList.First(z => z.Value == encSettings.Moves[0]);
             if (encSettings.Moves.Count >1)
@@ -34,15 +40,10 @@ public partial class SearchSettings : ContentPage
             if (encSettings.Moves.Count>3)
                 EncMove4.SelectedItem = EncMoveList.First(z => z.Value == encSettings.Moves[3]);
 
-            EncVersion.SelectedItem = EncVersionList.First(z=>z.Value == (int)encSettings.Version);
+            EncVersion.SelectedItem = EncVersionList.FirstOrDefault(z=>z.Value == (int)encSettings.Version);
             ShinyCheck.IsChecked = (bool)encSettings.SearchShiny;
             EggCheck.IsChecked = (bool)encSettings.SearchEgg;
         }
-    }
-
-    private void ChangeFontColor(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-		EncSpecies.TextColor = EncSpecies.IsDropDownOpen ? Colors.Black : Colors.White;
     }
 
     private void CloseSearchSettings(object sender, EventArgs e)
@@ -54,10 +55,10 @@ public partial class SearchSettings : ContentPage
     {
         encSettings = new()
         {
-            Species = (ushort)((ComboItem)EncSpecies.SelectedItem).Value,
+            Species = (ushort)((ComboItem)EncSpecies.SelectedItem??Any).Value,
             Format = sav.Generation,
             Generation = sav.Generation,
-            Version = (GameVersion)((ComboItem)EncVersion.SelectedItem).Value,
+            Version = (GameVersion)((ComboItem)EncVersion.SelectedItem??Any).Value,
             Nature = (EncounterSettings.UsePkEditorAsCriteria ? pk.Nature : 0),
             Ability = (EncounterSettings.UsePkEditorAsCriteria ? pk.Ability : 0),
             Level = (EncounterSettings.UsePkEditorAsCriteria ? pk.CurrentLevel : 0),

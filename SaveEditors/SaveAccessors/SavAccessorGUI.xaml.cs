@@ -1,6 +1,5 @@
 using CommunityToolkit.Maui.Storage;
 using PKHeX.Core;
-using Syncfusion.Maui.Inputs;
 using System.Reflection;
 namespace PKHeXMAUI;
 
@@ -11,17 +10,19 @@ public partial class SavAccessorGUI : ContentPage
 
     public SavAccessorGUI(SaveFile sav, ISaveBlockAccessor<BlockInfo>? accessor)
 	{
+        
 		InitializeComponent();
         if (accessor is not null)
         {
             Metadata = new SaveBlockMetadata<BlockInfo>(accessor);
-            BlockKey_Picker.ItemsSource = Metadata.GetSortedBlockList().ToArray();
+            BlockKey_Picker.ItemSource = Metadata.GetSortedBlockList().ToArray();
         }
         else
         {
             BlockKey_Picker.IsVisible = false;
             UpdateSimpleBlockSummaryControls(sav);
         }
+        BlockKey_Picker.TextChanged +=(s,e)=> BlockDataFilter.GetMatchingIndexes(s,(TextChangedEventArgs)e);
     }
     private void UpdateBlockSummaryControls(IDataIndirect obj)
     {
@@ -131,11 +132,11 @@ public partial class SavAccessorGUI : ContentPage
             }
         }
     }
-    private void Update_BlockCV(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
+    private void Update_BlockCV(object sender, EventArgs e)
     {
-            if (((SfComboBox)sender).SelectedItem is not null)
+            if (((comboBox)sender).SelectedItem is not null)
             {
-                var name = ((SfComboBox)sender).SelectedItem as string;
+                var name = ((comboBox)sender).SelectedItem as string;
                 CurrentBlock = Metadata.GetBlock(name);
                 UpdateBlockSummaryControls(CurrentBlock);
             }
@@ -164,9 +165,5 @@ public partial class SavAccessorGUI : ContentPage
                 return false;
         }
     }
-    private void ChangeComboBoxFontColor(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        SfComboBox box = (SfComboBox)sender;
-        box.TextColor = box.IsDropDownOpen ? Colors.Black : Colors.White;
-    }
+
 }

@@ -1,8 +1,8 @@
 using static PKHeXMAUI.MainPage;
 using PKHeX.Core;
-using Syncfusion.Maui.Inputs;
 using System.Windows.Input;
 using PKHeX.Core.Injection;
+using System.Globalization;
 
 namespace PKHeXMAUI;
 
@@ -69,13 +69,12 @@ public partial class Items : TabbedPage
                 grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
                 grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
                 grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
-                SfComboBox itemname = new() { Placeholder = "(None)", IsEditable = true, TextSearchMode = ComboBoxTextSearchMode.StartsWith, BackgroundColor = Colors.Transparent, MaxDropDownHeight = 500 };
-                itemname.PropertyChanged += ChangeComboBoxFontColor;
-                itemname.SelectionChanged += ChangeItemSprite;
+                comboBox itemname = new() { Placeholder = "(None)", BackgroundColor = Colors.Transparent };
+                itemname.SelectedIndexChanged += ChangeItemSprite;
                 var pouchstrings = GetStringsForPouch(pouch.GetAllItems());
-                itemname.ItemsSource = pouchstrings;
-                itemname.SetBinding(SfComboBox.SelectedItemProperty, "name", mode: BindingMode.TwoWay);
-                itemname.IsClearButtonVisible = false;
+                itemname.ItemSource = pouchstrings;
+                itemname.SetBinding(comboBox.SelectedItemProperty, "name", mode: BindingMode.TwoWay);
+                itemname.Loaded += itemname.ForceSelection;
                 grid.Add(itemname, 1);
                 Image itemsp = new() { HorizontalOptions = LayoutOptions.Start, HeightRequest = 25, WidthRequest = 25 };
                 itemsp.SetBinding(Image.SourceProperty, "itemsprite");
@@ -188,11 +187,6 @@ public partial class Items : TabbedPage
         SourceList[pindex] = list;
     }
 
-    private void ChangeComboBoxFontColor(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        SfComboBox box = (SfComboBox)sender;
-        box.TextColor = box.IsDropDownOpen ? Colors.Black : Colors.White;
-    }
     private string[] GetStringsForPouch(ReadOnlySpan<ushort> items, bool sort = true)
     {
         string[] res = new string[items.Length + 1];
@@ -275,7 +269,7 @@ public partial class Items : TabbedPage
     {
         var pindex = Array.IndexOf([.. ItemsMain.Children], ItemsMain.CurrentPage) - 1;
         var CurrentSource = SourceList[pindex];
-        itemInfo? CurrentItem = CurrentSource.Find(z => z.name == (string)((Syncfusion.Maui.Inputs.SelectionChangedEventArgs)e).CurrentSelection[0]);
+        itemInfo? CurrentItem = CurrentSource.Find(z => z.name == (string)((comboBox)sender).SelectedItem);
         if (CurrentItem is not null)
         {
             var lump = HeldItemLumpUtil.GetIsLump(CurrentItem.InvItem.Index, sav.Context);

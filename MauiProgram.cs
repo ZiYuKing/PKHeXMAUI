@@ -1,7 +1,6 @@
 ﻿
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
-using Syncfusion.Maui.Core.Hosting;
 using CommunityToolkit.Maui;
 
 namespace PKHeXMAUI;
@@ -14,7 +13,6 @@ public static class MauiProgram
                 builder
                         .UseMauiApp<App>()
                         .UseMauiCommunityToolkit()
-                        .ConfigureSyncfusionCore()
                         .ConfigureFonts(fonts =>
                         {
                                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

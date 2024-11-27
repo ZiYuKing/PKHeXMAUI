@@ -1,10 +1,9 @@
-﻿
+﻿using System.Collections;
 using PKHeX.Core;
 using System.Net.Sockets;
 using PKHeX.Core.AutoMod;
 using Octokit;
 using System.Windows.Input;
-using Syncfusion.Maui.Inputs;
 using PKHeX.Core.Injection;
 using CommunityToolkit.Maui.Storage;
 namespace PKHeXMAUI;
@@ -27,6 +26,7 @@ public partial class MainPage : ContentPage
         datasourcefiltered = GameInfo.FilteredSources;
         pk = EntityBlank.GetBlank(sav.Generation,(GameVersion)sav.Version);
         pk.Species = sav.MaxSpeciesID;
+        pk.Language = sav.Language;
         var validvers = RamOffsets.GetValidVersions(sav);
         ICommunicator com = RamOffsets.IsSwitchTitle(sav) ? new SysBotMini() : new NTRClient();
         Remote = new PokeSysBotMini(validvers[^1], com, false);
@@ -43,24 +43,32 @@ public partial class MainPage : ContentPage
         PKRefresh.Command = refreshCommand;
         Permissions.RequestAsync<Permissions.StorageWrite>();
         SetSettings();
-        specieslabel.ItemsSource = datasourcefiltered.Species;
-        naturepicker.ItemsSource = datasourcefiltered.Natures;
+        specieslabel.DisplayMemberPath = "Text";
+        specieslabel.ItemSource = (IList)datasourcefiltered.Species;
         naturepicker.DisplayMemberPath = "Text";
+        naturepicker.ItemSource = (IList)datasourcefiltered.Natures;
+        abilitypicker.ItemSource = new List<ComboItem>();
         if (pk.Format > 7)
         {
             statnaturepicker.IsVisible = true;
             Lab_StatNature.IsVisible = true;
-            statnaturepicker.ItemsSource = datasourcefiltered.Natures;
             statnaturepicker.DisplayMemberPath = "Text";
+            statnaturepicker.ItemSource = (IList)datasourcefiltered.Natures;
         }
-        helditempicker.ItemsSource = datasourcefiltered.Items;
         helditempicker.DisplayMemberPath = "Text";
+        helditempicker.ItemSource = (IList)datasourcefiltered.Items;
         if (datasourcefiltered.Items.Count > 0)
         {
             helditempicker.IsVisible = true;
             helditemlabel.IsVisible = true;
         }
-        languagepicker.ItemsSource = Enum.GetNames(typeof(LanguageID));
+        List<ComboItem> languageSource = [];
+        foreach(var item in Enum.GetValues<LanguageID>())
+        {
+            languageSource.Add(new ComboItem($"{(LanguageID)item}", (int)item));
+        }
+        languagepicker.ItemDisplayBinding = new Binding("Text");
+        languagepicker.ItemsSource = languageSource;
         checklegality();
         CheckForUpdate();
         FirstLoad = false;
@@ -87,7 +95,6 @@ public partial class MainPage : ContentPage
         APILegality.SetBattleVersion = PluginSettings.SetBattleVersion;
         APILegality.ForceSpecifiedBall = true;
         APILegality.Timeout = 45;
-        APILegality.AllowHOMETransferGeneration = PluginSettings.AllowHomeless;
         EncounterMovesetGenerator.PriorityList = new List<EncounterTypeGroup>() { EncounterTypeGroup.Slot, EncounterTypeGroup.Trade, EncounterTypeGroup.Static, EncounterTypeGroup.Mystery, EncounterTypeGroup.Egg };
         //TrainerSettings.DefaultOT = PluginSettings.DefaultOT;
         EncounterEvent.RefreshMGDB();
@@ -249,6 +256,7 @@ public partial class MainPage : ContentPage
         la = new(pk,sav.Personal);
         legality.Source = la.Valid ? "valid.png" : "warn.png";
     }
+    public List<ComboItem> abilitySource = [];
     public async Task applymainpkinfo(PKM pkm)
     {
         SkipTextChange = true;
@@ -266,14 +274,18 @@ public partial class MainPage : ContentPage
         iseggcheck.IsChecked = pkm.IsEgg;
         infectedcheck.IsChecked = pkm.IsPokerusInfected;
         curedcheck.IsChecked = pkm.IsPokerusCured;
-        if (abilitypicker.Items.Count != 0)
-            abilitypicker.Items.Clear();
+        if (abilitySource.Count != 0)
+            abilitySource.Clear();
         for (int i = 0; i < pk.PersonalInfo.AbilityCount; i++)
         {
             var abili = pk.PersonalInfo.GetAbilityAtIndex(i);
-            abilitypicker.Items.Add($"{(Ability)abili}");
+
+            abilitySource.Add(new ComboItem($"{(Ability)abili}", i));
         }
-        abilitypicker.SelectedIndex =pkm.AbilityNumber == 4? 2: pkm.AbilityNumber-1;
+        abilitypicker.DisplayMemberPath = "Text";
+        abilitypicker.ItemSource = abilitySource;
+        abilitypicker.SelectedIndex = -1;
+        abilitypicker.SelectedIndex =pkm.AbilityNumber == 4? 2: pkm.AbilityNumber;
         Friendshipdisplay.Text = $"{pkm.CurrentFriendship}";
 
         genderdisplay.Source = $"gender_{pkm.Gender}.png";
@@ -369,7 +381,8 @@ public partial class MainPage : ContentPage
     {
         if (!SkipTextChange)
         {
-            ComboItem test = (ComboItem)specieslabel.SelectedItem ?? new ComboItem("None", 0);
+            if (specieslabel.SelectedItem is null) return;
+            ComboItem test = (ComboItem)specieslabel.SelectedItem;
             var tree = EvolutionTree.GetEvolutionTree(sav.Context);
             var evos = tree.GetEvolutionsAndPreEvolutions(pk.Species, pk.Form);
             if(!evos.Contains(((ushort)test.Value,pk.Form)))
@@ -380,14 +393,15 @@ public partial class MainPage : ContentPage
             formpicker.IsVisible = false;
 
             pk.Species = (ushort)test.Value;
-            if (abilitypicker.Items.Count != 0)
-                abilitypicker.Items.Clear();
+            if (abilitySource.Count() != 0)
+                abilitySource.Clear();
             for (int i = 0; i < pk.PersonalInfo.AbilityCount; i++)
             {
                 var abili = pk.PersonalInfo.GetAbilityAtIndex(i);
-                abilitypicker.Items.Add($"{(Ability)abili}");
+                abilitySource.Add(new ComboItem($"{(Ability)abili}",abili));
             }
-            abilitypicker.SelectedIndex = 0;
+            abilitypicker.DisplayMemberPath = ".";
+            abilitypicker.ItemSource = abilitySource;
             if (pk.PersonalInfo.Genderless && genderdisplay.Source != (ImageSource)"gender_2.png")
             {
                 pk.Gender = 2;
@@ -549,9 +563,9 @@ public partial class MainPage : ContentPage
     {
         if (!SkipTextChange)
         {
-            if (abilitypicker.SelectedIndex != -1)
+            if (abilitypicker.SelectedItem != null)
             {
-                var abil = pk.PersonalInfo.GetAbilityAtIndex(abilitypicker.SelectedIndex);
+                var abil = pk.PersonalInfo.GetAbilityAtIndex(((ComboItem)abilitypicker.SelectedItem).Value);
                 pk.SetAbility(abil);
             }
         }
@@ -769,8 +783,7 @@ public partial class MainPage : ContentPage
 
     private void ChangeComboBoxFontColor(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        SfComboBox box = (SfComboBox)sender;
-        box.TextColor = box.IsDropDownOpen ? Colors.Black : Colors.White;
+        comboBox box = (comboBox)sender;
     }
 
     public async void ImportShowdown(object sender, EventArgs e)

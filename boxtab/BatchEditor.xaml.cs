@@ -1,6 +1,5 @@
 using PKHeX.Core;
 using System.Reflection;
-using Syncfusion.Maui.Inputs;
 using static PKHeXMAUI.MainPage;
 
 namespace PKHeXMAUI;
@@ -15,7 +14,8 @@ public partial class BatchEditor : ContentPage
 			BatchFormat.Items.Add(t.Name.ToLowerInvariant());
 		BatchFormat.Items.Add("All");
 		var format = BatchFormat.SelectedIndex = 0;
-		BatchProperty.ItemsSource = BatchEditing.Properties[format];
+		BatchProperty.ItemSource = BatchEditing.Properties[format];
+        BatchProperty.SelectedIndex = -1;
 		BatchProperty.SelectedIndex = 0;
 		BatchEditType.ItemsSource = new object[] { "Set", "==", "!=", ">", ">=", "<", "<=" };
 		BatchEditType.SelectedIndex = 0;
@@ -73,7 +73,7 @@ public partial class BatchEditor : ContentPage
     {
         skipchange = true;
         var format = BatchFormat.SelectedIndex;
-        BatchProperty.ItemsSource = BatchEditing.Properties[format];
+        BatchProperty.ItemSource = BatchEditing.Properties[format];
         skipchange = false;
         BatchProperty.SelectedIndex = 0;
     }
@@ -82,11 +82,7 @@ public partial class BatchEditor : ContentPage
     {
         Navigation.PopModalAsync();
     }
-    private void ChangeComboBoxFontColor(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        SfComboBox box = (SfComboBox)sender;
-        box.TextColor = box.IsDropDownOpen ? Colors.Black : Colors.White;
-    }
+
 
     private async void ApplyBatchChanges(object sender, EventArgs e)
     {

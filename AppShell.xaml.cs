@@ -1,7 +1,6 @@
 ﻿
 using PKHeX.Core;
 using PKHeX.Core.AutoMod;
-using Syncfusion.Maui.DataSource.Extensions;
 using System.Windows.Input;
 using static PKHeXMAUI.MainPage;
 namespace PKHeXMAUI;

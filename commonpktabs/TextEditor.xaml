@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:inputs="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:control="clr-namespace:PKHeXMAUI"
              x:Class="PKHeXMAUI.TextEditor"
              Title="TextEditor">
     <ScrollView>
@@ -42,7 +42,7 @@
                     </Grid.RowDefinitions>
                     <Label Text="Trash Byte Layers" VerticalOptions="Center" HorizontalOptions="Center"/>
                     <Label Text="Species" Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    <inputs:SfComboBox x:Name="SpeciesCombo" Grid.Row="1" Grid.Column="1"/>
+                    <control:comboBox x:Name="SpeciesCombo" Grid.Row="1" Grid.Column="1"/>
                     <Label Text="Language" Grid.Row="2" VerticalOptions="Center" HorizontalOptions="Center"/>
                     <Picker x:Name="LanguagePicker" Grid.Row="2" Grid.Column="1"/>
                     <Label Text="Generation" Grid.Row="3" VerticalOptions="Center" HorizontalOptions="Center"/>

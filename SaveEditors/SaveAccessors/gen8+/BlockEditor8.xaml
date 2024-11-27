@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:inputs="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
              xmlns:local="clr-namespace:PKHeXMAUI"
              x:Class="PKHeXMAUI.BlockEditor8"
              Title="BlockEditor">
     <ScrollView>
     <VerticalStackLayout>
-            <inputs:SfComboBox x:Name="BlockKey_Picker" SelectionChanged="Update_BlockCV" IsClearButtonVisible="True" IsEditable="True" IsFilteringEnabled="True" BackgroundColor="Transparent" PropertyChanged="ChangeComboBoxFontColor">
-                <inputs:SfComboBox.FilterBehavior>
-                    <local:BlockDataFilter/>
-                </inputs:SfComboBox.FilterBehavior>
-            </inputs:SfComboBox>
+            <local:comboBox x:Name="BlockKey_Picker" SelectedIndexChanged="Update_BlockCV" BackgroundColor="Transparent">
+            </local:comboBox>
             <Label x:Name="BlockSummary" IsVisible="false"/>
             <Editor HeightRequest="400"  x:Name="BlockEditor_Hex"/>
             <Grid x:Name="BlockStack">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:inputs="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:control="clr-namespace:PKHeXMAUI"
              x:Class="PKHeXMAUI.BatchEditor"
              Title="BatchEditor">
     <VerticalStackLayout>
@@ -17,7 +17,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Picker x:Name="BatchFormat" SelectedIndexChanged="FormatChanged"/>
-            <inputs:SfComboBox x:Name="BatchProperty" Grid.Column="1" SelectionChanged="PropertyChang" PropertyChanged="ChangeComboBoxFontColor" IsEditable="True" TextSearchMode="StartsWith" BackgroundColor="Transparent"/>
+            <control:comboBox x:Name="BatchProperty" Grid.Column="1" SelectedIndexChanged="PropertyChang" BackgroundColor="Transparent"/>
             <Picker x:Name="BatchEditType" Grid.Column="2"/>
             <Label x:Name="PropertyTypeLab" Grid.Row="1" FontSize="16"/>
             <Label x:Name="PropertyValueLab" Grid.Row="1" Grid.Column="1" FontSize="16"/>

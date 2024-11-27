@@ -1,13 +1,14 @@
-using Syncfusion.Maui.Inputs;
+
 using System.Reflection;
 using PKHeX.Core;
 using PKHeX.Core.AutoMod;
-using Syncfusion.Maui.DataSource.Extensions;
+
 using System.Collections.ObjectModel;
-using Syncfusion.Maui.Core.Internals;
+
 using System.Text.Json;
 using System.Runtime.Serialization.Json;
 using CommunityToolkit.Maui.Storage;
+using CommunityToolkit.Maui.Core.Extensions;
 
 namespace PKHeXMAUI;
 
@@ -32,11 +33,11 @@ public partial class PKHeXSettings : ContentPage
 			Label Label_settings = new();
             Label_settings.SetBinding(Label.TextProperty, "prop.Name");
 			grid.Add(Label_settings);
-			SfComboBox SettingBool = new() { HorizontalOptions = LayoutOptions.Center };
-			SettingBool.SetBinding(SfComboBox.PlaceholderProperty,"prop.Name");
-			SettingBool.SetBinding(SfComboBox.ItemsSourceProperty,"proparray");
-			SettingBool.PropertyChanged += GetSettingBool;
-            SettingBool.SelectionChanged += ApplySettingBool;
+			comboBox SettingBool = new() { HorizontalOptions = LayoutOptions.Center };
+			SettingBool.SetBinding(comboBox.PlaceholderProperty,"prop.Name");
+			SettingBool.SetBinding(comboBox.ItemSourceProperty,"proparray");
+			SettingBool.Loaded += GetSettingBool;
+            SettingBool.SelectedIndexChanged += ApplySettingBool;
 			grid.Add(SettingBool, 1);
 
 			return grid;
@@ -53,7 +54,7 @@ public partial class PKHeXSettings : ContentPage
 	public string LastBox = "";
     public void GetSettingBool(object sender, EventArgs e)
 	{
-        var box = (SfComboBox)sender;
+        var box = (comboBox)sender;
         if (box.Placeholder != LastBox)
 		{
 			box.SelectedItem = Preferences.Default.Get(box.Placeholder, false);
@@ -63,7 +64,7 @@ public partial class PKHeXSettings : ContentPage
 
     public void ApplySettingBool(object sender, EventArgs e)
 	{
-        var box = (SfComboBox)sender;
+        var box = (comboBox)sender;
 		Preferences.Set(box.Placeholder, (bool)box.SelectedItem);
 	}
 
@@ -89,7 +90,7 @@ public class GenericCollection
 	public GenericCollection(PropertyInfo p)
 	{
 		prop = p;
-		if(p.PropertyType == typeof(Boolean))
+		if(p.PropertyType == typeof(bool))
 		{
 			proparray = [false, true];
 		}
@@ -118,7 +119,7 @@ public class GenericCollectionSelector : DataTemplateSelector
     public static CollectionView Selected = new() { CanReorderItems = true, SelectionMode = SelectionMode.Single};
     public static CollectionView Options = new() { CanReorderItems = true, SelectionMode = SelectionMode.Single };
     public static ObservableCollection<MoveType> SelectedSource = [];
-    public static ObservableCollection<MoveType> MoveTypeOptionsSource = Enum.GetValues<MoveType>().ToObservableCollection();
+    public static ObservableCollection<MoveType> MoveTypeOptionsSource = Enum.GetValues<MoveType>().ToArray().ToObservableCollection<MoveType>();
     public DataTemplate ComboTemplate = new(() =>
     {
         Grid grid = new() { Padding = 10, Margin = 10 };
@@ -129,11 +130,11 @@ public class GenericCollectionSelector : DataTemplateSelector
         Label Label_settings = new();
         Label_settings.SetBinding(Label.TextProperty, "prop.Name");
         grid.Add(Label_settings);
-        SfComboBox SettingBool = new() { HorizontalOptions = LayoutOptions.Center };
-        SettingBool.SetBinding(SfComboBox.PlaceholderProperty, "prop.Name");
-        SettingBool.SetBinding(SfComboBox.ItemsSourceProperty, "proparray");
-        SettingBool.PropertyChanged += GetSettingBool;
-        SettingBool.SelectionChanged += ApplySettingBool;
+        comboBox SettingBool = new() { HorizontalOptions = LayoutOptions.Center };
+        SettingBool.SetBinding(comboBox.PlaceholderProperty, "prop.Name");
+        SettingBool.SetBinding(comboBox.ItemSourceProperty, "proparray");
+        SettingBool.Loaded += GetSettingBool;
+        SettingBool.SelectedIndexChanged += ApplySettingBool;
         grid.Add(SettingBool, 1);
 
         return grid;
@@ -210,9 +211,9 @@ public class GenericCollectionSelector : DataTemplateSelector
     }
     public static void ApplySettingBool(object sender, EventArgs e)
     {
-        if (sender is SfComboBox box)
+        if (sender is comboBox box)
         {
-                if (box.SelectedItem is bool)
+                if (box.SelectedItem is Boolean)
                     Preferences.Set(box.Placeholder, (bool)box.SelectedItem);
                 else if (box.SelectedItem is GameVersion)
                     Preferences.Set(box.Placeholder, (int)(GameVersion)box.SelectedItem);
@@ -245,15 +246,15 @@ public class GenericCollectionSelector : DataTemplateSelector
     {
         try
         {
-            if (sender is SfComboBox box)
+            if (sender is comboBox box)
             {
-                if (box.Placeholder != LastBox && box.ItemsSource is not null)
+                if (box.Placeholder != LastBox && box.ItemSource is not null)
                 {
-                    if (((List<object>)box.ItemsSource)[0] is Boolean)
+                    if (((List<object>)box.ItemSource)[0] is Boolean)
                         box.SelectedItem = Preferences.Get(box.Placeholder, false);
-                    else if (((List<object>)box.ItemsSource)[0] is GameVersion)
+                    else if (((List<object>)box.ItemSource)[0] is GameVersion)
                         box.SelectedItem = (GameVersion)Preferences.Get(box.Placeholder, 0);
-                    else if (((List<object>)box.ItemsSource)[0] is Severity)
+                    else if (((List<object>)box.ItemSource)[0] is Severity)
                         box.SelectedItem = (Severity)Preferences.Get(box.Placeholder, 0);
 
                     LastBox = box.Placeholder;
@@ -281,6 +282,7 @@ public class GenericCollectionSelector : DataTemplateSelector
                             tap.Tapped +=async (s, e) => 
                             {
                                 var path = await FolderPicker.PickAsync(CancellationToken.None);
+                                if (!path.IsSuccessful) return;
                                 ((Editor)s).Text = $"{path.Folder.Path}/";
                             };
                             editor.GestureRecognizers.Add(tap);

@@ -1,5 +1,4 @@
 using PKHeX.Core;
-using Syncfusion.Maui.Inputs;
 
 using static PKHeXMAUI.MainPage;
 
@@ -9,16 +8,16 @@ public partial class MemoriesAmie : TabbedPage
 {
     public Label MoreThanAFeeling = new() { Text = "Feeling", IsVisible = false };
     public Label HTMoreThanAFeeling = new() { Text = "Feeling", IsVisible = false };
-    public SfComboBox MoreThanAFeelingbox = new() { IsEditable = true, IsVisible = false, BackgroundColor = Colors.Transparent };
-    public SfComboBox HTMoreThanAFeelingbox = new() { IsEditable = true, IsVisible = false, BackgroundColor = Colors.Transparent };
+    public comboBox MoreThanAFeelingbox = new() { IsVisible = false, BackgroundColor = Colors.Transparent };
+    public comboBox HTMoreThanAFeelingbox = new() { IsVisible = false, BackgroundColor = Colors.Transparent };
     public Label Intense = new() { Text = "Intensity", IsVisible = false };
     public Label HTIntense = new() { Text = "Intensity", IsVisible = false };
-    public SfComboBox Intensebox = new() { IsEditable = true, IsVisible = false, BackgroundColor = Colors.Transparent };
-    public SfComboBox HTIntenseBox = new() { IsEditable = true, IsVisible = false, BackgroundColor = Colors.Transparent };
+    public comboBox Intensebox = new() { IsVisible = false, BackgroundColor = Colors.Transparent };
+    public comboBox HTIntenseBox = new() { IsVisible = false, BackgroundColor = Colors.Transparent };
     public Label TextVar = new() { IsVisible = false };
     public Label HTTextVar = new() { IsVisible = false };
-    public SfComboBox OTTextVarBox = new() { IsEditable = true, IsVisible = false, BackgroundColor = Colors.Transparent };
-    public SfComboBox HTTextVarBox = new() { IsEditable = true, IsVisible = false, BackgroundColor = Colors.Transparent };
+    public comboBox OTTextVarBox = new() { IsVisible = false, BackgroundColor = Colors.Transparent };
+    public comboBox HTTextVarBox = new() { IsVisible = false, BackgroundColor = Colors.Transparent };
     public Label MemoryString = new() { IsVisible = false };
     public Label HTMemoryString = new() { IsVisible = false };
     public MemoriesAmie()
@@ -38,33 +37,32 @@ public partial class MemoriesAmie : TabbedPage
             MemoryTypePicker.SelectedItem = memorytext.Memory.Find(z => z.Value == mems.OriginalTrainerMemory);
             HTMemoryTypePicker.SelectedItem = memorytext.Memory.Find(x => x.Value == mems.HandlingTrainerMemory);
 
-            MoreThanAFeelingbox.ItemsSource = memorytext.GetMemoryFeelings(pk.Generation).ToArray();
-            MoreThanAFeelingbox.SelectionChanged += UpdateMemoryString;
-            MoreThanAFeelingbox.PropertyChanged += ChangeComboBoxFontColor;
-            HTMoreThanAFeelingbox.ItemsSource = memorytext.GetMemoryFeelings(pk.Generation).ToArray();
-            HTMoreThanAFeelingbox.SelectionChanged += UpdateMemoryString;
-            HTMoreThanAFeelingbox.PropertyChanged += ChangeComboBoxFontColor;
-            MoreThanAFeelingbox.SelectedIndex = mems.OriginalTrainerMemoryFeeling;
-            HTMoreThanAFeelingbox.SelectedIndex = mems.HandlingTrainerMemoryFeeling;
-            Intensebox.ItemsSource = memorytext.GetMemoryQualities().ToArray();
-            Intensebox.SelectionChanged += UpdateMemoryString;
-            Intensebox.PropertyChanged += ChangeComboBoxFontColor;
-            HTIntenseBox.ItemsSource = memorytext.GetMemoryQualities().ToArray();
-            HTIntenseBox.SelectionChanged += UpdateMemoryString;
-            HTIntenseBox.PropertyChanged += ChangeComboBoxFontColor;
+            MoreThanAFeelingbox.ItemSource = memorytext.GetMemoryFeelings(pk.Generation).ToArray();
+            MoreThanAFeelingbox.SelectedIndexChanged += UpdateMemoryString;
+
+            HTMoreThanAFeelingbox.ItemSource = memorytext.GetMemoryFeelings(pk.Generation).ToArray();
+            HTMoreThanAFeelingbox.SelectedIndexChanged += UpdateMemoryString;
+
+            //MoreThanAFeelingbox.SelectedIndex = mems.OriginalTrainerMemoryFeeling;
+            //HTMoreThanAFeelingbox.SelectedIndex = mems.HandlingTrainerMemoryFeeling;
+            Intensebox.ItemSource = memorytext.GetMemoryQualities().ToArray();
+            Intensebox.SelectedIndexChanged += UpdateMemoryString;
+
+            HTIntenseBox.ItemSource = memorytext.GetMemoryQualities().ToArray();
+            HTIntenseBox.SelectedIndexChanged += UpdateMemoryString;
+
             Intensebox.SelectedIndex = mems.OriginalTrainerMemoryIntensity;
             HTIntenseBox.SelectedIndex = mems.HandlingTrainerMemoryIntensity;
             var memindex = Memories.GetMemoryArgType(mems.OriginalTrainerMemory, pk.Format);
             var argvals = memorytext.GetArgumentStrings(memindex, pk.Format);
-            OTTextVarBox.ItemsSource = argvals;
-            OTTextVarBox.SelectionChanged += UpdateMemoryString;
-            OTTextVarBox.PropertyChanged += ChangeComboBoxFontColor;
+            OTTextVarBox.ItemSource = argvals;
+            OTTextVarBox.SelectedIndexChanged += UpdateMemoryString;
             TextVar.Text = GetMemoryCategory(memindex, pk.Format);
             var HTmemindex = Memories.GetMemoryArgType(mems.HandlingTrainerMemory, pk.Format);
             var HTargvals = memorytext.GetArgumentStrings(HTmemindex, pk.Format);
-            HTTextVarBox.ItemsSource = HTargvals;
-            HTTextVarBox.SelectionChanged += UpdateMemoryString;
-            HTTextVarBox.PropertyChanged += ChangeComboBoxFontColor;
+            HTTextVarBox.ItemSource = HTargvals;
+            HTTextVarBox.SelectedIndexChanged += UpdateMemoryString;
+
             HTTextVar.Text = GetMemoryCategory(HTmemindex, pk.Format);
             OTTextVarBox.SelectedItem = argvals.Find(z => z.Value == mems.OriginalTrainerMemoryVariable);
             HTTextVarBox.SelectedItem = HTargvals.Find(z => z.Value == mems.HandlingTrainerMemoryVariable);
@@ -167,8 +165,7 @@ public partial class MemoriesAmie : TabbedPage
         {
             var memindex = Memories.GetMemoryArgType((byte)((Picker)sender).SelectedIndex, pk.Format);
             var argvals = memorytext.GetArgumentStrings(memindex, pk.Format);
-            OTTextVarBox.ItemsSource = argvals;
-            OTTextVarBox.DisplayMemberPath = "Text";
+            OTTextVarBox.ItemSource = argvals;
             TextVar.Text = GetMemoryCategory(memindex, pk.Format);
 
             MoreThanAFeeling.IsVisible = true;
@@ -211,9 +208,9 @@ public partial class MemoriesAmie : TabbedPage
     {
         var memindex = Memories.GetMemoryArgType((byte)MemoryTypePicker.SelectedIndex, pk.Format);
         var argvals = memorytext.GetArgumentStrings(memindex, pk.Format);
-        if ((SfComboBox)sender == OTTextVarBox || (SfComboBox)sender == MoreThanAFeelingbox || (SfComboBox)sender == Intensebox)
+        if ((comboBox)sender == OTTextVarBox || (comboBox)sender == MoreThanAFeelingbox || (comboBox)sender == Intensebox)
             MemoryString.Text = string.Format(memorytext.Memory[MemoryTypePicker.SelectedIndex].Text, pk.Nickname, pk.OriginalTrainerName, (ComboItem)OTTextVarBox.SelectedItem != null ? ((ComboItem)OTTextVarBox.SelectedItem).Text : argvals[0].Text, (string)Intensebox.SelectedItem, (string)MoreThanAFeelingbox.SelectedItem);
-        if ((SfComboBox)sender == HTTextVarBox || (SfComboBox)sender == HTMoreThanAFeelingbox || (SfComboBox)sender == HTIntenseBox)
+        if ((comboBox)sender == HTTextVarBox || (comboBox)sender == HTMoreThanAFeelingbox || (comboBox)sender == HTIntenseBox)
         {
             memindex = Memories.GetMemoryArgType((byte)HTMemoryTypePicker.SelectedIndex, pk.Format);
             argvals = memorytext.GetArgumentStrings(memindex, pk.Format);
@@ -226,8 +223,7 @@ public partial class MemoriesAmie : TabbedPage
         {
             var memindex = Memories.GetMemoryArgType((byte)((Picker)sender).SelectedIndex, pk.Format);
             var argvals = memorytext.GetArgumentStrings(memindex, pk.Format);
-            HTTextVarBox.ItemsSource = argvals;
-            HTTextVarBox.DisplayMemberPath = "Text";
+            HTTextVarBox.ItemSource = argvals;
             HTTextVar.Text = GetMemoryCategory(memindex, pk.Format);
 
             HTMoreThanAFeeling.IsVisible = true;
@@ -257,9 +253,5 @@ public partial class MemoriesAmie : TabbedPage
             HTMemoryString.IsVisible = false;
         }
     }
-    private void ChangeComboBoxFontColor(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        SfComboBox box = (SfComboBox)sender;
-        box.TextColor = box.IsDropDownOpen ? Colors.Black : Colors.White;
-    }
+
 }

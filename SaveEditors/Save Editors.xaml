@@ -12,5 +12,6 @@
         <Button x:Name="TrainerInfoButton" Text="Trainer Info" IsVisible="false" Clicked="OpenTrainerEditor"/>
         <Button x:Name="MailBoxButton" Text="Mail Box" IsVisible="False" Clicked="OpenMailBoxEditor"/>
         <Button x:Name="GSBallButton" Text="Enable GS Ball Event(Virtual Console)" IsVisible="False" Clicked="EnableGSBallEvent"/>
+        <Button x:Name="B_Misc" Text="Misc" IsVisible="False" Clicked="OpenMisc3Editor"/>
     </VerticalStackLayout>
 </ContentPage>

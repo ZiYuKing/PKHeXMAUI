@@ -55,6 +55,8 @@ public partial class SaveEditors : ContentPage
         }
         if(sav is SAV2 or SAV3)
             Button_RTCEditor.IsVisible = true;
+        if(sav is SAV3)
+            B_Misc.IsVisible = true;
     }
 
     private void OpenTrainerEditor(object sender, EventArgs e)
@@ -117,5 +119,10 @@ public partial class SaveEditors : ContentPage
         var sav2 = sav as SAV2;
         sav2.EnableGSBallMobileEvent();
         GSBallButton.IsEnabled = false;
+    }
+
+    private void OpenMisc3Editor(object sender, EventArgs e)
+    {
+        Navigation.PushModalAsync(new MiscTab());
     }
 }

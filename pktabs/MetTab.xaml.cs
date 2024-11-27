@@ -1,6 +1,5 @@
 
-using Syncfusion.Maui.Inputs;
-using Syncfusion.Maui.DataSource.Extensions;
+
 using System.ComponentModel;
 using System.Windows.Input;
 using PKHeX.Core;
@@ -18,17 +17,19 @@ public partial class MetTab : ContentPage
 		InitializeComponent();
 
         mettabpic.Source = spriteurl;
-        origingamepicker.ItemsSource = (System.Collections.IList)datasourcefiltered.Games;
         origingamepicker.ItemDisplayBinding = new Binding("Text");
+        origingamepicker.ItemsSource = (System.Collections.IList)datasourcefiltered.Games;
         battleversionpicker.ItemsSource = GameInfo.Strings.gamelist;
-        metlocationpicker.ItemsSource = GameInfo.GetLocationList((GameVersion)pk.Version, pk.Context);
         metlocationpicker.DisplayMemberPath = "Text";
+        metlocationpicker.ItemSource = (System.Collections.IList)GameInfo.GetLocationList((GameVersion)pk.Version, pk.Context);
+
         eggmetpicker.ItemsSource = (System.Collections.IList)GameInfo.GetLocationList(sav.Version, sav.Context, true);
         eggmetpicker.ItemDisplayBinding = new Binding("Text");
         if (PSettings.DisplayLegalBallsOnly)
         {
-            var PokemonBalls = BallApplicator.GetLegalBalls(pk);
-            ballpicker.ItemsSource = PokemonBalls.Any() ? PokemonBalls.ToList() : Enum.GetValues(typeof(Ball));
+            Span<Ball> PokemonBalls = [];
+            BallApplicator.GetLegalBalls(PokemonBalls,pk);
+            ballpicker.ItemsSource = PokemonBalls.ToArray().Any() ? PokemonBalls.ToArray().ToList() : Enum.GetValues(typeof(Ball));
         }
         else
         {
@@ -51,8 +52,9 @@ public partial class MetTab : ContentPage
         eggsprite.IsVisible = pkm.IsEgg;
         if (PSettings.DisplayLegalBallsOnly)
         {
-            var PokemonsBalls = BallApplicator.GetLegalBalls(pkm).ToList();
-            ballpicker.ItemsSource = PokemonsBalls.Count != 0 ? PokemonsBalls : Enum.GetValues(typeof(Ball));
+            Span<Ball> PokemonBalls = [];
+            BallApplicator.GetLegalBalls(PokemonBalls,pkm);
+            ballpicker.ItemsSource = PokemonBalls.ToArray().Count() != 0 ? PokemonBalls.ToArray() : Enum.GetValues(typeof(Ball));
         }
         if (pkm.HeldItem > 0)
         {
@@ -109,8 +111,8 @@ public partial class MetTab : ContentPage
         {
             var version = (ComboItem)origingamepicker.SelectedItem;
             pk.Version = (GameVersion)version.Value;
-            metlocationpicker.ItemsSource = GameInfo.GetLocationList((GameVersion)pk.Version, pk.Context);
-            metlocationpicker.DisplayMemberPath = "Text";
+            metlocationpicker.ItemSource = (System.Collections.IList)GameInfo.GetLocationList((GameVersion)pk.Version, pk.Context);
+
         }
     }
 
@@ -209,9 +211,5 @@ public partial class MetTab : ContentPage
             applymetinfo(pk);
     }
 
-    private void ChangeComboBoxFontColor(object sender, PropertyChangedEventArgs e)
-    {
-        SfComboBox box = (SfComboBox)sender;
-        box.TextColor = box.IsDropDownOpen ? Colors.Black : Colors.White;
-    }
+
 }

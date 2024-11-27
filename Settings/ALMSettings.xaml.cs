@@ -1,6 +1,5 @@
 using PKHeX.Core;
 using PKHeX.Core.AutoMod;
-using Syncfusion.Maui.DataSource.Extensions;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -64,7 +63,6 @@ public class PluginSettings
     public static bool SetBallByColor { get => Preferences.Default.Get("SetBallByColor", false);  }
     public static bool EnableMemesForIllegalSets { get => Preferences.Default.Get("EnableMemesForIllegalSets", false);  }
     public static bool ForceLevel100For50 { get => Preferences.Default.Get("ForceLevel100For50", false); }
-    public static bool AllowHomeless { get => Preferences.Default.Get("AllowHomeless", false); }
     public static bool LivingDexAllForms { get => Preferences.Get("LivingDexAllForms", false); }
     public static bool LivingDexNativeOnly { get => Preferences.Get("LivingDexNativeOnly", false); }
     public static bool LivingDexSetAlpha { get => Preferences.Get("LivingDexSetAlpha", false); }
