@@ -108,7 +108,7 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     private void entry_textChanged(object sender, TextChangedEventArgs e)
     {
         if (picker.ItemsSource is null) return;
-        ShowDropdown();
+        if (popupWindow?.IsShowing == false) ShowDropdown();
 		IList tempsource = Items.Where(z=>z.StartsWith(entry.Text,StringComparison.CurrentCultureIgnoreCase)).ToList();
         picker.ItemsSource = ItemSource.Cast<object>().Where(z => tempsource.Contains(z.GetType().GetProperty(DisplayMemberPath) is null?z.ToString():z.GetType().GetProperty(DisplayMemberPath).GetValue(z).ToString())).ToList();
     }
@@ -164,8 +164,8 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     private void ClearText(object sender, EventArgs e)
     {
         entry.Text = string.Empty;
-        ShowDropdown();
-        
+        if (!entry.IsFocused)
+            entry.Focus();
     }
     private void AutoCompleteText(object sender, EventArgs e)
     {
@@ -189,8 +189,7 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
 
         popupWindow = new(contentView, (int)(this.Width * 2), 300)
         {
-            OutsideTouchable = true,
-            Focusable = true
+            OutsideTouchable = true
         };
 
         var parentView = this.entry.ToPlatform(this.Handler.MauiContext);
