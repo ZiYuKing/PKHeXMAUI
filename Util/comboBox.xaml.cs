@@ -1,12 +1,15 @@
 
+#if ANDROID
+using Android.Views;
+using Android.Widget;
+using Microsoft.Maui.Platform;
 using System.Collections;
-using System.Runtime.CompilerServices;
 
 namespace PKHeXMAUI;
 /// <summary>
 /// Custom Combo Box control that allows setting a generic ItemSource.
 /// </summary>
-public partial class comboBox : ContentView
+public partial class comboBox : Microsoft.Maui.Controls.ContentView
 {
     ///<summary>Bindable property for <see cref="DisplayMemberPath"/></summary>
     public static BindableProperty DisplayMemberPathProperty = BindableProperty.Create(nameof(DisplayMemberPath), typeof(string), typeof(comboBox),".");
@@ -47,18 +50,28 @@ public partial class comboBox : ContentView
     /// Gets or sets the selected item in the comboBox. Default is null. This is a bindable property.
     /// </summary>
 	public object SelectedItem { get => GetValue(SelectedItemProperty); set { picker.SelectedItem = value; SetValue(SelectedItemProperty, value); } }
-	public comboBox()
-	{
+    public Microsoft.Maui.Controls.ListView picker;
+    public comboBox()
+    {
         InitializeComponent();
+        picker = new();
+        picker.BackgroundColor = Colors.White;
+        picker.ItemSelected += IndexChanged;
+        picker.HeightRequest = 50;
+        picker.SelectionMode = ListViewSelectionMode.Single;
+        picker.SetBinding(Microsoft.Maui.Controls.ListView.ItemsSourceProperty, new Binding("ItemSource", source: ThisView));
         picker.ItemTemplate = new DataTemplate(() =>
         {
             ViewCell cell = new();
             Label label = new();
             label.SetBinding(Label.TextProperty, new Binding(DisplayMemberPath));
+            label.TextColor = Colors.Black;
             cell.View = label;
             return cell;
         });
-        entry.Unfocused += (s, e) => picker.IsVisible = false;
+        entry.Unfocused += (s, e) => popupWindow.Dismiss();
+        picker.ZIndex = 1;
+
     }
     static void OnItemsCollectionChanged(BindableObject bindable, object oldValue, object newValue)
     {
@@ -86,7 +99,6 @@ public partial class comboBox : ContentView
         var result = item.GetType().GetProperty(DisplayMemberPath).GetValue(item).ToString();
         return result;
     }
-    static bool editing = false;
     /// <summary>
     /// Filter's the items in the ListView based on the text in the entry.
     /// </summary>
@@ -96,7 +108,7 @@ public partial class comboBox : ContentView
     private void entry_textChanged(object sender, TextChangedEventArgs e)
     {
         if (picker.ItemsSource is null) return;
-        picker.IsVisible = true;
+        ShowDropdown();
 		IList tempsource = Items.Where(z=>z.StartsWith(entry.Text,StringComparison.CurrentCultureIgnoreCase)).ToList();
         picker.ItemsSource = ItemSource.Cast<object>().Where(z => tempsource.Contains(z.GetType().GetProperty(DisplayMemberPath) is null?z.ToString():z.GetType().GetProperty(DisplayMemberPath).GetValue(z).ToString())).ToList();
     }
@@ -109,6 +121,7 @@ public partial class comboBox : ContentView
 
     private void IndexChanged(object sender, EventArgs e)
     {
+       
         if (picker.SelectedItem.GetType().GetProperty(DisplayMemberPath) is null)
             SelectedItemText = picker.SelectedItem.ToString();
         else
@@ -116,8 +129,8 @@ public partial class comboBox : ContentView
 
         entry.Text = SelectedItemText;
         SelectedItem = picker.SelectedItem;
-        picker.IsVisible = false;
         SelectedIndexChanged?.Invoke(this, e);
+        popupWindow?.Dismiss();
     }
     public void ForceSelection(object sender, EventArgs e) => picker.SelectedItem = SelectedItem;
     static void SetSelectedItem(BindableObject bindable, object oldValue, object newValue)
@@ -134,20 +147,26 @@ public partial class comboBox : ContentView
     /// <summary>
     /// Hides the dropdown List for the comboBox
     /// </summary>
-    public void HideList() => picker.IsVisible = false;
+    public void HideList() => popupWindow.Dismiss();
     /// <summary>
     /// Shows the dropdown List for the comboBox
     /// </summary>
-    public void ShowList() => picker.IsVisible = true;
+    public void ShowList()
+    {
+
+        ShowDropdown();
+    }
     private void ShowList(object sender, FocusEventArgs e)
     {
-        picker.IsVisible = true;
+
+        ShowDropdown();
     }
     private void ClearText(object sender, EventArgs e)
     {
         entry.Text = string.Empty;
+        ShowDropdown();
+        
     }
-
     private void AutoCompleteText(object sender, EventArgs e)
     {
         IList tempsource = Items.Where(z => z.StartsWith(entry.Text, StringComparison.CurrentCultureIgnoreCase)).ToList();
@@ -159,4 +178,23 @@ public partial class comboBox : ContentView
         entry.Text = SelectedItemText;
         picker.SelectedItem = item;
     }
+
+    private PopupWindow popupWindow;
+
+    private void ShowDropdown()
+    {
+        if (this.Handler?.MauiContext == null) { return; }
+        popupWindow?.Dismiss();
+        var contentView = picker.ToPlatform(this.Handler.MauiContext);
+
+        popupWindow = new(contentView, (int)(this.Width * 2), 300)
+        {
+            OutsideTouchable = true,
+            Focusable = true
+        };
+
+        var parentView = this.entry.ToPlatform(this.Handler.MauiContext);
+        popupWindow.ShowAsDropDown(parentView);
+    }
 }
+#endif

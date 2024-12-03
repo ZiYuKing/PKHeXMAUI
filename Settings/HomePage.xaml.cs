@@ -30,7 +30,7 @@ public partial class HomePage : ContentPage
             var savefilebytes = File.ReadAllBytes(savefile.FullPath);
             var savefileobj = (SaveFile)FileUtil.GetSupportedFile(savefilebytes, "");
             savefileobj.Metadata.SetExtraInfo(savefile.FullPath);
-            App.Current.MainPage = new AppShell(savefileobj);
+            App.Current.Windows[0].Page = new AppShell(savefileobj);
         }
 
     }

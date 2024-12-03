@@ -287,7 +287,6 @@ public partial class MainPage : ContentPage
         abilitypicker.SelectedIndex = -1;
         abilitypicker.SelectedIndex =pkm.AbilityNumber == 4? 2: pkm.AbilityNumber;
         Friendshipdisplay.Text = $"{pkm.CurrentFriendship}";
-
         genderdisplay.Source = $"gender_{pkm.Gender}.png";
         helditempicker.SelectedItem = datasourcefiltered.Items.FirstOrDefault(z=>z.Value == pkm.HeldItem);
         if (pkm.HeldItem > 0)

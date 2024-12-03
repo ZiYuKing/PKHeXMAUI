@@ -80,7 +80,7 @@ public partial class MetTab : ContentPage
         }
 
         metlocationpicker.SelectedItem = GameInfo.GetLocationList((GameVersion)pkm.Version, pkm.Context).FirstOrDefault(z=>z.Value == pkm.MetLocation);
-        ballpicker.SelectedItem = pkm.Ball > -1 ? (Ball)pkm.Ball : Ball.None;
+        ballpicker.SelectedItem = pkm.Ball > 0 ? (Ball)pkm.Ball : Ball.None;
         ballspriteurl = $"{(pkm.Ball>0?$"ball{pkm.Ball}":"ball4")}.png";
         ballimage.Source = ballspriteurl;
 
