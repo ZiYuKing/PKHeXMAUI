@@ -1,3 +1,5 @@
+#nullable disable
+
 using static PKHeXMAUI.MainPage;
 using PKHeX.Core;
 

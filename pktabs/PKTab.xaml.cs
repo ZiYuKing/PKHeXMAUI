@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#nullable disable
+
+using System.Collections;
 using PKHeX.Core;
 using System.Net.Sockets;
 using PKHeX.Core.AutoMod;

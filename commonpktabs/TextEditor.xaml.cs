@@ -1,4 +1,6 @@
-﻿using PKHeX.Core;
+﻿#nullable disable
+
+using PKHeX.Core;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;

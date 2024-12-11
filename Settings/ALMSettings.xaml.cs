@@ -1,3 +1,5 @@
+#nullable disable
+
 using PKHeX.Core;
 using PKHeX.Core.AutoMod;
 using System.Collections.ObjectModel;

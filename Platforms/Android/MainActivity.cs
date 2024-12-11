@@ -1,4 +1,6 @@
-﻿using Android.App;
+﻿#nullable disable
+
+using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Content;
@@ -13,14 +15,14 @@ public class MainActivity : MauiAppCompatActivity
         {
             if (!Android.OS.Environment.IsExternalStorageManager)
             {
-                Intent intent = new Intent();
+                Intent intent = new();
                 intent.SetAction(Android.Provider.Settings.ActionManageAppAllFilesAccessPermission);
                 Android.Net.Uri uri = Android.Net.Uri.FromParts("package", this.PackageName, null);
                 intent.SetData(uri);
                 StartActivity(intent);
             }
         }
-        catch (Exception e) { };
+        catch (Exception) { }
         base.OnCreate(savedInstanceState);
     }
 }

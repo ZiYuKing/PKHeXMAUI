@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PKHeXMAUI.MiscDecorations"
+             Title="Decorations"
+            x:Name="DecorationsTab">
+    <StackLayout>
+        <CarouselView x:Name="Decorationsview" HeightRequest="400">
+            <CarouselView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal"
+                           SnapPointsType="MandatorySingle"
+                           SnapPointsAlignment="Center" />
+            </CarouselView.ItemsLayout>
+        </CarouselView>
+    </StackLayout>
+</ContentPage>

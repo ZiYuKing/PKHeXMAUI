@@ -1,3 +1,5 @@
+#nullable disable
+
 using PKHeX.Core;
 using System.Drawing;
 using System.Drawing.Imaging;

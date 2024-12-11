@@ -1,3 +1,5 @@
+#nullable disable
+
 using CommunityToolkit.Maui.Storage;
 using PKHeX.Core;
 using System.Security.Cryptography;

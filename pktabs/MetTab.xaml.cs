@@ -1,5 +1,7 @@
 
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Windows.Input;
 using PKHeX.Core;

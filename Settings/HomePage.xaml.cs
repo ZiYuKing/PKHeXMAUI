@@ -1,3 +1,5 @@
+#nullable disable
+
 using PKHeX.Core;
 using CommunityToolkit.Maui.Storage;
 using static PKHeXMAUI.MainPage;

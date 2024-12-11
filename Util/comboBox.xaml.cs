@@ -1,7 +1,9 @@
 
+#nullable disable
+
 #if ANDROID
-using Android.Views;
 using Android.Widget;
+#endif
 using Microsoft.Maui.Platform;
 using System.Collections;
 
@@ -12,7 +14,7 @@ namespace PKHeXMAUI;
 public partial class comboBox : Microsoft.Maui.Controls.ContentView
 {
     ///<summary>Bindable property for <see cref="DisplayMemberPath"/></summary>
-    public static BindableProperty DisplayMemberPathProperty = BindableProperty.Create(nameof(DisplayMemberPath), typeof(string), typeof(comboBox),".");
+    public static BindableProperty DisplayMemberPathProperty = BindableProperty.Create(nameof(DisplayMemberPath), typeof(string), typeof(comboBox),".",propertyChanged:OnItemsCollectionChanged);
     /// <summary>Bindable property for <see cref="ItemSource"/> </summary>
     public static BindableProperty ItemSourceProperty = BindableProperty.Create(nameof(ItemSource), typeof(IEnumerable), typeof(comboBox), propertyChanged:OnItemsCollectionChanged);
     /// <summary>Bindable property for <see cref="Title"/> </summary>
@@ -54,8 +56,10 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     public comboBox()
     {
         InitializeComponent();
-        picker = new();
-        picker.BackgroundColor = Colors.White;
+        picker = new()
+        {
+            BackgroundColor = Colors.White
+        };
         picker.ItemSelected += IndexChanged;
         picker.HeightRequest = 50;
         picker.SelectionMode = ListViewSelectionMode.Single;
@@ -69,9 +73,10 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
             cell.View = label;
             return cell;
         });
+#if ANDROID
         entry.Unfocused += (s, e) => popupWindow.Dismiss();
+#endif
         picker.ZIndex = 1;
-
     }
     static void OnItemsCollectionChanged(BindableObject bindable, object oldValue, object newValue)
     {
@@ -79,6 +84,7 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     }
     public void OnItemsCollectionChanged(object sender, EventArgs e)
     {
+        if (ItemSource is null) return;
         Items.Clear();
         foreach (var item in ItemSource)
         {
@@ -87,7 +93,7 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     }
     private string GetDisplayMember(object item)
     {
-        if (DisplayMemberPath is null or ".")
+        if (DisplayMemberPath == ".")
         {
             if (item != null)
             {
@@ -96,7 +102,7 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
 
             return string.Empty;
         }
-        var result = item.GetType().GetProperty(DisplayMemberPath).GetValue(item).ToString();
+        var result = (item.GetType().GetProperty(DisplayMemberPath).GetValue(item)).ToString();
         return result;
     }
     /// <summary>
@@ -104,12 +110,13 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     /// </summary>
     /// <param name="sender">the object calling the event</param>
     /// <param name="e">Event args</param>
-
     private void entry_textChanged(object sender, TextChangedEventArgs e)
     {
         if (picker.ItemsSource is null) return;
+#if ANDROID
         if (popupWindow?.IsShowing == false) ShowDropdown();
-		IList tempsource = Items.Where(z=>z.StartsWith(entry.Text,StringComparison.CurrentCultureIgnoreCase)).ToList();
+#endif
+        IList tempsource = Items.Where(z=>z.StartsWith(entry.Text,StringComparison.OrdinalIgnoreCase)).ToList();
         picker.ItemsSource = ItemSource.Cast<object>().Where(z => tempsource.Contains(z.GetType().GetProperty(DisplayMemberPath) is null?z.ToString():z.GetType().GetProperty(DisplayMemberPath).GetValue(z).ToString())).ToList();
     }
     private string SelectedItemText;
@@ -118,10 +125,8 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-
     private void IndexChanged(object sender, EventArgs e)
     {
-       
         if (picker.SelectedItem.GetType().GetProperty(DisplayMemberPath) is null)
             SelectedItemText = picker.SelectedItem.ToString();
         else
@@ -130,7 +135,9 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
         entry.Text = SelectedItemText;
         SelectedItem = picker.SelectedItem;
         SelectedIndexChanged?.Invoke(this, e);
+#if ANDROID
         popupWindow?.Dismiss();
+#endif
     }
     public void ForceSelection(object sender, EventArgs e) => picker.SelectedItem = SelectedItem;
     static void SetSelectedItem(BindableObject bindable, object oldValue, object newValue)
@@ -147,18 +154,21 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     /// <summary>
     /// Hides the dropdown List for the comboBox
     /// </summary>
-    public void HideList() => popupWindow.Dismiss();
+    public void HideList()
+    {
+        #if ANDROID
+        popupWindow.Dismiss();
+      #endif
+    }
     /// <summary>
     /// Shows the dropdown List for the comboBox
     /// </summary>
     public void ShowList()
     {
-
         ShowDropdown();
     }
     private void ShowList(object sender, FocusEventArgs e)
     {
-
         ShowDropdown();
     }
     private void ClearText(object sender, EventArgs e)
@@ -178,11 +188,15 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
         entry.Text = SelectedItemText;
         picker.SelectedItem = item;
     }
-
+#if ANDROID
     private PopupWindow popupWindow;
-
+#endif
+    /// <summary>
+    /// Shows the dropdown Listview. Currently for Android Only. To-Do: All Other Platforms.
+    /// </summary>
     private void ShowDropdown()
     {
+#if ANDROID
         if (this.Handler?.MauiContext == null) { return; }
         popupWindow?.Dismiss();
         var contentView = picker.ToPlatform(this.Handler.MauiContext);
@@ -194,6 +208,6 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
 
         var parentView = this.entry.ToPlatform(this.Handler.MauiContext);
         popupWindow.ShowAsDropDown(parentView);
+#endif
     }
 }
-#endif

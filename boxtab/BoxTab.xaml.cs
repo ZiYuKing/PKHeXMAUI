@@ -1,4 +1,6 @@
 
+#nullable disable
+
 using System.Windows.Input;
 using PKHeX.Core;
 using PKHeX.Core.AutoMod;

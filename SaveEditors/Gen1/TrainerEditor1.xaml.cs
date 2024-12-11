@@ -1,3 +1,5 @@
+#nullable disable
+
 using Octokit;
 using PKHeX.Core;
 using System.Xml.Serialization;

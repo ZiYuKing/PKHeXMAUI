@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace PKHeXMAUI;
 
 public partial class TrainerTab8a : TabbedPage

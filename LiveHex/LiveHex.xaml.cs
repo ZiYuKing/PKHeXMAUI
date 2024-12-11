@@ -85,8 +85,6 @@ public partial class LiveHex : ContentPage
                     }
                 }
                 catch(Exception) { }
-                   
-
             }
             if (!valid)
             {
@@ -200,7 +198,7 @@ public partial class LiveHex : ContentPage
                 }
                 catch (Exception ex)
                 {
-                    await DisplayAlert("Error", $"Unable to load data from the specified offset. {ex.Message}", "cancel"); 
+                    await DisplayAlert("Error", $"Unable to load data from the specified offset. {ex.Message}", "cancel");
                 }
             }
         }
@@ -274,7 +272,6 @@ public partial class LiveHex : ContentPage
     {
         // Check and set trainerdata based on ISaveBlock interfaces
         Span<byte> dest;
-
         Func<PokeSysBotMini, byte[]?> tdata;
         switch (sav)
         {

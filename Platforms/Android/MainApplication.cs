@@ -1,4 +1,6 @@
-﻿using Android.App;
+﻿#nullable disable
+
+using Android.App;
 using Android.Runtime;
 
 namespace PKHeXMAUI;

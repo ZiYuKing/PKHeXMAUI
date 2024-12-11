@@ -4,22 +4,7 @@
              x:Class="PKHeXMAUI.MiscMainEditor"
              Title="MiscMainEditor">
     <VerticalStackLayout>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Grid RowDefinitions="*,*,*,*,*,*,*,*,*,*" ColumnDefinitions="*,*">
             <Label x:Name="L_BP" Text="BP:"/>
             <Entry x:Name="E_BP" Grid.Column="1" Keyboard="Numeric"/>
             <Label x:Name="L_EarnedBP" Text="Earned BP:" Grid.Row="1"/>
@@ -30,16 +15,7 @@
             <Entry x:Name="E_Rival" Grid.Row="3" Grid.Column="1"/>
             <Label x:Name="L_TrainerCards" Grid.Row="4" Text="Trainer Card Pokemon Icons"/>
         </Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Grid RowDefinitions="*,*" ColumnDefinitions="*,*,*">
             <Picker x:Name="P_TCM1"/>
             <Picker x:Name="P_TCM2" Grid.Column="1"/>
             <Picker x:Name="P_TCM3" Grid.Column="2"/>
