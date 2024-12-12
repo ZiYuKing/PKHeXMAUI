@@ -42,10 +42,7 @@ public partial class EventFlags1 : ContentPage
         {
             Text = "Close"
         };
-        cl.Clicked += (s, e) =>
-        {
-            Navigation.PopModalAsync();
-        };
+        cl.Clicked += (s, e) => Navigation.PopModalAsync();
         eventstack.Children.Add(cl);
     }
 }

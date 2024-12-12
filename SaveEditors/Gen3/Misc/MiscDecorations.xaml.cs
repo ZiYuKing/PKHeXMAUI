@@ -14,7 +14,6 @@ public partial class MiscDecorations : ContentPage
             var CV_Desk = new CollectionView();
             var decorations = decoarray[0].Item2[0].GetType().GetEnumNames();
             var list = Util.GetCBList(decorations);
-            
             CV_Desk.ItemTemplate = new DataTemplate(() =>
             {
                 Grid grid = [];
@@ -29,15 +28,13 @@ public partial class MiscDecorations : ContentPage
             });
 
             CV_Desk.SetBinding(CollectionView.ItemsSourceProperty, "Item2");
-            Label labs = new Label();
+            Label labs = new();
             labs.SetBinding(Label.TextProperty, "Item1");
             StackLayout stack = [labs,CV_Desk];
             return stack;
-
         });
         Decorationsview.ItemsSource = decoarray;
 	}
-
 }
 public static class lazyext
 {

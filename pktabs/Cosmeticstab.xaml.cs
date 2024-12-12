@@ -25,8 +25,8 @@ public partial class Cosmeticstab : ContentPage
         CosmeticsRefresh.Command = refreshCommand;
         FirstLoad = false;
     }
-    private static readonly string[] SizeClass = Enum.GetNames(typeof(PokeSize));
-    private static readonly string[] SizeClassDetailed = Enum.GetNames(typeof(PokeSizeDetailed));
+    private static readonly string[] SizeClass = Enum.GetNames<PokeSize>();
+    private static readonly string[] SizeClassDetailed = Enum.GetNames<PokeSizeDetailed>();
     private readonly CheckBox[] Flags;
     public async Task applycomsetics(PKM pkm)
 	{

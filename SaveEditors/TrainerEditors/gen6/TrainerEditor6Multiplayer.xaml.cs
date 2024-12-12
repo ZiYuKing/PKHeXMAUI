@@ -40,7 +40,6 @@ public partial class TrainerEditor6Multiplayer : ContentPage
         var MultiSprite = ((ComboItem)((Picker)sender).SelectedItem).Value;
         string file = $"tr_{MultiSprite:00}.png";
         MSSprite.Source = file;
-        
     }
 
     public void SaveMultiplayer()
@@ -55,6 +54,5 @@ public partial class TrainerEditor6Multiplayer : ContentPage
         if (SAV is IMultiplayerSprite ms)
             ms.MultiplayerSpriteID = ((ComboItem)MSPicker.SelectedItem).Value;
         status.IsMegaRayquazaUnlocked = RayquazeMECheck.IsChecked;
-
     }
 }

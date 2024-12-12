@@ -34,6 +34,5 @@ public partial class TrainerEditor7Ultra : ContentPage
 		if (parsed) SAV.FieldMenu.RotomAffection = (ushort)result;
 		SAV.FieldMenu.RotomLoto1 = Loto1Check.IsChecked;
 		SAV.FieldMenu.RotomLoto2 = Loto2Check.IsChecked;
-		
 	}
 }

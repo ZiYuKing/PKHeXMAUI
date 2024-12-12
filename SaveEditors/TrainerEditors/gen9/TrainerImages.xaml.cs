@@ -11,7 +11,6 @@ using CommunityToolkit.Maui.Converters;
 using SkiaSharp;
 namespace PKHeXMAUI
 {
-
     public partial class TrainerImages : ContentPage
     {
         public SAV9SV SAV = (SAV9SV)MainPage.sav;
@@ -19,8 +18,6 @@ namespace PKHeXMAUI
         public TrainerImages()
         {
             InitializeComponent();
-
-
             var result = GetImageData(KPictureProfileCurrent, KPictureProfileCurrentWidth, KPictureProfileCurrentHeight);
             var testenc = result.Encode(SKEncodedImageFormat.Png, 100);
             Microsoft.Maui.Graphics.IImage testimage;
@@ -53,7 +50,7 @@ namespace PKHeXMAUI
             var result = DXT1.Decompress(data, (int)width, (int)height);
             return GetBitmap(result, (int)width, (int)height);
         }
-        public static SKBitmap GetBitmap(byte[] data, int width, int height, int length, PixelFormat format = PixelFormat.Format32bppArgb)
+        public static SKBitmap GetBitmap(byte[] data, int width, int height, int length)
         {
             var bmp = new SKBitmap(width, height,SKColorType.Bgra8888,SKAlphaType.Opaque);
             var ptr = bmp.GetPixels();
@@ -61,10 +58,9 @@ namespace PKHeXMAUI
             return bmp;
         }
 
-        public static SKBitmap GetBitmap(byte[] data, int width, int height, PixelFormat format = PixelFormat.Format32bppArgb)
+        public static SKBitmap GetBitmap(byte[] data, int width, int height)
         {
-            return GetBitmap(data, width, height, data.Length, format);
+            return GetBitmap(data, width, height, data.Length);
         }
     }
-   
 }

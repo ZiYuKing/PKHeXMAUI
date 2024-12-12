@@ -33,7 +33,7 @@ public partial class TrainerEditor7Map : ContentPage
             flycheck.SetBinding(CheckBox.IsCheckedProperty, "check", BindingMode.TwoWay);
             Label flytext = new();
             flytext.SetBinding(Label.TextProperty, "Text");
-            grid.Add(flycheck); 
+            grid.Add(flycheck);
             grid.Add(flytext, 1);
             return grid;
         });
@@ -145,13 +145,8 @@ public partial class TrainerEditor7Map : ContentPage
         }
     }
 }
-public class WhyYouNoTakeGenericsDataTemplate
+public class WhyYouNoTakeGenericsDataTemplate(string s, bool b)
 {
-    public string Text { get; set; }
-    public bool check { get; set; }
-    public WhyYouNoTakeGenericsDataTemplate(string s, bool b)
-    {
-        Text = s;
-        check = b;
-    }
+    public string Text { get; set; } = s;
+    public bool check { get; set; } = b;
 }

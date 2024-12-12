@@ -35,7 +35,7 @@ public partial class TrainerTab6 : TabbedPage
         trainertab6.Children.Add(new cancelpage());
     }
 }
-public class SavePage6 : ContentPage
+public partial class SavePage6 : ContentPage
 {
     public SavePage6()
     {

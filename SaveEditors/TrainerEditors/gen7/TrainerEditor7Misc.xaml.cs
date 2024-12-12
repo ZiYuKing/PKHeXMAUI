@@ -62,7 +62,6 @@ public partial class TrainerEditor7Misc : ContentPage
         MegaUnlockCheck.IsChecked = SAV.MyStatus.MegaUnlocked;
         ZUnlockCheck.IsChecked = SAV.MyStatus.ZMoveUnlocked;
         uint stampBits = SAV.Misc.Stamps;
-        
         StampCollection.SelectedItems = StampList.FindAll(i => (stampBits & 1 << StampList.IndexOf(i)) != 0).Cast<object>().ToList();
         const int unlockStart = 292;
         const int learnedStart = 3479;

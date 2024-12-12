@@ -14,7 +14,7 @@ public partial class EventConstants2 : ContentPage
 	{
 		InitializeComponent();
         var editor = Editor = new EventWorkspace<SAV2, byte>((SAV2)sav, sav.Version);
-        ConstantCollection.ItemTemplate = new DataTemplate(() => 
+        ConstantCollection.ItemTemplate = new DataTemplate(() =>
 		{
 			var grid = new Grid() { Padding = 10 };
 			grid.ColumnDefinitions.Add(new ColumnDefinition() { Width=new GridLength(3, GridUnitType.Star) });

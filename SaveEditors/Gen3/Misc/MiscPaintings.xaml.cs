@@ -14,12 +14,12 @@ public partial class MiscPaintings : ContentPage
         Speciesbox.ItemSource = filteredspecies;
         Speciesbox.DisplayMemberPath = "Text";
         CurrentPaintingEntry.Text = "0";
-
+        CurrentPaintingView.IsVisible = PaintingEnabledCheck.IsChecked;
     }
     private int PaintingIndex = -1;
     private void CurrentPaintingChanged(object sender, TextChangedEventArgs e)
     {
-        if (CurrentPaintingEntry.Text == "") return;
+        if (CurrentPaintingEntry.Text?.Length == 0) return;
         if (int.TryParse(CurrentPaintingEntry.Text, out int index))
         {
             index = index < 0 ? 0 : index > 3 ? 3 : index;

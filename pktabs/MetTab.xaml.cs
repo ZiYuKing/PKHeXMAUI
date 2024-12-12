@@ -1,5 +1,4 @@
 
-
 #nullable disable
 
 using System.ComponentModel;
@@ -31,11 +30,11 @@ public partial class MetTab : ContentPage
         {
             Span<Ball> PokemonBalls = [];
             BallApplicator.GetLegalBalls(PokemonBalls,pk);
-            ballpicker.ItemsSource = PokemonBalls.ToArray().Any() ? PokemonBalls.ToArray().ToList() : Enum.GetValues(typeof(Ball));
+            ballpicker.ItemsSource = PokemonBalls.ToArray().Length != 0 ? PokemonBalls.ToArray().ToList() : Enum.GetValues<PKHeX.Core.Ball>();
         }
         else
         {
-            ballpicker.ItemsSource = Enum.GetValues(typeof(Ball));
+            ballpicker.ItemsSource = Enum.GetValues<Ball>();
         }
 
         ICommand refreshCommand = new Command(async () =>
@@ -56,7 +55,7 @@ public partial class MetTab : ContentPage
         {
             Span<Ball> PokemonBalls = [];
             BallApplicator.GetLegalBalls(PokemonBalls,pkm);
-            ballpicker.ItemsSource = PokemonBalls.ToArray().Count() != 0 ? PokemonBalls.ToArray() : Enum.GetValues(typeof(Ball));
+            ballpicker.ItemsSource = PokemonBalls.ToArray().Length != 0 ? PokemonBalls.ToArray() : Enum.GetValues<Ball>();
         }
         if (pkm.HeldItem > 0)
         {
@@ -114,7 +113,6 @@ public partial class MetTab : ContentPage
             var version = (ComboItem)origingamepicker.SelectedItem;
             pk.Version = (GameVersion)version.Value;
             metlocationpicker.ItemSource = (System.Collections.IList)GameInfo.GetLocationList((GameVersion)pk.Version, pk.Context);
-
         }
     }
 
@@ -212,6 +210,4 @@ public partial class MetTab : ContentPage
         if(pk.Species != 0)
             applymetinfo(pk);
     }
-
-
 }

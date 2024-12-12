@@ -16,7 +16,6 @@ public partial class TrainerEditor6Appearance : ContentPage
             UpdateBlockSummaryControls(xystat.Fashion);
             TNickEntry.Text = xystat.Nickname;
         }
-
     }
     private void UpdateBlockSummaryControls(TrainerFashion6 obj)
     {
@@ -37,8 +36,10 @@ public partial class TrainerEditor6Appearance : ContentPage
                         {
                             var propLabel = new Label() { Text = prop };
                             BlockStack.Add(propLabel, 0, row);
-                            var BlockEntry = new Entry();
-                            BlockEntry.BindingContext = obj;
+                            var BlockEntry = new Entry
+                            {
+                                BindingContext = obj
+                            };
                             try { BlockEntry.SetBinding(Entry.TextProperty, prop, BindingMode.TwoWay); }
                             catch (Exception) { BlockStack.Remove(propLabel); continue; }
                             BlockStack.Add(BlockEntry, 1, row);
@@ -48,8 +49,10 @@ public partial class TrainerEditor6Appearance : ContentPage
                         {
                             var propLabel = new Label() { Text = prop };
                             BlockStack.Add(propLabel, 0, row);
-                            var BlockEntry = new Picker();
-                            BlockEntry.BindingContext = obj;
+                            var BlockEntry = new Picker
+                            {
+                                BindingContext = obj
+                            };
                             try { BlockEntry.SetBinding(Picker.ItemsSourceProperty, prop, BindingMode.TwoWay); }
                             catch (Exception) { BlockStack.Remove(propLabel); continue; }
                             BlockStack.Add(BlockEntry, 1, row);
@@ -60,8 +63,10 @@ public partial class TrainerEditor6Appearance : ContentPage
                     {
                         var propLabel = new Label() { Text = prop };
                         BlockStack.Add(propLabel, 0, row);
-                        var BlockEntry = new Picker();
-                        BlockEntry.BindingContext = obj;
+                        var BlockEntry = new Picker
+                        {
+                            BindingContext = obj
+                        };
                         try { BlockEntry.SetBinding(Picker.ItemsSourceProperty, prop, BindingMode.TwoWay); }
                         catch (Exception) { BlockStack.Remove(propLabel); continue; }
                         BlockStack.Add(BlockEntry, 1, row);
@@ -79,27 +84,14 @@ public partial class TrainerEditor6Appearance : ContentPage
             var xystat = (MyStatus6XY)xy.Status;
             xystat.Nickname = TNickEntry.Text;
         }
-            
     }
     public static bool IsNumericType(object o)
     {
-        switch (Type.GetTypeCode(o.GetType()))
+        return Type.GetTypeCode(o.GetType()) switch
         {
-            case TypeCode.Byte:
-            case TypeCode.SByte:
-            case TypeCode.UInt16:
-            case TypeCode.UInt32:
-            case TypeCode.UInt64:
-            case TypeCode.Int16:
-            case TypeCode.Int32:
-            case TypeCode.Int64:
-            case TypeCode.Decimal:
-            case TypeCode.Double:
-            case TypeCode.Single:
-                return true;
-            default:
-                return false;
-        }
+            TypeCode.Byte or TypeCode.SByte or TypeCode.UInt16 or TypeCode.UInt32 or TypeCode.UInt64 or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64 or TypeCode.Decimal or TypeCode.Double or TypeCode.Single => true,
+            _ => false,
+        };
     }
 
     private void GiveAllAccessories(object sender, EventArgs e)

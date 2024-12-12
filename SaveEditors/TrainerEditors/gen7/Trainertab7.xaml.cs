@@ -29,11 +29,10 @@ public partial class TrainerTab7 : TabbedPage
 			trainertab7.Children.Add(TE7U);
 		trainertab7.Children.Add(new cancelpage());
 		trainertab7.Children.Add(new SavePage7());
-
 	}
 }
 
-public class SavePage7 : ContentPage
+public partial class SavePage7 : ContentPage
 {
     public SavePage7()
     {

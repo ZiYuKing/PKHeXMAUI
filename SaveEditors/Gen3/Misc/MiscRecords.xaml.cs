@@ -37,20 +37,16 @@ public partial class MiscRecords : ContentPage
 				setting = true;
 				EntryFameH.Text = (value >> 16).ToString();
 				EntryFameM.Text = (value >> 8).ToString();
-				EntryFameS.Text = (value).ToString();
+				EntryFameS.Text = value.ToString();
 				setting = false;
 			}
 		};
 		EntryFameH.TextChanged += (_, _) => ChangeFame(records);
 		EntryFameM.TextChanged += (_, _) => ChangeFame(records);
 		EntryFameS.TextChanged += (_, _) => ChangeFame(records);
-
-
         void ChangeFame(Record3 r3) { if (setting) return; r3.SetRecord(1, uint.Parse(GetFameTime())); }
 		setting = false;
     }
-
-
     public string GetFameTime()
     {
         var hrs = Math.Min(9999, uint.Parse(EntryFameH.Text));

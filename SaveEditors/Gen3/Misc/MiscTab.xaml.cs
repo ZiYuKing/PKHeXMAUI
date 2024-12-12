@@ -30,7 +30,7 @@ public partial class MiscTab : TabbedPage
 		misctab3.Children.Add(new Misc3Save());
 	}
 }
-public class Misc3Save : ContentPage
+public partial class Misc3Save : ContentPage
 {
 	public Misc3Save()
 	{

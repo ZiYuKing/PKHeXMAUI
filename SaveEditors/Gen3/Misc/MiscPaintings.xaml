@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:PKHeXMAUI"
              x:Class="PKHeXMAUI.MiscPaintings"
-             Title="MiscPaintings"
+             Title="Paintings"
              x:Name="ThisView">
     <StackLayout>
         <Grid ColumnDefinitions="*,*,2*">
@@ -11,7 +11,7 @@
             <CheckBox x:Name="PaintingEnabledCheck" Grid.Row="0" Grid.Column="1" CheckedChanged="enablePainting"/>
             <Label Text="Enabled" Grid.Row="0" Grid.Column="2" VerticalOptions="Center"/>
         </Grid>
-        <Grid x:Name="CurrentPaintingView" RowDefinitions="*,*,*,*,*,*,*,*,*" ColumnDefinitions="*,*" IsVisible="{Binding PaintingEnabledCheck.IsChecked, Source=ThisView}">
+        <Grid x:Name="CurrentPaintingView" RowDefinitions="*,*,*,*,*,*,*,*,*" ColumnDefinitions="*,*" >
             <Label Text="Details"/>
             <Label Text="Species:" Grid.Row="1"/>
             <local:comboBox x:Name="Speciesbox" Grid.Row="1" Grid.Column="1"/>

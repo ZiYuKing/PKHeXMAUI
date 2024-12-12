@@ -69,7 +69,6 @@ public partial class PKHeXSettings : ContentPage
         var box = (comboBox)sender;
 		Preferences.Set(box.Placeholder, (bool)box.SelectedItem);
 	}
-
 }
 public class PSettings
 {
@@ -217,10 +216,10 @@ public class GenericCollectionSelector : DataTemplateSelector
         {
                 if (box.SelectedItem is Boolean)
                     Preferences.Set(box.Placeholder, (bool)box.SelectedItem);
-                else if (box.SelectedItem is GameVersion)
-                    Preferences.Set(box.Placeholder, (int)(GameVersion)box.SelectedItem);
-                else if (box.SelectedItem is Severity)
-                    Preferences.Set(box.Placeholder, (int)(Severity)box.SelectedItem);
+                else if (box.SelectedItem is GameVersion version)
+                    Preferences.Set(box.Placeholder, (int)version);
+                else if (box.SelectedItem is Severity severity)
+                    Preferences.Set(box.Placeholder, (int)severity);
         }
         if (sender is Editor editor)
         {
@@ -281,7 +280,7 @@ public class GenericCollectionSelector : DataTemplateSelector
                         if(editor.Placeholder == "TrainerFolderPath")
                         {
                             var tap = new TapGestureRecognizer() { NumberOfTapsRequired = 1 };
-                            tap.Tapped +=async (s, e) => 
+                            tap.Tapped +=async (s, e) =>
                             {
                                 var path = await FolderPicker.PickAsync(CancellationToken.None);
                                 if (!path.IsSuccessful) return;
@@ -292,10 +291,7 @@ public class GenericCollectionSelector : DataTemplateSelector
                     }
                 }
             }
-
         }
         catch (Exception) { }
     }
-
-
 }

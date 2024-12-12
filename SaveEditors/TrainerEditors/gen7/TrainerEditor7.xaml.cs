@@ -25,7 +25,7 @@ public partial class TrainerEditor7 : ContentPage
         if (TimeOffsetPicker.SelectedItem == null)
             TimeOffsetPicker.IsVisible = false;
         var recordres = RecordLists.RecordList_7;
-        List<string> recordlist = new();
+        List<string> recordlist = [];
         for (int i = 0; i < ((ITrainerStatRecord)SAV).RecordCount; i++)
         {
             if (!recordres.TryGetValue(i, out var name))
@@ -63,14 +63,16 @@ public partial class TrainerEditor7 : ContentPage
             LSTimePicker.Time = SAV.Played.LastSavedDate.Value.TimeOfDay;
         }
         else
+        {
             LSLabel.IsVisible = LSDatePicker.IsVisible = LSTimePicker.IsVisible = false;
+        }
+
         DateUtil.GetDateTime2000(SAV.SecondsToStart, out var date, out var time);
         GSDatePicker.Date = date;
         GSTimePicker.Time = time.TimeOfDay;
         DateUtil.GetDateTime2000(SAV.SecondsToFame, out date, out time);
         HOFDatePicker.Date = date;
         HOFTimePicker.Time = time.TimeOfDay;
-
     }
     private static ComboItem[] GetAlolaTimeList()
     {
@@ -132,7 +134,7 @@ public partial class TrainerEditor7 : ContentPage
         if (parsed) SAV.PlayedMinutes = result;
         parsed = int.TryParse(SecPlayedEntry.Text, out result);
         if (parsed) SAV.PlayedSeconds = result;
-        SAV.SecondsToStart = (uint)DateUtil.GetSecondsFrom2000(GSDatePicker.Date, GSDatePicker.Date.AddSeconds(GSTimePicker.Time.TotalSeconds)); 
+        SAV.SecondsToStart = (uint)DateUtil.GetSecondsFrom2000(GSDatePicker.Date, GSDatePicker.Date.AddSeconds(GSTimePicker.Time.TotalSeconds));
         SAV.SecondsToFame = (uint)DateUtil.GetSecondsFrom2000(HOFDatePicker.Date, HOFDatePicker.Date.AddSeconds(HOFTimePicker.Time.TotalSeconds));
         if (SAV.Played.LastSavedDate.HasValue)
             SAV.Played.LastSavedDate = LSDatePicker.Date.AddSeconds(LSTimePicker.Time.TotalSeconds);

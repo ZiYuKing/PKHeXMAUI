@@ -34,7 +34,6 @@ public partial class HomePage : ContentPage
             savefileobj.Metadata.SetExtraInfo(savefile.FullPath);
             App.Current.Windows[0].Page = new AppShell(savefileobj);
         }
-
     }
 
     private void applynewsave(object sender, EventArgs e)
@@ -45,7 +44,7 @@ public partial class HomePage : ContentPage
             Preferences.Set("SaveFile", selected.Value);
             var blanksav = SaveUtil.GetBlankSAV((GameVersion)selected.Value, "PKHeX");
 
-            App.Current.MainPage = new AppShell(blanksav);
+            App.Current.Windows[0].Page = new AppShell(blanksav);
         }
     }
     private async void ExportSave(object sender, EventArgs e)
@@ -55,7 +54,7 @@ public partial class HomePage : ContentPage
             sav.CurrentBox = BoxTab.CurrentBox;
         var ext = sav.Metadata.GetSuggestedExtension();
         var flags = sav.Metadata.GetSuggestedFlags(ext);
-        using var LiveStream = new MemoryStream(sav.Write(flags));
+        await using var LiveStream = new MemoryStream(sav.Write(flags));
         var result = await FileSaver.Default.SaveAsync(sav.Metadata.FileName, LiveStream, CancellationToken.None);
         if (result.IsSuccessful)
             await DisplayAlert("Success", $"Save file was exported to {result.FilePath}", "cancel");

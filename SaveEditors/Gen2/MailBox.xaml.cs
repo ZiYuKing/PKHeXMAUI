@@ -110,14 +110,13 @@ public partial class MailBox : ContentPage
 
     private void EntryControl(object sender, SelectionChangedEventArgs e)
     {
-        int partyindex = Array.IndexOf(PartyBoxList.ToArray(), MBP_CV.SelectedItem);
-        int pcboxindex = Array.IndexOf(PCBoxList.ToArray(), MBPC_CV.SelectedItem);
+        int partyindex = Array.IndexOf([.. PartyBoxList], MBP_CV.SelectedItem);
+        int pcboxindex = Array.IndexOf([.. PCBoxList], MBPC_CV.SelectedItem);
         if(entry >= 0)
         {
             TempSave();
             if (GetLBLabel(entry) != loadedLBItemLabel)
                 LoadList();
-
         }
         if (sender == MBP_CV && partyindex >= 0)
         {
@@ -130,8 +129,11 @@ public partial class MailBox : ContentPage
             MBP_CV.SelectedItem = null;
         }
         else
+        {
             entry = -1;
-        if(entry >= 0)
+        }
+
+        if (entry >= 0)
         {
             LoadMail();
             loadedLBItemLabel = GetLBLabel(entry);
@@ -179,7 +181,6 @@ public partial class MailBox : ContentPage
             mail.SetMessage(Message1.Text, Message2.Text, UserEnteredCB.IsChecked);
             return;
         }
-        
     }
     private void LoadList()
     {

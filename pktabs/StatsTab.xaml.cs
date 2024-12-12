@@ -21,10 +21,10 @@ public partial class StatsTab : ContentPage
     public StatsTab()
 	{
 		InitializeComponent();
-        foreach (var ty in Enum.GetNames(typeof(MoveType)))
+        foreach (var ty in Enum.GetNames<MoveType>())
             Teratypepicker.Items.Add(ty);
         Teratypepicker.Items.Add("Stellar");
-        foreach (var typ in Enum.GetNames(typeof(MoveType)))
+        foreach (var typ in Enum.GetNames<MoveType>())
             MainTeratypepicker.Items.Add(typ);
         MainTeratypepicker.Items.Add("Stellar");
         var hptypes = GameInfo.Strings.types.AsSpan(1, HiddenPower.TypeCount);

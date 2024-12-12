@@ -7,14 +7,13 @@ namespace PKHeXMAUI;
 public partial class EventFlags2 : ContentPage
 {
     private readonly EventWorkspace<SAV2, byte> Editor;
-    private readonly Dictionary<int, int> FlagDict = [];
     public static Dictionary<string,bool> ValueDict = [];
     public EventFlags2()
 	{
 		InitializeComponent();
         ValueDict = [];
 		var editor = Editor = new EventWorkspace<SAV2, byte>((SAV2)sav, sav.Version);
-        FlagCollection.ItemTemplate = new DataTemplate(() => 
+        FlagCollection.ItemTemplate = new DataTemplate(() =>
         {
             var grid = new Grid() { Padding = 10 };
             grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
@@ -28,15 +27,15 @@ public partial class EventFlags2 : ContentPage
             var tap = new TapGestureRecognizer();
             tap.Tapped += tapp;
             grid.GestureRecognizers.Add(tap);
-            var tap2 = new TapGestureRecognizer();
-            tap2.CommandParameter = grid;
-            tap2.Command = new Command(() => tapp(grid, null));
+            var tap2 = new TapGestureRecognizer
+            {
+                CommandParameter = grid,
+                Command = new Command(() => tapp(grid, (TappedEventArgs)EventArgs.Empty))
+            };
             check.GestureRecognizers.Add(tap2);
             return grid;
         });
         AddFlagList(editor.Labels, editor.Flags);
-       
-        
     }
     private void AddFlagList(EventLabelCollection list, bool[] values)
     {
@@ -47,15 +46,14 @@ public partial class EventFlags2 : ContentPage
             ValueDict.Add(labels[i].Name, values[labels[i].Index]);
         }
         FlagCollection.ItemsSource = ValueDict;
-      
     }
-    public void tapp(object g, EventArgs? e)
+#nullable enable
+    public void tapp(object g, TappedEventArgs? e)
     {
         Grid gr = (Grid)g;
         var chs = ((CheckBox)gr.Children[0]).IsChecked;
         ((CheckBox)gr.Children[0]).IsChecked = !chs;
         ValueDict[((Label)gr.Children[1]).Text] = !chs;
-
     }
     public void save()
     {
@@ -71,13 +69,12 @@ public partial class EventFlags2 : ContentPage
     }
 }
 
-public class EventFlags2Tab : TabbedPage
+public partial class EventFlags2Tab : TabbedPage
 {
-	public static EventFlags2 EF2;
-    public static EventConstants2 EC2;
+	public static EventFlags2? EF2;
+    public static EventConstants2? EC2;
 	public EventFlags2Tab()
 	{
-        
         this.BarBackgroundColor = Color.FromArgb("303030");
         this.BarTextColor = Colors.White;
         EF2 = new();
@@ -86,10 +83,9 @@ public class EventFlags2Tab : TabbedPage
         this.Children.Add(EC2);
         this.Children.Add(new EventEditor2Save());
         this.Children.Add(new cancelpage());
-
     }
 }
-public class EventEditor2Save : ContentPage
+public partial class EventEditor2Save : ContentPage
 {
     public EventEditor2Save()
     {
@@ -98,8 +94,8 @@ public class EventEditor2Save : ContentPage
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
-        EventFlags2Tab.EF2.save();
-        EventFlags2Tab.EC2.save();
+        EventFlags2Tab.EF2?.save();
+        EventFlags2Tab.EC2?.save();
         Navigation.PopModalAsync();
     }
 }

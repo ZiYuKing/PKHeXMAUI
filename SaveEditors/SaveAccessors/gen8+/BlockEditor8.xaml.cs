@@ -5,7 +5,6 @@ using PKHeX.Core;
 using System.Security.Cryptography;
 namespace PKHeXMAUI
 {
-
     public partial class BlockEditor8 : ContentPage
     {
         private readonly ISCBlockArray SAV;
@@ -37,7 +36,6 @@ namespace PKHeXMAUI
                 BlockStack.Clear();
                 BlockSummary.Text = string.Empty;
             }
-
         }
         private void UpdateBlockSummaryControls()
         {
@@ -51,13 +49,15 @@ namespace PKHeXMAUI
             if(CurrentBlock.Type.IsBoolean())
             {
                 BlockEditor_Hex.IsVisible = false;
-                var CB_TypeToggle = new comboBox();
-                CB_TypeToggle.ItemSource = new[]
+                var CB_TypeToggle = new comboBox
+                {
+                    ItemSource = new[]
                 {
                     new ComboItem(nameof(SCTypeCode.Bool1), (int)SCTypeCode.Bool1),
                     new ComboItem(nameof(SCTypeCode.Bool2), (int)SCTypeCode.Bool2),
+                },
+                    SelectedIndex = (int)CurrentBlock.Type - 1
                 };
-                CB_TypeToggle.SelectedIndex = (int)CurrentBlock.Type - 1;
                 CB_TypeToggle.SelectedIndexChanged += CB_TypeToggle_SelectionChanged;
                 BlockStack.Add(CB_TypeToggle);
             }
@@ -72,8 +72,10 @@ namespace PKHeXMAUI
                     {
                         var propLabel = new Label() { Text = prop };
                         BlockStack.Add(propLabel, 0, row);
-                        var BlockEntry = new Entry();
-                        BlockEntry.BindingContext = obj;
+                        var BlockEntry = new Entry
+                        {
+                            BindingContext = obj
+                        };
                         try { BlockEntry.SetBinding(Entry.TextProperty, prop, BindingMode.TwoWay); }
                         catch (Exception) { BlockStack.Remove(propLabel); continue; }
                         BlockStack.Add(BlockEntry, 1, row);
@@ -93,15 +95,16 @@ namespace PKHeXMAUI
                     foreach (var prop in props)
                     {
                         BlockStack.Add(new Label() { Text = prop }, 0, row);
-                        var BlockEntry = new Entry();
-                        BlockEntry.BindingContext = o;
+                        var BlockEntry = new Entry
+                        {
+                            BindingContext = o
+                        };
                         BlockEntry.SetBinding(Entry.TextProperty, prop, BindingMode.TwoWay);
                         BlockStack.Add(BlockEntry, 1, row);
                         row++;
                     }
                     return;
                 }
-
             }
         }
 
@@ -120,8 +123,6 @@ namespace PKHeXMAUI
         {
             Navigation.PopModalAsync();
         }
-
-
         private async void ExportBlocksFolder(object sender, EventArgs e)
         {
             var FolderResults = await FolderPicker.PickAsync(CancellationToken.None);
@@ -142,7 +143,7 @@ namespace PKHeXMAUI
         private async void ImportBlocksFolder(object sender, EventArgs e)
         {
             var FolderResults = await FolderPicker.PickAsync(CancellationToken.None);
-            if (FolderResults.IsSuccessful) 
+            if (FolderResults.IsSuccessful)
             {
                 var failed = SCBlockUtil.ImportBlocksFromFolder(FolderResults.Folder.Path,SAV);
                 if(failed.Count != 0)
@@ -150,7 +151,6 @@ namespace PKHeXMAUI
                     var msg = string.Join(Environment.NewLine, failed);
                     await DisplayAlert("Failed", $"Failed to import: {msg}", "cancel");
                 }
-
             }
         }
 
@@ -159,7 +159,7 @@ namespace PKHeXMAUI
         private async void ExportSelectBlock(SCBlock block)
         {
             var name = SCBlockUtil.GetBlockFileNameWithoutExtension(block);
-            using var BlockStreams = new MemoryStream(block.Data);
+            await using var BlockStreams = new MemoryStream(block.Data);
             var result = await FileSaver.SaveAsync($"{name}.bin", BlockStreams, CancellationToken.None);
             if (result.IsSuccessful)
                 await DisplayAlert("Success", $"Block File saved at {result.FilePath}", "cancel");
@@ -173,7 +173,6 @@ namespace PKHeXMAUI
             var Pickedfile = await FilePicker.PickAsync();
             if (Pickedfile is null)
                 return;
-            var key = blockTarget.Key;
             var data = blockTarget.Data;
             var path = Pickedfile.FileName;
             var file = new FileInfo(path);
@@ -210,13 +209,13 @@ namespace PKHeXMAUI
             return option;
         }
     }
-    public class BlockDataFilter 
+    public static class BlockDataFilter
     {
         public static void GetMatchingIndexes(object sender, TextChangedEventArgs filterInfo)
         {
             comboBox source = (comboBox)sender;
             List<int> filteredlist = [];
-            List<ComboItem> SourceList = ((ComboItem[])source.ItemSource).ToList();
+            List<ComboItem> SourceList = [.. ((ComboItem[])source.ItemSource)];
             var text = filterInfo.NewTextValue;
             if (text.Length == 8)
             {

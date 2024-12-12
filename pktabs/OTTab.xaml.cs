@@ -12,7 +12,7 @@ public partial class OTTab : ContentPage
 	public OTTab()
 	{
 		InitializeComponent();
-        htlanguagepicker.ItemsSource = Enum.GetValues(typeof(LanguageID));
+        htlanguagepicker.ItemsSource = Enum.GetValues<LanguageID>();
         var OpenTrash = new TapGestureRecognizer() { NumberOfTapsRequired = 2 };
         OpenTrash.Tapped += OpenTrashEditor;
         OTLabel.GestureRecognizers.Add(OpenTrash);
@@ -288,13 +288,11 @@ public partial class OTTab : ContentPage
     }
     private void WaitForTrashToClose()
     {
-        var trash = pk.OriginalTrainerTrash;
         EditingTrash = true;
-        while (EditingTrash) { };
+        while (EditingTrash) { Task.Delay(1); }
         TrashWindow.FinalBytes.CopyTo(pk.OriginalTrainerTrash);
         pk.OriginalTrainerName = TrashWindow.FinalString;
         applyotinfo(pk);
-        
     }
     public async void OpenHiddenTrashEditor(object sender, TappedEventArgs e)
     {
@@ -304,12 +302,10 @@ public partial class OTTab : ContentPage
     }
     private void WaitForHiddenTrashToClose()
     {
-        var trash = pk.HandlingTrainerTrash;
         EditingTrash = true;
-        while (EditingTrash) { };
+        while (EditingTrash) { Task.Delay(1); }
         TrashWindow.FinalBytes.CopyTo(pk.HandlingTrainerTrash);
         pk.HandlingTrainerName = TrashWindow.FinalString;
         applyotinfo(pk);
-
     }
 }

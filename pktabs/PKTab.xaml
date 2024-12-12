@@ -79,9 +79,9 @@
                 <Editor Grid.Row="6" Grid.Column="3" Text="0" HorizontalOptions="Start" VerticalOptions="Center" x:Name="leveldisplay" TextChanged="changelevel"></Editor>
                 <!--Nature-->
                 <Label Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Text="Nature:" VerticalOptions="Center" HorizontalOptions="Start"></Label>
-                <control:comboBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Placeholder="Nature" x:Name="naturepicker" HorizontalOptions="Start" VerticalOptions="Center" SelectedIndexChanged="applynature" PropertyChanged="ChangeComboBoxFontColor" BackgroundColor="Transparent"></control:comboBox>
+                <control:comboBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Placeholder="Nature" x:Name="naturepicker" HorizontalOptions="Start" VerticalOptions="Center" SelectedIndexChanged="applynature" BackgroundColor="Transparent"></control:comboBox>
                 <Label Grid.Row="7" Grid.Column="3" x:Name="Lab_StatNature" Text="Stat Nature:" VerticalOptions="Center" HorizontalOptions="Start" IsVisible="False"/>
-                <control:comboBox Grid.Row="7" Grid.Column="4" Grid.ColumnSpan="2" Placeholder="Stat Nature" x:Name="statnaturepicker" VerticalOptions="Center" SelectedIndexChanged="applystatnature" PropertyChanged="ChangeComboBoxFontColor" BackgroundColor="Transparent" IsVisible="False"/>
+                <control:comboBox Grid.Row="7" Grid.Column="4" Grid.ColumnSpan="2" Placeholder="Stat Nature" x:Name="statnaturepicker" VerticalOptions="Center" SelectedIndexChanged="applystatnature" BackgroundColor="Transparent" IsVisible="False"/>
 
                 <!--form-->
                 <Label x:Name="formlabel" IsVisible="false" Grid.Row="10" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" Text="Form:"></Label>

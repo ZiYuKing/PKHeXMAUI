@@ -36,7 +36,6 @@ public partial class SaveEditors : ContentPage
             case ISCBlockArray: Navigation.PushModalAsync(new BlockDataTab()); break;
 
         }
-        
     }
     private void ToggleControls()
     {

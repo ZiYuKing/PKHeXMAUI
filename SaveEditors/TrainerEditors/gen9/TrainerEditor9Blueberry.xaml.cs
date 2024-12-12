@@ -15,7 +15,6 @@ public partial class TrainerEditor9Blueberry : ContentPage
         GQEditor.Text = SAV.BlueberryQuestRecord.QuestsDoneGroup.ToString();
         ThrowStylePicker.ItemsSource = Util.GetStringList("throw_styles","en");
         ThrowStylePicker.SelectedIndex = (int)SAV.ThrowStyle - 1;
-
     }
 
     private void MaxBP(object sender, EventArgs e)

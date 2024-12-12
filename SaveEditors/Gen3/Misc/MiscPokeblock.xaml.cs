@@ -25,17 +25,14 @@ public partial class MiscPokeblock : ContentPage
         CV_Pokeblocks.ItemsSource = Case.Blocks;
         CV_Pokeblocks.SelectedItem = Case.Blocks[0];
         propertyGrid pg_Pokeblock = new(CV_Pokeblocks.SelectedItem);
-        CV_Pokeblocks.SelectionChanged += (_, _) =>
-        {
-            pg_Pokeblock.CurrentItem = CV_Pokeblocks.SelectedItem;
-        };
+        CV_Pokeblocks.SelectionChanged += (_, _) => pg_Pokeblock.CurrentItem = CV_Pokeblocks.SelectedItem;
         PokeBlockStack.Add(pg_Pokeblock);
         Button B_GiveAll = new()
         {
             Text = "Give All"
         };
         B_GiveAll.Clicked += B_GiveAll_Clicked;
-        Grid buttongrid = new();
+        Grid buttongrid = [];
         buttongrid.Add(B_GiveAll);
         Button B_delAll = new()
         {

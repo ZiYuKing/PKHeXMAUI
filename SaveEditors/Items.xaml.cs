@@ -267,6 +267,7 @@ public partial class Items : TabbedPage
     {
         Navigation.PopModalAsync();
     }
+#nullable enable
     private void ChangeItemSprite(object sender, EventArgs e)
     {
         var pindex = Array.IndexOf([.. ItemsMain.Children], ItemsMain.CurrentPage) - 1;

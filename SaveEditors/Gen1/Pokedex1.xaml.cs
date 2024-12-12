@@ -96,6 +96,5 @@ public class SimplePokedexInfo
         SpecieID = specid;
         seen = MainPage.sav.GetSeen(SpecieID);
         caught = MainPage.sav.GetCaught(SpecieID);
-
     }
 }

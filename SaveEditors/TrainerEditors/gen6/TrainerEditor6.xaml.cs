@@ -14,7 +14,7 @@ public partial class TrainerEditor6 : ContentPage
 		GenderPicker.ItemsSource = GameInfo.GenderSymbolUnicode.Take(2).ToArray();
 		GenderPicker.SelectedIndex = SAV.Gender;
 		var recordres = RecordLists.RecordList_6;
-		List<string> recordlist = new();
+		List<string> recordlist = [];
         for (int i = 0; i < ((ITrainerStatRecord)SAV).RecordCount; i++)
 		{
             if (!recordres.TryGetValue(i, out var name))
@@ -53,8 +53,11 @@ public partial class TrainerEditor6 : ContentPage
 			LSDatePicker.Date = SAV.Played.LastSavedDate.Value;
 			LSTimePicker.Time = SAV.Played.LastSavedDate.Value.TimeOfDay;
 		}
-		else
-			LSLabel.IsVisible = LSDatePicker.IsVisible = LSTimePicker.IsVisible = false;
+        else
+        {
+            LSLabel.IsVisible = LSDatePicker.IsVisible = LSTimePicker.IsVisible = false;
+        }
+
         DateUtil.GetDateTime2000(SAV.SecondsToStart, out var date, out var time);
 		GSDatePicker.Date = date;
 		GSTimePicker.Time = time.TimeOfDay;
@@ -116,8 +119,8 @@ public partial class TrainerEditor6 : ContentPage
 		parsed = ushort.TryParse(BPEntry.Text, out result);
 		if (parsed) SAV.BP = result;
 		parsed = int.TryParse(PMEntry.Text, out var iresult);
-		if (parsed) 
-		{ 
+		if (parsed)
+		{
 			SAV.SetRecord(63, iresult);
 			SAV.SetRecord(64, iresult);
 		}

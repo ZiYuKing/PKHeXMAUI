@@ -32,11 +32,11 @@ public partial class TrainerEditor6BadgeMap : ContentPage
         var sit = SAV.Situation;
         var parsed = int.TryParse(CurrentMapEntry.Text, out var result);
         if (parsed) sit.M = result;
-        parsed = float.TryParse(XCoordEntry.Text, out var fresult);
+        parsed = float.TryParse(XCoordEntry.Text, out _);
         if (parsed) sit.X = result * 18;
-        parsed = float.TryParse(YCoordEntry.Text, out fresult);
+        parsed = float.TryParse(YCoordEntry.Text, out _);
         if (parsed) sit.Y = result * 18;
-        parsed = float.TryParse(ZCoordEntry.Text, out fresult);
+        parsed = float.TryParse(ZCoordEntry.Text, out _);
         if (parsed) sit.Z = result * 18;
         parsed = int.TryParse(RotationEntry.Text, out result);
         if (parsed) sit.R = result;

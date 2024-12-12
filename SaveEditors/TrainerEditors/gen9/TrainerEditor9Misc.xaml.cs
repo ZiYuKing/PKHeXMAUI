@@ -14,13 +14,10 @@ public partial class TrainerEditor9Misc : ContentPage
 		TrainerYCoordinateEditor.Text = SAV.Y.ToString();
 		TrainerZCoordinateEditor.Text = SAV.Z.ToString();
 		TrainerRotationEditor.Text = (Math.Atan2(SAV.RZ, SAV.RW) * 360.0 / Math.PI).ToString();
-
-
     }
 
     private void UnlockFlyLocations(object sender, EventArgs e)
     {
-       
         var accessor = SAV.Accessor;
         foreach (var hash in FlyHashes)
         {

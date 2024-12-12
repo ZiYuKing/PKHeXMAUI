@@ -255,5 +255,4 @@ public partial class MemoriesAmie : TabbedPage
             HTMemoryString.IsVisible = false;
         }
     }
-
 }

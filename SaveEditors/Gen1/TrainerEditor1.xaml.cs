@@ -64,7 +64,6 @@ public partial class TrainerEditor1 : ContentPage
             TextSpeedPicker.SelectedIndex = sav2.TextSpeed;
             badgeval = sav2.Badges;
             cba = cba = [Badge1, Badge2, Badge3, Badge4, Badge5, Badge6, Badge7, Badge8, Badge9, Badge10, Badge11, Badge12, Badge13, Badge14, Badge15, Badge16];
-
         }
         if(SAV is SAV3 sav3)
         {
@@ -72,7 +71,6 @@ public partial class TrainerEditor1 : ContentPage
             MapGrid.IsVisible = false;
             OptionsGrid.IsVisible = false;
             badgeval = sav3.Badges;
-
         }
         if (SAV is SAV3Colosseum or SAV3XD)
         {
@@ -114,7 +112,6 @@ public partial class TrainerEditor1 : ContentPage
             CountryPicker.ItemsSource = Util.GetCountryRegionList("gen5_countries", GameInfo.CurrentLanguage);
             CountryPicker.ItemDisplayBinding = new Binding("Text");
             CountryPicker.SelectedItem = Util.GetCountryRegionList("gen5_countries", GameInfo.CurrentLanguage).Find(z => z.Value == sav5.Country);
-
         }
         for (int i = 0; i < cba.Length; i++)
         {
@@ -183,7 +180,6 @@ public partial class TrainerEditor1 : ContentPage
             sav1.BattleStyleSwitch = BattleStylePicker.SelectedIndex == 0;
             sav1.Sound = SoundTypePicker.SelectedIndex;
             sav1.TextSpeed = TextSpeedPicker.SelectedIndex;
-
         }
         if(SAV is SAV2 sav2)
         {
@@ -242,7 +238,7 @@ public partial class TrainerEditor1 : ContentPage
             if (region is not null)
                 s.Region = region.Value;
         }
-        DateTime Epoch2000 = new DateTime(2000, 1, 1);
+        DateTime Epoch2000 = new(2000, 1, 1);
         SAV.SecondsToStart = (uint)DateUtil.GetSecondsFrom2000(GSDatePicker.Date, Epoch2000.AddSeconds(GSTimerPicker.Time.TotalSeconds % 86400));
         SAV.SecondsToFame = (uint)DateUtil.GetSecondsFrom2000(HOFDatePicker.Date, Epoch2000.AddSeconds(HOFTimePicker.Time.TotalSeconds % 86400));
         Navigation.PopModalAsync();

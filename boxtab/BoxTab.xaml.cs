@@ -46,11 +46,11 @@ public partial class BoxTab : ContentPage
         boxrefresh.Command = refreshCommand;
         boxnum.SelectedIndex = sav.CurrentBox;
     }
-    public static IList<boxsprite> boxsprites = new List<boxsprite>();
+    public static IList<boxsprite> boxsprites = [];
     public static int CurrentBox = 0;
 	public void fillbox()
 	{
-		boxsprites = new List<boxsprite>();
+		boxsprites = [];
         //if(sav.GetBoxData(boxnum.SelectedIndex).Count() == 0) { sav.SetBoxBinary(BitConverter.GetBytes(0),boxnum.SelectedIndex); }
         int i = 0;
         foreach (var boxpk in sav.GetBoxData(boxnum.SelectedIndex))
@@ -304,8 +304,7 @@ public partial class BoxTab : ContentPage
     public void copyboxdata()
     {
         PKM[] pkms = sav.GetSixRandomMons();
-        if (sav.BoxData == null)
-            sav.BoxData = [];
+        sav.BoxData ??= [];
         var empties = Legalizer.FindAllEmptySlots(sav.BoxData, 0);
         for (int i = 0; i < 6; i++)
             sav.SetBoxSlotAtIndex(pkms[i], empties[i]);

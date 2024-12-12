@@ -29,7 +29,7 @@ public partial class TextEditor : ContentPage
         if (raw.Length != 0)
         {
             Raw = FinalBytes = raw.ToArray();
-            AddTrashEditing(raw.Length, generation);
+            AddTrashEditing(raw.Length);
         }
         else
         {
@@ -38,19 +38,18 @@ public partial class TextEditor : ContentPage
         var f = new Microsoft.Maui.Graphics.Font("sans-serif", 11);
         AddCharEditing(f, generation);
         StringEntry.Text = TB_NN;
-        LanguagePicker.ItemsSource = Enum.GetValues(typeof(LanguageID));
+        LanguagePicker.ItemsSource = Enum.GetValues<LanguageID>();
         LanguagePicker.SelectedIndex = MainPage.sav.Language;
     }
-    private void AddTrashEditing(int count, byte generation)
+    private void AddTrashEditing(int count)
     {
         for(var i = 0;i<count;i++)
             TrashList.Add(new trashclass(i, Raw[i]));
-        StringHexCV.ItemTemplate = new DataTemplate(() => 
+        StringHexCV.ItemTemplate = new DataTemplate(() =>
         {
             Grid grid = new() { Padding = 10 };
             grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
             grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
-                
             Label HexLabel = new() { VerticalOptions=LayoutOptions.Center,HorizontalOptions=LayoutOptions.Center };
             HexLabel.SetBinding(Label.TextProperty, new Binding("Index",stringFormat:"${0}"));
             grid.Add(HexLabel);
@@ -71,7 +70,7 @@ public partial class TextEditor : ContentPage
         var chars = GetChars(generation);
         if (chars.Count == 0)
             return;
-        SpecialStringCV.ItemTemplate = new DataTemplate(() => 
+        SpecialStringCV.ItemTemplate = new DataTemplate(() =>
         {
             Grid grid = new() { Padding = 10 };
             Label special = new() { VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center,FontFamily=f.ToString() };
@@ -87,13 +86,11 @@ public partial class TextEditor : ContentPage
     }
     private void B_Save_Click(object sender, EventArgs e)
     {
-
         FinalString = StringEntry.Text;
         foreach (var trash in TrashList)
             Raw[trash.Index] = trash.Data;
 
         FinalBytes = Raw;
-        
 
         Navigation.PopModalAsync();
         EditingTrash = false;
@@ -122,15 +119,14 @@ public partial class TextEditor : ContentPage
     public void SetOrientation()
     {
         #if ANDROID
-        Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.RequestedOrientation =    Android.Content.PM.ScreenOrientation.Locked;  
-        Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;  
+        Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.RequestedOrientation =    Android.Content.PM.ScreenOrientation.Locked;
+        Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
         #endif
     }
     public void RestSetOrientation()
     {
         #if ANDROID
-        Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.RequestedOrientation =    Android.Content.PM.ScreenOrientation.User;  
-            
+        Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.RequestedOrientation =    Android.Content.PM.ScreenOrientation.User;
         #endif
     }
 
@@ -142,7 +138,6 @@ public partial class TextEditor : ContentPage
     protected override void OnDisappearing()
     {
         RestSetOrientation();
-
     }
 
     private void CloseTextEditor(object sender, EventArgs e)
@@ -174,7 +169,6 @@ public partial class TextEditor : ContentPage
             TrashList[i].Data = 0;
         }
     }
- 
     private string GetString() => Converter.GetString(Raw);
     private void UpdateString(Entry tb)
     {
@@ -302,19 +296,13 @@ public partial class TextEditor : ContentPage
         '☃', // '\uE09E' -> '\u2603'
     ];
 }
-public class trashclass
+public class trashclass(int index, byte data)
 {
-    public int Index { get; set; }
-    public byte Data { get; set; }
-    public trashclass(int index,byte data)
-    {
-        Index = index;
-        Data = data;
-    }
+    public int Index { get; set; } = index;
+    public byte Data { get; set; } = data;
 }
 public class CharConverter : IValueConverter
-{ 
-
+{
     object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is null)

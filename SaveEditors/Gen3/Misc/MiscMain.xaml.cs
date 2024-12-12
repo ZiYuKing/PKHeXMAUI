@@ -38,14 +38,13 @@ public partial class MiscMainEditor : ContentPage
             }
         }
         else
-        { 
+        {
             E_Rival.IsVisible = L_Rival.IsVisible = L_TrainerCards.IsVisible = false;
             Picker[] cba = [P_TCM1, P_TCM2, P_TCM3, P_TCM4, P_TCM5, P_TCM6];
-            foreach (var c in cba) 
+            foreach (var c in cba)
             {
                 c.IsVisible = false;
             }
         }
-
     }
 }

@@ -27,9 +27,9 @@ public partial class ALMSettings : ContentPage
         switch (result)
         {
             case "cancel": break;
-            case "Add": GenericCollectionSelector.SelectedSource.Add((MoveType)e.Parameter); 
+            case "Add": GenericCollectionSelector.SelectedSource.Add((MoveType)e.Parameter);
                 Preferences.Set("RandomTypes", JsonSerializer.Serialize(GenericCollectionSelector.SelectedSource));
-                APILegality.RandTypes = GenericCollectionSelector.SelectedSource.ToArray();
+                APILegality.RandTypes = [.. GenericCollectionSelector.SelectedSource];
                 GenericCollectionSelector.MoveTypeOptionsSource.Remove((MoveType)e.Parameter);
                 break;
 
@@ -45,7 +45,7 @@ public partial class ALMSettings : ContentPage
             case "cancel": break;
             case "Remove": GenericCollectionSelector.SelectedSource.Remove((MoveType)e.Parameter);
                 Preferences.Set("RandomTypes", JsonSerializer.Serialize(GenericCollectionSelector.SelectedSource));
-                APILegality.RandTypes = GenericCollectionSelector.SelectedSource.ToArray();
+                APILegality.RandTypes = [.. GenericCollectionSelector.SelectedSource];
                 GenericCollectionSelector.MoveTypeOptionsSource.Add((MoveType)e.Parameter); break;
         }
     }

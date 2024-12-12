@@ -20,7 +20,7 @@ public partial class TrainerTab8a : TabbedPage
     }
 }
 
-public class SavePage8a : ContentPage
+public partial class SavePage8a : ContentPage
 {
     public SavePage8a()
     {

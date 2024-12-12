@@ -27,7 +27,7 @@ public partial class TrainerTab9 : TabbedPage
     }
 }
 
-public class cancelpage : ContentPage
+public partial class cancelpage : ContentPage
 {
     public cancelpage()
     {
@@ -39,7 +39,7 @@ public class cancelpage : ContentPage
     }
 }
 
-public class SavePage9 : ContentPage 
+public partial class SavePage9 : ContentPage
 {
     public SavePage9()
     {

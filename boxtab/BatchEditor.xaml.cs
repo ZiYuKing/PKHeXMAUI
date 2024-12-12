@@ -84,8 +84,6 @@ public partial class BatchEditor : ContentPage
     {
         Navigation.PopModalAsync();
     }
-
-
     private async void ApplyBatchChanges(object sender, EventArgs e)
     {
         var sets = StringInstructionSet.GetBatchSets(BatchText.Text);

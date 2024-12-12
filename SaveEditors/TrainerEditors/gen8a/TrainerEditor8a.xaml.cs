@@ -40,7 +40,6 @@ public partial class TrainerEditor8a : ContentPage
     {
 		TE8aMoneyEntry.Text = MainPage.sav.MaxMoney.ToString();
     }
-	
 	public void SaveTE8a()
 	{
 		SAV.OT = OTName.Text;
@@ -52,7 +51,7 @@ public partial class TrainerEditor8a : ContentPage
 		SAV.Money = parsed ? result : SAV.Money;
 		SAV.Gender = (byte)TE8aGenderPicker.SelectedIndex;
 		SAV.Language = ((ComboItem)TE8aLanguagePicker.SelectedItem).Value;
-		parsed = uint.TryParse(TE8aCMPEntry.Text, out result);
+        _ = uint.TryParse(TE8aCMPEntry.Text, out result);
 		SAV.Blocks.SetBlockValue(SaveBlockAccessor8LA.KMeritCurrent, result);
 		SAV.Blocks.SetBlockValue(SaveBlockAccessor8LA.KMeritEarnedTotal, uint.Parse(TE8aEMPEntry.Text));
 		SAV.Blocks.SetBlockValue(SaveBlockAccessor8LA.KExpeditionTeamRank, uint.Parse(TE8aGREntry.Text));

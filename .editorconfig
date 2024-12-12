@@ -23,6 +23,9 @@ csharp_prefer_static_local_function = true:suggestion
 csharp_style_conditional_delegate_call = true:suggestion
 csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
 
+# RCS1075: Avoid empty catch clause that catches System.Exception
+dotnet_diagnostic.RCS1075.severity = none
+
 [*.{cs,vb}]
 #### Naming styles ####
 

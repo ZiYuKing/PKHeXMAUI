@@ -12,7 +12,7 @@ namespace PKHeXMAUI;
 
 public partial class MainPage : ContentPage
 {
-    public static string Version = "v24.10.30";
+    public static string Version = "v24.12.11";
     public bool SkipTextChange = false;
     public static int[] NoFormSpriteSpecies = [664, 665, 744, 982, 855, 854, 869,892,1012,1013];
     public bool FirstLoad = true;
@@ -97,7 +97,7 @@ public partial class MainPage : ContentPage
         APILegality.SetBattleVersion = PluginSettings.SetBattleVersion;
         APILegality.ForceSpecifiedBall = true;
         APILegality.Timeout = 45;
-        EncounterMovesetGenerator.PriorityList = new List<EncounterTypeGroup>() { EncounterTypeGroup.Slot, EncounterTypeGroup.Trade, EncounterTypeGroup.Static, EncounterTypeGroup.Mystery, EncounterTypeGroup.Egg };
+        EncounterMovesetGenerator.PriorityList = [EncounterTypeGroup.Slot, EncounterTypeGroup.Trade, EncounterTypeGroup.Static, EncounterTypeGroup.Mystery, EncounterTypeGroup.Egg];
         //TrainerSettings.DefaultOT = PluginSettings.DefaultOT;
         EncounterEvent.RefreshMGDB();
         var IsSIDdigits = ushort.TryParse(PluginSettings.DefaultSID, out var SID);
@@ -108,7 +108,9 @@ public partial class MainPage : ContentPage
             TrainerSettings.DefaultTID16 = TID;
         TrainerSettings.Clear();
         if (!APILegality.UseTrainerData)
+        {
             TrainerSettings.Register(TrainerSettings.DefaultFallback((GameVersion)sav.Version, (LanguageID)sav.Language));
+        }
         else
         {
             if (Directory.Exists(trainerfolder))
@@ -370,7 +372,7 @@ public partial class MainPage : ContentPage
     public async void pk9saver_Clicked(object sender, EventArgs e)
     {
         pk.ResetPartyStats();
-        using var CrossedStreams = new MemoryStream(pk.DecryptedPartyData);
+        await using var CrossedStreams = new MemoryStream(pk.DecryptedPartyData);
         var result = await FileSaver.Default.SaveAsync(pk.FileName, CrossedStreams, CancellationToken.None);
         if (result.IsSuccessful)
             await DisplayAlert("Success", $"PK File saved at {result.FilePath}", "cancel");
@@ -394,7 +396,7 @@ public partial class MainPage : ContentPage
             formpicker.IsVisible = false;
 
             pk.Species = (ushort)test.Value;
-            if (abilitySource.Count() != 0)
+            if (abilitySource.Count != 0)
                 abilitySource.Clear();
             for (int i = 0; i < pk.PersonalInfo.AbilityCount; i++)
             {
@@ -502,9 +504,9 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void applynature(object sender, EventArgs e) 
-    { 
-        if (!SkipTextChange) 
+    private void applynature(object sender, EventArgs e)
+    {
+        if (!SkipTextChange)
         {
             if (naturepicker.SelectedItem is null)
                 return;
@@ -516,7 +518,7 @@ public partial class MainPage : ContentPage
             }
             pk.Nature = (Nature)selectedNature;
             applymainpkinfo(pk);
-        } 
+        }
     }
 
     private void applyform(object sender, EventArgs e)
@@ -781,12 +783,6 @@ public partial class MainPage : ContentPage
                 pk5.NSparkle = NSparkleCheckbox.IsChecked;
         }
     }
-
-    private void ChangeComboBoxFontColor(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        comboBox box = (comboBox)sender;
-    }
-
     public async void ImportShowdown(object sender, EventArgs e)
     {
         if (!Clipboard.HasText)
@@ -907,16 +903,13 @@ public partial class MainPage : ContentPage
     }
     private void WaitForTrashToClose()
     {
-        var trash = pk.NicknameTrash;
         EditingTrash = true;
-        while (EditingTrash) { };
+        while (EditingTrash) { Task.Delay(1); }
         TrashWindow.FinalBytes.CopyTo(pk.NicknameTrash);
         if (TrashWindow.FinalString != SpeciesName.GetSpeciesNameGeneration(pk.Species, pk.Language, pk.Format))
             pk.SetNickname(TrashWindow.FinalString);
         else
             pk.ClearNickname();
-        
         applymainpkinfo(pk);
     }
-
 }
