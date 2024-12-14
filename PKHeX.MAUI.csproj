@@ -262,7 +262,16 @@
 	  <MauiXaml Update="SaveEditors\Gen2\MailBox.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\Gen3\Misc\MiscBattleFrontier.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="SaveEditors\Gen3\Misc\MiscDecorations.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\Gen3\Misc\MiscFerry.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="SaveEditors\Gen3\Misc\MiscJoyful.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="SaveEditors\Gen3\Misc\MiscPaintings.xaml">
@@ -353,6 +362,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Settings\LegalitySettings.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Util\NumericUpDown.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Util\propertyGrid.xaml">

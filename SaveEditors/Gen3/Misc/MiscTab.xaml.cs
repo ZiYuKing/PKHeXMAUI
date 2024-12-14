@@ -11,6 +11,9 @@ public partial class MiscTab : TabbedPage
 	public static MiscPokeblock MPB;
 	public static MiscDecorations MDE;
 	public static MiscPaintings MPE;
+	public static MiscJoyful MJE;
+	public static MiscFerry MFE;
+	public static MiscBattleFrontier MBF;
 	public MiscTab()
 	{
 		InitializeComponent();
@@ -18,14 +21,29 @@ public partial class MiscTab : TabbedPage
         misctab3.BarTextColor = Colors.White;
         MME = new MiscMainEditor();
 		MRE = new((SAV3)sav);
-		MPB = new((IGen3Hoenn)sav);
-		MDE = new((IGen3Hoenn)sav);
-		MPE = new((SAV3)sav);
-		misctab3.Children.Add(MME);
-		misctab3.Children.Add(MRE);
-		misctab3.Children.Add(MPB);
-		misctab3.Children.Add(MDE);
-		misctab3.Children.Add(MPE);
+        misctab3.Children.Add(MME);
+		if(sav is IGen3Joyful j)
+		{
+            MJE = new(j);
+			misctab3.Children.Add(MJE);
+        }
+		if(sav is SAV3E e)
+		{
+			MFE = new(e);
+			misctab3.Children.Add(MFE);
+			MBF = new(e);
+			misctab3.Children.Add(MBF);
+		}
+        misctab3.Children.Add(MRE);
+        if (sav is IGen3Hoenn hoenn)
+		{
+			MPB = new(hoenn);
+			MDE = new(hoenn);
+			MPE = new((SAV3)sav);
+            misctab3.Children.Add(MPB);
+            misctab3.Children.Add(MDE);
+            misctab3.Children.Add(MPE);
+        }
 		misctab3.Children.Add(new cancelpage());
 		misctab3.Children.Add(new Misc3Save());
 	}
@@ -40,6 +58,7 @@ public partial class Misc3Save : ContentPage
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
 	{
 		MiscTab.MPB.Save();
+		MiscTab.MJE.SaveJoyful();
 		Navigation.PopModalAsync();
 	}
 }

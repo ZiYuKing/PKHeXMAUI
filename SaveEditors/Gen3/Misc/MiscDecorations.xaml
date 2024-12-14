@@ -4,13 +4,15 @@
              x:Class="PKHeXMAUI.MiscDecorations"
              Title="Decorations"
             x:Name="DecorationsTab">
-    <StackLayout>
-        <CarouselView x:Name="Decorationsview" HeightRequest="400">
-            <CarouselView.ItemsLayout>
-                <LinearItemsLayout Orientation="Horizontal"
+    <ScrollView>
+        <StackLayout>
+            <CarouselView x:Name="Decorationsview" HeightRequest="400">
+                <CarouselView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal"
                            SnapPointsType="MandatorySingle"
                            SnapPointsAlignment="Center" />
-            </CarouselView.ItemsLayout>
-        </CarouselView>
-    </StackLayout>
+                </CarouselView.ItemsLayout>
+            </CarouselView>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>
