@@ -8,7 +8,7 @@
         <Label Text="Frontier Pass" />
         <Grid ColumnDefinitions="*,*">
             <CheckBox x:Name="CHK_ActivatePass"/>
-            <Label Text="Activated" Grid.Column="1"/>
+            <Label Text="Activated" Grid.Column="1" VerticalOptions="Center"/>
         </Grid>
         <Label Text="Symbol Icons"/>
         <Grid ColumnDefinitions="*,*,*,*">
@@ -27,13 +27,13 @@
         <local:comboBox x:Name="CB_Stats2" SelectedIndexChanged="ChangeStat"/>
         <Grid ColumnDefinitions="*,*,*,*">
             <RadioButton GroupName="StatRBA" x:Name="RB_Stats3_01" CheckedChanged="ChangeStat"/>
-            <Label Text="Lv.50" Grid.Column="1"/>
+            <Label Text="Lv.50" Grid.Column="1" VerticalOptions="Center"/>
             <RadioButton GroupName="StatRBA" x:Name="RB_Stats3_02" Grid.Column="2" CheckedChanged="ChangeStat"/>
-            <Label Text="Open" Grid.Column="3"/>
+            <Label Text="Open" Grid.Column="3" VerticalOptions="Center"/>
         </Grid>
         <Grid ColumnDefinitions="*,*" RowDefinitions="*,*,*,*,*">
             <CheckBox x:Name="CHK_Continue" CheckedChanged="CHK_Continue_CheckedChanged"/>
-            <Label Text="Continue" Grid.Column="1"/>
+            <Label Text="Continue" Grid.Column="1" VerticalOptions="Center"/>
             <Label x:Name="L_Stat0" Text="Current" Grid.Row="1"/>
             <local:NumericUpDown x:Name="NUD_Stat0" Grid.Row="1" Grid.Column="1" ValueChanged="ChangeStatVal"/>
             <Label x:Name="L_Stat1" Text="Trade" Grid.Row="2"/>

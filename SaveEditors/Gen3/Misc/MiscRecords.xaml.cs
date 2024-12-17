@@ -21,37 +21,37 @@ public partial class MiscRecords : ContentPage
 		{
 			if (ComboRecord.SelectedItem is null) return;
 			var index = ((ComboItem)ComboRecord.SelectedItem).Value;
-			EntryRecordValue.Text = records.GetRecord(index).ToString();
+			EntryRecordValue.Number = records.GetRecord(index);
 			EntryFameH.IsVisible = EntryFameM.IsVisible = EntryFameS.IsVisible = index == 1;
         };
 		ComboRecord.SelectedIndex = 1;
 		ComboRecord.SelectedIndex = 0;
-		EntryRecordValue.TextChanged += (_, _) =>
+		EntryRecordValue.ValueChanged += (_, _) =>
 		{
 			if (ComboRecord.SelectedItem is null || setting) return;
 			var index = ((ComboItem)ComboRecord.SelectedItem).Value;
-			var value = uint.Parse(EntryRecordValue.Text);
+			var value = (uint)EntryRecordValue.Number;
 			records.SetRecord(index, value);
 			if (index == 1)
 			{
 				setting = true;
-				EntryFameH.Text = (value >> 16).ToString();
-				EntryFameM.Text = (value >> 8).ToString();
-				EntryFameS.Text = value.ToString();
+				EntryFameH.Number = (value >> 16);
+				EntryFameM.Number = (value >> 8);
+				EntryFameS.Number = value;
 				setting = false;
 			}
 		};
-		EntryFameH.TextChanged += (_, _) => ChangeFame(records);
-		EntryFameM.TextChanged += (_, _) => ChangeFame(records);
-		EntryFameS.TextChanged += (_, _) => ChangeFame(records);
+		EntryFameH.ValueChanged += (_, _) => ChangeFame(records);
+		EntryFameM.ValueChanged += (_, _) => ChangeFame(records);
+		EntryFameS.ValueChanged += (_, _) => ChangeFame(records);
         void ChangeFame(Record3 r3) { if (setting) return; r3.SetRecord(1, uint.Parse(GetFameTime())); }
 		setting = false;
     }
     public string GetFameTime()
     {
-        var hrs = Math.Min(9999, uint.Parse(EntryFameH.Text));
-        var min = Math.Min(59, uint.Parse(EntryFameM.Text));
-        var sec = Math.Min(59, uint.Parse(EntryFameS.Text));
+        var hrs = Math.Min(9999, (uint)EntryFameH.Number);
+        var min = Math.Min(59, (uint)EntryFameM.Number);
+        var sec = Math.Min(59, (uint)EntryFameS.Number);
 
         return ((hrs << 16) | (min << 8) | sec).ToString();
     }

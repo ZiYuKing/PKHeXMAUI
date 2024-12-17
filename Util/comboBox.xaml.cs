@@ -134,6 +134,7 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
 
         entry.Text = SelectedItemText;
         SelectedItem = picker.SelectedItem;
+        SelectedIndex = ItemSource.Cast<object>().ToList().IndexOf(SelectedItem);
         SelectedIndexChanged?.Invoke(this, e);
 #if ANDROID
         popupWindow?.Dismiss();

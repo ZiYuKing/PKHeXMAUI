@@ -7,11 +7,11 @@
              x:Name="ThisView">
     <VerticalStackLayout>
         <local:comboBox x:Name="ComboRecord"/>
-        <Entry x:Name="EntryRecordValue" Keyboard="Numeric"/>
+        <local:NumericUpDown x:Name="EntryRecordValue"/>
         <Grid ColumnDefinitions="*,*,*">
-            <Entry x:Name="EntryFameH" Keyboard="Numeric"/>
-            <Entry x:Name="EntryFameM" Grid.Column="1" Keyboard="Numeric"/>
-            <Entry x:Name="EntryFameS" Grid.Column="2" Keyboard="Numeric"/>
+            <local:NumericUpDown x:Name="EntryFameH"/>
+            <local:NumericUpDown x:Name="EntryFameM" Grid.Column="1"/>
+            <local:NumericUpDown x:Name="EntryFameS" Grid.Column="2"/>
         </Grid>
     </VerticalStackLayout>
 </ContentPage>

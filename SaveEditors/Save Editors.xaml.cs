@@ -56,8 +56,11 @@ public partial class SaveEditors : ContentPage
         }
         if(sav is SAV2 or SAV3)
             Button_RTCEditor.IsVisible = true;
-        if(sav is SAV3)
+        if (sav is SAV3)
+        {
             B_Misc.IsVisible = true;
+            B_Roamer.IsVisible = true;
+        }
     }
 
     private void OpenTrainerEditor(object sender, EventArgs e)
@@ -125,5 +128,10 @@ public partial class SaveEditors : ContentPage
     private void OpenMisc3Editor(object sender, EventArgs e)
     {
         Navigation.PushModalAsync(new MiscTab());
+    }
+
+    private void OpenRoamerEditor(object sender, EventArgs e)
+    {
+        Navigation.PushModalAsync(new RoamerEditor3((SAV3)sav));
     }
 }

@@ -7,7 +7,7 @@
              x:Name="ThisView">
     <StackLayout>
         <Grid ColumnDefinitions="*,*,2*">
-            <Entry x:Name="CurrentPaintingEntry" Keyboard="Numeric" TextChanged="CurrentPaintingChanged" Grid.Row="0" Grid.Column="0"/>
+            <local:NumericUpDown x:Name="CurrentPaintingEntry" ValueChanged="CurrentPaintingChanged" MaxValue="4" Grid.Row="0" Grid.Column="0"/>
             <CheckBox x:Name="PaintingEnabledCheck" Grid.Row="0" Grid.Column="1" CheckedChanged="enablePainting"/>
             <Label Text="Enabled" Grid.Row="0" Grid.Column="2" VerticalOptions="Center"/>
         </Grid>
@@ -28,7 +28,7 @@
             <Label Text="Nickname:" Grid.Row="7"/>
             <Entry x:Name="Nicknameentry" Grid.Row="7" Grid.Column="1"/>
             <Label Text="Caption:" Grid.Row="8"/>
-            <Entry x:Name="Captionentry" Grid.Row="8" Grid.Column="1" Keyboard="Numeric"/>
+            <local:NumericUpDown x:Name="Captionentry" Grid.Row="8" Grid.Column="1" MaxValue="2"/>
 
         </Grid>
     </StackLayout>

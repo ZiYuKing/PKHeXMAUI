@@ -25,25 +25,7 @@ public partial class PKHeXSettings : ContentPage
             props.Add(new GenericCollection(p));
         foreach (var p in new EncounterSettings().GetType().GetProperties())
             props.Add(new GenericCollection(p));
-        PKHeXSettingsCollection.ItemTemplate = new DataTemplate(() =>
-		{
-            Grid grid = new() { Padding = 10, Margin =10 };
-            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 175 });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = 175 });
-
-			Label Label_settings = new();
-            Label_settings.SetBinding(Label.TextProperty, "prop.Name");
-			grid.Add(Label_settings);
-			comboBox SettingBool = new() { HorizontalOptions = LayoutOptions.Center };
-			SettingBool.SetBinding(comboBox.PlaceholderProperty,"prop.Name");
-			SettingBool.SetBinding(comboBox.ItemSourceProperty,"proparray");
-			SettingBool.Loaded += GetSettingBool;
-            SettingBool.SelectedIndexChanged += ApplySettingBool;
-			grid.Add(SettingBool, 1);
-
-			return grid;
-        });
+        PKHeXSettingsCollection.ItemTemplate = new GenericCollectionSelector();
         try
         {
             GenericCollectionSelector.SelectedSource = JsonSerializer.Deserialize<ObservableCollection<MoveType>>(Preferences.Get("RandomTypes", string.Empty));
@@ -52,26 +34,33 @@ public partial class PKHeXSettings : ContentPage
         }
         catch (Exception) { }
 		PKHeXSettingsCollection.ItemsSource = props;
+        Permissions.RequestAsync<Permissions.StorageWrite>();
+        var noSelectVersions = new[] { GameVersion.GO, GameVersion.Any };
+        SaveVersionPicker.ItemsSource = GameInfo.VersionDataSource.Where(z => !noSelectVersions.Contains((GameVersion)z.Value)).ToList();
+        SaveVersionPicker.ItemDisplayBinding = new Binding("Text");
+        skipevent = true;
+        var newVersion = MainPage.sav.Version;
+        if (newVersion == GameVersion.HGSS)
+            newVersion = MainPage.sav.Version.GetSingleVersion();
+        SaveVersionPicker.SelectedItem = GameInfo.VersionDataSource.FirstOrDefault(z => (GameVersion)z.Value == newVersion);
+        skipevent = false;
     }
-	public string LastBox = "";
-    public void GetSettingBool(object sender, EventArgs e)
-	{
-        var box = (comboBox)sender;
-        if (box.Placeholder != LastBox)
-		{
-			box.SelectedItem = Preferences.Default.Get(box.Placeholder, false);
-			LastBox = box.Placeholder;
-		}
-	}
+    private void applynewsave(object sender, EventArgs e)
+    {
+        if (!skipevent)
+        {
+            var selected = (ComboItem)SaveVersionPicker.SelectedItem;
+            Preferences.Set("SaveFile", selected.Value);
+            var blanksav = SaveUtil.GetBlankSAV((GameVersion)selected.Value, "PKHeX");
 
-    public void ApplySettingBool(object sender, EventArgs e)
-	{
-        var box = (comboBox)sender;
-		Preferences.Set(box.Placeholder, (bool)box.SelectedItem);
-	}
+            App.Current.Windows[0].Page = new AppShell(blanksav);
+        }
+    }
+    public string LastBox = "";
 }
 public class PSettings
 {
+    public static int StartupPage { get => Preferences.Get("StartupPage", 0); }
 	public static bool IgnoreLegalPopup { get => Preferences.Get("IgnoreLegalPopup",false); }
 	public static bool RememberLastSave { get => Preferences.Default.Get("RememberLastSave", true);  }
 	public static bool DisplayLegalBallsOnly { get => Preferences.Default.Get("DisplayLegalBallsOnly", false);  }
@@ -112,6 +101,10 @@ public class GenericCollection
         {
             foreach (var l in Enum.GetValues<MoveType>())
                 proparray.Add(l);
+        }
+        if (p.PropertyType == typeof(int))
+        {
+            proparray = ["PK Editor", "Box", "Encounters", "LiveHex", "Save Editors"];
         }
 	}
 }
@@ -220,6 +213,8 @@ public class GenericCollectionSelector : DataTemplateSelector
                     Preferences.Set(box.Placeholder, (int)version);
                 else if (box.SelectedItem is Severity severity)
                     Preferences.Set(box.Placeholder, (int)severity);
+                else if (box.SelectedItem is string v)
+                    Preferences.Set(box.Placeholder, box.SelectedIndex);
         }
         if (sender is Editor editor)
         {
@@ -257,6 +252,8 @@ public class GenericCollectionSelector : DataTemplateSelector
                         box.SelectedItem = (GameVersion)Preferences.Get(box.Placeholder, 0);
                     else if (((List<object>)box.ItemSource)[0] is Severity)
                         box.SelectedItem = (Severity)Preferences.Get(box.Placeholder, 0);
+                    else if (((List<object>)box.ItemSource)[0] is string)
+                        box.SelectedIndex = Preferences.Get(box.Placeholder, 0);
 
                     LastBox = box.Placeholder;
                 }

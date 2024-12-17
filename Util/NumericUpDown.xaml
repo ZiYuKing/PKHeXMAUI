@@ -5,7 +5,7 @@
              x:Name="ThisView">
     <Border>
         <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
-            <Entry x:Name="E_Number" Grid.RowSpan="2" Keyboard="Numeric"/>
+            <Entry x:Name="E_Number" Grid.RowSpan="2" Keyboard="Numeric" VerticalOptions="Center" TextChanged="EnforceLimitations"/>
             <Button x:Name="BTN_Up" Grid.Column="1" Clicked="Increase" Text="▲"/>
             <Button x:Name="BTN_Down" Grid.Column="1" Grid.Row="1" Clicked="Decrease" Text="▼"/>
         </Grid>

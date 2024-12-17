@@ -1,6 +1,7 @@
 ﻿
 #nullable disable
 
+using CommunityToolkit.Maui.Storage;
 using PKHeX.Core;
 using PKHeX.Core.AutoMod;
 using System.Windows.Input;
@@ -13,7 +14,7 @@ public partial class AppShell : Shell
 	{
         AppSaveFile = sav;
         InitializeComponent();
-        
+        Shelltest = TheShell;
         TheShell.ItemTemplate = new FlyoutCollectionSelector();
         TheShell.MenuItemTemplate = new FlyoutCollectionSelector();
     }
@@ -21,6 +22,8 @@ public partial class AppShell : Shell
     public BoxManipulator manip = new BoxManipulatorMAUI();
     public static bool boxexpanded = false;
     public static bool pkexpanded = false;
+    public static bool fileexpanded = false;
+    public static Shell Shelltest;
     public async void DropdownExpansion(object sender, EventArgs e)
     {
         if (((string)((ImageButton)sender).CommandParameter) == "Box/Party")
@@ -55,8 +58,6 @@ public partial class AppShell : Shell
         {
             if (!pkexpanded)
             {
-                Shell.SetFlyoutItemIsVisible(OpenPKM, true);
-                Shell.SetFlyoutItemIsVisible(SavePKM, true);
                 Shell.SetFlyoutItemIsVisible(thelegalizer, true);
                 Shell.SetFlyoutItemIsVisible(impshow, true);
                 Shell.SetFlyoutItemIsVisible(expshow, true);
@@ -64,14 +65,29 @@ public partial class AppShell : Shell
             }
             else
             {
-                Shell.SetFlyoutItemIsVisible(OpenPKM, false);
-                Shell.SetFlyoutItemIsVisible(SavePKM, false);
                 Shell.SetFlyoutItemIsVisible(thelegalizer, false);
                 Shell.SetFlyoutItemIsVisible(impshow, false);
                 Shell.SetFlyoutItemIsVisible(expshow, false);
                 pkexpanded = false;
             }
             return;
+        }
+        if (((string)((ImageButton)sender).CommandParameter) == "File")
+        {
+            if (!fileexpanded)
+            {
+                Shell.SetFlyoutItemIsVisible(OpenFile,true);
+                Shell.SetFlyoutItemIsVisible(SavePKM, true);
+                Shell.SetFlyoutItemIsVisible(ExportSave, true);
+                fileexpanded = true;
+            }
+            else
+            {
+                Shell.SetFlyoutItemIsVisible(OpenFile, false);
+                Shell.SetFlyoutItemIsVisible(SavePKM, false);
+                Shell.SetFlyoutItemIsVisible(ExportSave, false);
+                fileexpanded = false;
+            }
         }
     }
     public async void checkbox(object sender, EventArgs e)
@@ -515,7 +531,20 @@ public partial class AppShell : Shell
         TheShell.FlyoutIsPresented = false;
         ((MainPage)TheShell.CurrentPage).pk9picker_Clicked(sender, e);
     }
-
+    private async void ExportSaveClicked(object sender, EventArgs e)
+    {
+        // Set box now that we're saving
+        if (sav.HasBox)
+            sav.CurrentBox = BoxTab.CurrentBox;
+        var ext = sav.Metadata.GetSuggestedExtension();
+        var flags = sav.Metadata.GetSuggestedFlags(ext);
+        await using var LiveStream = new MemoryStream(sav.Write(flags));
+        var result = await FileSaver.Default.SaveAsync(sav.Metadata.FileName, LiveStream, CancellationToken.None);
+        if (result.IsSuccessful)
+            await DisplayAlert("Success", $"Save file was exported to {result.FilePath}", "cancel");
+        else
+            await DisplayAlert("Failure", $"Save file did not export due to {result.Exception.Message}", "cancel");
+    }
     private async void SavePKMClicked(object sender, EventArgs e)
     {
         await TheShell.GoToAsync("///pkeditortab");
@@ -617,14 +646,14 @@ public class FlyoutCollectionSelector : DataTemplateSelector
     {
         if (item is FlyoutItem e)
         {
-            if (e.Title == "Box/Party" || e.Title == "pk editor")
+            if (e.Title == "Box/Party" || e.Title == "pk editor" || e.Title == "File")
                 return FlyoutItemDataTemplate;
             else
                 return MenuItemDataTemplate;
         }
         if(item is Tab t)
         {
-            if (t.Title == "Box/Party" || t.Title == "pk editor")
+            if (t.Title == "Box/Party" || t.Title == "pk editor" || t.Title == "File")
                 return FlyoutItemDataTemplate;
             else
                 return MenuItemDataTemplate;
@@ -633,5 +662,13 @@ public class FlyoutCollectionSelector : DataTemplateSelector
         {
             return MenuItemDataTemplate2;
         }
+    }
+}
+public class tempPage : ContentPage
+{
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        AppShell.Shelltest.GoToAsync("///pkeditortab");
+        AppShell.Shelltest.FlyoutIsPresented = false;
     }
 }

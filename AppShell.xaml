@@ -15,7 +15,14 @@
             </Grid>
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>
-
+    <FlyoutItem FlyoutDisplayOptions="AsSingleItem" x:Name="File" Title="File">
+        <Tab x:Name="Filetab" Title="File">
+            <ShellContent Title="Main" ContentTemplate="{DataTemplate local:tempPage}" x:Name="test" Route="PKPage"/>
+        </Tab>
+    </FlyoutItem>
+    <MenuItem Text="    - Open" x:Name="OpenFile" Shell.FlyoutItemIsVisible="False" Clicked="OpenPKMClicked"/>
+    <MenuItem Text="    - Save PKM" x:Name="SavePKM" Shell.FlyoutItemIsVisible="False" Clicked="SavePKMClicked"/>
+    <MenuItem Text="    - Export Save" x:Name="ExportSave" Shell.FlyoutItemIsVisible="False" Clicked="ExportSaveClicked"/>
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Shell.TabBarIsVisible="False" x:Name="PKShell" Route="PKShell">
 
         <Tab x:Name="pkeditortab" Title="pk editor" Icon="bag_pcitems.png" Route="pkeditortab">
@@ -33,11 +40,10 @@
     </FlyoutItem>
     
     <!--Hidden PK Editor Menus-->
-    <MenuItem Text="    - Open PKM" x:Name="OpenPKM" Shell.FlyoutItemIsVisible="False" Clicked="OpenPKMClicked"/>
-    <MenuItem Text="    - Save PKM" x:Name="SavePKM" Shell.FlyoutItemIsVisible="False" Clicked="SavePKMClicked"/>
     <MenuItem Text="    - Legalize" x:Name="thelegalizer" Shell.FlyoutItemIsVisible="False" Clicked="LegalizePKM"/>
     <MenuItem Text="    - Import Showdown" x:Name="impshow" Shell.FlyoutItemIsVisible="False" Clicked="ImpShowClicked"/>
     <MenuItem Text="    - Export Showdown" x:Name="expshow" Shell.FlyoutItemIsVisible="False" Clicked="ExpShowClicked"/>
+    
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Shell.TabBarIsVisible="False" x:Name="BoxShell" Route="BoxShell" Title="Box/Party">
         <Tab Icon="ball4.png" Title="Box/Party" x:Name="boxtab" Route="boxtab">
             <ShellContent Title="Box" ContentTemplate="{DataTemplate local:BoxTab}" x:Name="BoxPage" Route="BoxPage"/>
@@ -90,20 +96,19 @@
     <MenuItem Text="        - Heal (Stats/PP)" x:Name="Heal" Shell.FlyoutItemIsVisible="False" Clicked="HealClicked"/>
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Shell.TabBarIsVisible="False" Title="Settings">
         <Tab Icon="main.png" Title="Settings">
-            <ShellContent Title="Save Settings" ContentTemplate="{DataTemplate local:HomePage}"/>
             <ShellContent Title="PKHeX Settings" ContentTemplate="{DataTemplate local:PKHeXSettings}"/>
             <ShellContent Title="ALM Settings" ContentTemplate="{DataTemplate local:ALMSettings}"/>
             <ShellContent Title="Legality Settings" ContentTemplate="{DataTemplate local:LegalitySettings}"/>
         </Tab>
     </FlyoutItem>
     <FlyoutItem Icon="users.png" Title="Encounter Database">
-        <ShellContent Title="Encounter Database" ContentTemplate="{DataTemplate local:EncounterDB}"/>
+        <ShellContent Title="Encounter Database" ContentTemplate="{DataTemplate local:EncounterDB}" Route="EncounterPage"/>
     </FlyoutItem>
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Shell.TabBarIsVisible="False" x:Name="LiveHexFlyout" Route="LiveHexFlyout" Title="LiveHex">
         <Tab Icon="language.png" Title="LiveHex" x:Name="livehextab" Route="livehextab">
             <ShellContent Title="LiveHex" ContentTemplate="{DataTemplate local:LiveHex}"/>
         </Tab>
-        <Tab Title="Save Editors">
+        <Tab Title="Save Editors" Route="SaveEditorsPage">
             <ShellContent Title="Save Editors" ContentTemplate="{DataTemplate local:SaveEditors}"/>
         </Tab>
     </FlyoutItem>

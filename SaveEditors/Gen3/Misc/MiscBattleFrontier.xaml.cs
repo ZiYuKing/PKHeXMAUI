@@ -55,10 +55,10 @@ public partial class MiscBattleFrontier : ContentPage
         CHK_ActivatePass.IsChecked = SAV.GetEventFlag(0x860 + 0x72);
         SetFrontierSymbols();
 
-        CB_Stats1.ItemSource.Cast<Object>().ToList().Clear();
-        CB_Stats1.ItemSource=Util.GetCBList(BFN);
-        CB_Stats1.DisplayMemberPath = "Text";
+        CB_Stats1.ItemSource?.Cast<Object>().ToList().Clear();
+        CB_Stats1.ItemSource=BFN;
         loading = false;
+        CB_Stats1.SelectedIndex = 1;
         CB_Stats1.SelectedIndex = 0;
     }
     private void SetFrontierSymbols()
@@ -155,7 +155,7 @@ public partial class MiscBattleFrontier : ContentPage
             int vali = ReadUInt16LittleEndian(SAV.Small.AsSpan(offset));
             if (vali > 9999)
                 vali = 9999;
-            StatNUDA[BFV[BFF[Facility][0]][i]].Number = vali;
+            StatNUDA[BFV[BFF[Facility][0]][i]].Number = (ulong)vali;
         }
 
         var shift = (BFF[Facility][2 + BFV[BFF[Facility][0]].Length + BattleType] + RBi);
@@ -176,7 +176,7 @@ public partial class MiscBattleFrontier : ContentPage
         if ((uint)facility >= BFN.Length)
             return;
         editingcont = true;
-        CB_Stats2.ItemSource.Cast<Object>().ToList().Clear();
+        CB_Stats2.ItemSource?.Cast<Object>().ToList().Clear();
         foreach (RadioButton rb in StatRBA)
             rb.IsChecked = false;
 
@@ -188,8 +188,7 @@ public partial class MiscBattleFrontier : ContentPage
         else
         {
             CB_Stats2.IsVisible = true;
-            CB_Stats2.ItemSource = Util.GetCBList(bft);
-            CB_Stats2.DisplayMemberPath = "Text";
+            CB_Stats2.ItemSource = bft;
             CB_Stats2.SelectedIndex = 0;
         }
 

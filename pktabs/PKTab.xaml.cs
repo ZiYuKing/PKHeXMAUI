@@ -74,6 +74,16 @@ public partial class MainPage : ContentPage
         checklegality();
         CheckForUpdate();
         FirstLoad = false;
+        if(PSettings.StartupPage != 0)
+        {
+            switch (PSettings.StartupPage)
+            {
+                case 1: AppShell.Current.GoToAsync("///BoxPage"); break;
+                case 2: AppShell.Current.GoToAsync("///EncounterPage"); break;
+                case 3: AppShell.Current.GoToAsync("///livehextab"); break;
+                case 4: AppShell.Current.GoToAsync("///SaveEditorsPage"); break;
+            }
+        }
     }
     public static LegalityAnalysis la;
 
@@ -164,7 +174,13 @@ public partial class MainPage : ContentPage
             case MysteryGift g: OpenMG(g); return;
             case IEnumerable<byte[]> pkms: OpenPCBoxBin(pkms); return;
             case IEncounterConvertible enc: OpenPKMFile(enc.ConvertToPKM(sav));return;
+            case SaveFile s: opensavefile(s, pkfile.FullPath);return;
         }
+    }
+    private async void opensavefile(SaveFile savefile, string path)
+    {
+        savefile.Metadata.SetExtraInfo(path);
+        App.Current.Windows[0].Page = new AppShell(savefile);
     }
     public async void OpenPCBoxBin(IEnumerable<byte[]> pkms)
     {

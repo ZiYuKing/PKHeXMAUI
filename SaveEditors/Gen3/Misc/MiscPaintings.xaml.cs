@@ -13,20 +13,18 @@ public partial class MiscPaintings : ContentPage
         SAV = sav;
         Speciesbox.ItemSource = filteredspecies;
         Speciesbox.DisplayMemberPath = "Text";
-        CurrentPaintingEntry.Text = "0";
+        CurrentPaintingEntry.Number = 0;
         CurrentPaintingView.IsVisible = PaintingEnabledCheck.IsChecked;
     }
     private int PaintingIndex = -1;
-    private void CurrentPaintingChanged(object sender, TextChangedEventArgs e)
+    private void CurrentPaintingChanged(object sender, EventArgs e)
     {
-        if (CurrentPaintingEntry.Text?.Length == 0) return;
-        if (int.TryParse(CurrentPaintingEntry.Text, out int index))
-        {
-            index = index < 0 ? 0 : index > 3 ? 3 : index;
-            if (index == PaintingIndex) return;
-            SavePainting(PaintingIndex);
-            LoadPainting(index);
-        }
+        
+        var index = (int)CurrentPaintingEntry.Number;
+        if (index == PaintingIndex) return;
+        SavePainting(PaintingIndex);
+        LoadPainting(index);
+        
     }
     private void LoadPainting(int index)
     {
@@ -38,7 +36,7 @@ public partial class MiscPaintings : ContentPage
         CurrentPaintingView.IsVisible = PaintingEnabledCheck.IsChecked = SAV.GetEventFlag(Paintings3.GetFlagIndexContestStat(index));
 
         Speciesbox.SelectedItem = filteredspecies.Find(z=>z.Value== (int)painting.Species);
-        Captionentry.Text = painting.GetCaptionRelative(index).ToString();
+        Captionentry.Number = (ulong)painting.GetCaptionRelative(index);
         TIDEntry.Text = painting.TID.ToString();
         SIDEntry.Text = painting.SID.ToString();
         PIDEntry.Text = painting.PID.ToString("X8");
@@ -73,7 +71,7 @@ public partial class MiscPaintings : ContentPage
         }
 
         painting.Species = (ushort)((ComboItem)Speciesbox.SelectedItem).Value;
-        painting.SetCaptionRelative(index, Math.Min(byte.Parse(Captionentry.Text),(byte)2));
+        painting.SetCaptionRelative(index, Math.Min((byte)Captionentry.Number,(byte)2));
         painting.TID = (ushort)Util.ToUInt32(TIDEntry.Text);
         painting.SID = (ushort)Util.ToUInt32(SIDEntry.Text);
         painting.PID = Util.GetHexValue(PIDEntry.Text);
