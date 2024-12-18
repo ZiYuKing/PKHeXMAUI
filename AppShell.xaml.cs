@@ -23,6 +23,7 @@ public partial class AppShell : Shell
     public static bool boxexpanded = false;
     public static bool pkexpanded = false;
     public static bool fileexpanded = false;
+    public static bool dataexpanded = false;
     public static Shell Shelltest;
     public async void DropdownExpansion(object sender, EventArgs e)
     {
@@ -31,17 +32,17 @@ public partial class AppShell : Shell
             if (!boxexpanded)
             {
                 boxexpanded = true;
-                Shell.SetFlyoutItemIsVisible(DeleteBoxes, true);
-                Shell.SetFlyoutItemIsVisible(SortBoxes, true);
-                Shell.SetFlyoutItemIsVisible(SortBoxesAdvanced, true);
-                Shell.SetFlyoutItemIsVisible(ModifyBoxes, true);
+                SetFlyoutItemIsVisible(DeleteBoxes, true);
+                SetFlyoutItemIsVisible(SortBoxes, true);
+                SetFlyoutItemIsVisible(SortBoxesAdvanced, true);
+                SetFlyoutItemIsVisible(ModifyBoxes, true);
             }
             else
             {
-                Shell.SetFlyoutItemIsVisible(DeleteBoxes, false);
-                Shell.SetFlyoutItemIsVisible(SortBoxes, false);
-                Shell.SetFlyoutItemIsVisible(SortBoxesAdvanced, false);
-                Shell.SetFlyoutItemIsVisible(ModifyBoxes, false);
+                SetFlyoutItemIsVisible(DeleteBoxes, false);
+                SetFlyoutItemIsVisible(SortBoxes, false);
+                SetFlyoutItemIsVisible(SortBoxesAdvanced, false);
+                SetFlyoutItemIsVisible(ModifyBoxes, false);
                 DeleteExpanded = true;
                 DeleteClicked(sender, e);
                 SortExpanded = true;
@@ -58,16 +59,16 @@ public partial class AppShell : Shell
         {
             if (!pkexpanded)
             {
-                Shell.SetFlyoutItemIsVisible(thelegalizer, true);
-                Shell.SetFlyoutItemIsVisible(impshow, true);
-                Shell.SetFlyoutItemIsVisible(expshow, true);
+                SetFlyoutItemIsVisible(thelegalizer, true);
+                SetFlyoutItemIsVisible(impshow, true);
+                SetFlyoutItemIsVisible(expshow, true);
                 pkexpanded = true;
             }
             else
             {
-                Shell.SetFlyoutItemIsVisible(thelegalizer, false);
-                Shell.SetFlyoutItemIsVisible(impshow, false);
-                Shell.SetFlyoutItemIsVisible(expshow, false);
+                SetFlyoutItemIsVisible(thelegalizer, false);
+                SetFlyoutItemIsVisible(impshow, false);
+                SetFlyoutItemIsVisible(expshow, false);
                 pkexpanded = false;
             }
             return;
@@ -76,17 +77,33 @@ public partial class AppShell : Shell
         {
             if (!fileexpanded)
             {
-                Shell.SetFlyoutItemIsVisible(OpenFile,true);
-                Shell.SetFlyoutItemIsVisible(SavePKM, true);
-                Shell.SetFlyoutItemIsVisible(ExportSave, true);
+                SetFlyoutItemIsVisible(OpenFile,true);
+                SetFlyoutItemIsVisible(SavePKM, true);
+                SetFlyoutItemIsVisible(ExportSave, true);
                 fileexpanded = true;
             }
             else
             {
-                Shell.SetFlyoutItemIsVisible(OpenFile, false);
-                Shell.SetFlyoutItemIsVisible(SavePKM, false);
-                Shell.SetFlyoutItemIsVisible(ExportSave, false);
+                SetFlyoutItemIsVisible(OpenFile, false);
+                SetFlyoutItemIsVisible(SavePKM, false);
+                SetFlyoutItemIsVisible(ExportSave, false);
                 fileexpanded = false;
+            }
+        }
+        if (((string)((ImageButton)sender).CommandParameter) == "Data")
+        {
+            if (!dataexpanded)
+            {
+                SetFlyoutItemIsVisible(LoadBoxes,true);
+                SetFlyoutItemIsVisible(DumpBox,true);
+                SetFlyoutItemIsVisible(SaveBoxData, true);
+                dataexpanded = true;
+            }
+            else
+            {
+                SetFlyoutItemIsVisible(LoadBoxes, false);
+                SetFlyoutItemIsVisible(DumpBox, false);
+                SetFlyoutItemIsVisible(SaveBoxData, false);
             }
         }
     }
@@ -132,7 +149,6 @@ public partial class AppShell : Shell
             catch(Exception) { }
         }
     }
-    
     public bool SortExpanded = false;
     public bool DeleteExpanded = false;
     public bool SortAdvancedExpanded = false;
@@ -141,24 +157,24 @@ public partial class AppShell : Shell
     {
         if (DeleteExpanded)
         {
-            Shell.SetFlyoutItemIsVisible(ClearBox, false);
-            Shell.SetFlyoutItemIsVisible(ClearEggs, false);
-            Shell.SetFlyoutItemIsVisible(ClearPast, false);
-            Shell.SetFlyoutItemIsVisible(ClearForeign, false);
-            Shell.SetFlyoutItemIsVisible(ClearUntrained, false);
-            Shell.SetFlyoutItemIsVisible(ClearIllegal, false);
-            Shell.SetFlyoutItemIsVisible(ClearClones, false);
+            SetFlyoutItemIsVisible(ClearBox, false);
+            SetFlyoutItemIsVisible(ClearEggs, false);
+            SetFlyoutItemIsVisible(ClearPast, false);
+            SetFlyoutItemIsVisible(ClearForeign, false);
+            SetFlyoutItemIsVisible(ClearUntrained, false);
+            SetFlyoutItemIsVisible(ClearIllegal, false);
+            SetFlyoutItemIsVisible(ClearClones, false);
             DeleteExpanded = false;
         }
         else
         {
-            Shell.SetFlyoutItemIsVisible(ClearBox, true);
-            Shell.SetFlyoutItemIsVisible(ClearEggs, true);
-            Shell.SetFlyoutItemIsVisible(ClearPast, true);
-            Shell.SetFlyoutItemIsVisible(ClearForeign, true);
-            Shell.SetFlyoutItemIsVisible(ClearUntrained, true);
-            Shell.SetFlyoutItemIsVisible(ClearIllegal, true);
-            Shell.SetFlyoutItemIsVisible(ClearClones, true);
+            SetFlyoutItemIsVisible(ClearBox, true);
+            SetFlyoutItemIsVisible(ClearEggs, true);
+            SetFlyoutItemIsVisible(ClearPast, true);
+            SetFlyoutItemIsVisible(ClearForeign, true);
+            SetFlyoutItemIsVisible(ClearUntrained, true);
+            SetFlyoutItemIsVisible(ClearIllegal, true);
+            SetFlyoutItemIsVisible(ClearClones, true);
             DeleteExpanded = true;
         }
     }
@@ -206,57 +222,57 @@ public partial class AppShell : Shell
     {
         if (Menu == "Delete")
         {
-            Shell.SetFlyoutItemIsVisible(ClearBox, false);
-            Shell.SetFlyoutItemIsVisible(ClearEggs, false);
-            Shell.SetFlyoutItemIsVisible(ClearPast, false);
-            Shell.SetFlyoutItemIsVisible(ClearForeign, false);
-            Shell.SetFlyoutItemIsVisible(ClearUntrained, false);
-            Shell.SetFlyoutItemIsVisible(ClearIllegal, false);
-            Shell.SetFlyoutItemIsVisible(ClearClones, false);
+            SetFlyoutItemIsVisible(ClearBox, false);
+            SetFlyoutItemIsVisible(ClearEggs, false);
+            SetFlyoutItemIsVisible(ClearPast, false);
+            SetFlyoutItemIsVisible(ClearForeign, false);
+            SetFlyoutItemIsVisible(ClearUntrained, false);
+            SetFlyoutItemIsVisible(ClearIllegal, false);
+            SetFlyoutItemIsVisible(ClearClones, false);
             DeleteExpanded = false;
         }
         if (Menu == "Sort")
         {
-            Shell.SetFlyoutItemIsVisible(SortSpecies, false);
-            Shell.SetFlyoutItemIsVisible(SortSpeciesReverse, false);
-            Shell.SetFlyoutItemIsVisible(SortLevellohi, false);
-            Shell.SetFlyoutItemIsVisible(SortLevelhilo, false);
-            Shell.SetFlyoutItemIsVisible(SortMetDate, false);
-            Shell.SetFlyoutItemIsVisible(SortSpeciesName, false);
-            Shell.SetFlyoutItemIsVisible(SortShiny, false);
-            Shell.SetFlyoutItemIsVisible(SortRandom, false);
+            SetFlyoutItemIsVisible(SortSpecies, false);
+            SetFlyoutItemIsVisible(SortSpeciesReverse, false);
+            SetFlyoutItemIsVisible(SortLevellohi, false);
+            SetFlyoutItemIsVisible(SortLevelhilo, false);
+            SetFlyoutItemIsVisible(SortMetDate, false);
+            SetFlyoutItemIsVisible(SortSpeciesName, false);
+            SetFlyoutItemIsVisible(SortShiny, false);
+            SetFlyoutItemIsVisible(SortRandom, false);
             SortExpanded = false;
         }
         if (Menu == "SortAdvanced")
         {
-            Shell.SetFlyoutItemIsVisible(SortUsage, false);
-            Shell.SetFlyoutItemIsVisible(SortIV, false);
-            Shell.SetFlyoutItemIsVisible(SortEV, false);
-            Shell.SetFlyoutItemIsVisible(SortOwnership, false);
-            Shell.SetFlyoutItemIsVisible(SortType, false);
+            SetFlyoutItemIsVisible(SortUsage, false);
+            SetFlyoutItemIsVisible(SortIV, false);
+            SetFlyoutItemIsVisible(SortEV, false);
+            SetFlyoutItemIsVisible(SortOwnership, false);
+            SetFlyoutItemIsVisible(SortType, false);
             if (sav.Version == GameVersion.VL || sav.Version == GameVersion.SL)
-                Shell.SetFlyoutItemIsVisible(SortTera, false);
-            Shell.SetFlyoutItemIsVisible(SortVersion, false);
-            Shell.SetFlyoutItemIsVisible(SortBaseStat, false);
+                SetFlyoutItemIsVisible(SortTera, false);
+            SetFlyoutItemIsVisible(SortVersion, false);
+            SetFlyoutItemIsVisible(SortBaseStat, false);
             if (sav.Version == GameVersion.PLA || sav.Version == GameVersion.VL || sav.Version == GameVersion.SL)
-                Shell.SetFlyoutItemIsVisible(SortScale, false);
-            Shell.SetFlyoutItemIsVisible(SortRibbonCount, false);
-            Shell.SetFlyoutItemIsVisible(SortMarkCount, false);
-            Shell.SetFlyoutItemIsVisible(SortLegal, false);
-            Shell.SetFlyoutItemIsVisible(SortEncounter, false);
+                SetFlyoutItemIsVisible(SortScale, false);
+            SetFlyoutItemIsVisible(SortRibbonCount, false);
+            SetFlyoutItemIsVisible(SortMarkCount, false);
+            SetFlyoutItemIsVisible(SortLegal, false);
+            SetFlyoutItemIsVisible(SortEncounter, false);
             SortAdvancedExpanded = false;
         }
         if (Menu == "Modify")
         {
-            Shell.SetFlyoutItemIsVisible(HatchEggs, false);
-            Shell.SetFlyoutItemIsVisible(MaxFriendship, false);
-            Shell.SetFlyoutItemIsVisible(MaxLevel, false);
-            Shell.SetFlyoutItemIsVisible(ResetMoves, false);
-            Shell.SetFlyoutItemIsVisible(RandomizeMoves, false);
-            Shell.SetFlyoutItemIsVisible(HyperTrain, false);
-            Shell.SetFlyoutItemIsVisible(RemoveNicknames, false);
-            Shell.SetFlyoutItemIsVisible(DeleteHeldItem, false);
-            Shell.SetFlyoutItemIsVisible(Heal, false);
+            SetFlyoutItemIsVisible(HatchEggs, false);
+            SetFlyoutItemIsVisible(MaxFriendship, false);
+            SetFlyoutItemIsVisible(MaxLevel, false);
+            SetFlyoutItemIsVisible(ResetMoves, false);
+            SetFlyoutItemIsVisible(RandomizeMoves, false);
+            SetFlyoutItemIsVisible(HyperTrain, false);
+            SetFlyoutItemIsVisible(RemoveNicknames, false);
+            SetFlyoutItemIsVisible(DeleteHeldItem, false);
+            SetFlyoutItemIsVisible(Heal, false);
             ModifyExpanded = false;
         }
         if(Shell.Current is not null)
@@ -266,26 +282,26 @@ public partial class AppShell : Shell
     {
         if (SortExpanded)
         {
-            Shell.SetFlyoutItemIsVisible(SortSpecies, false);
-            Shell.SetFlyoutItemIsVisible(SortSpeciesReverse, false);
-            Shell.SetFlyoutItemIsVisible(SortLevellohi, false);
-            Shell.SetFlyoutItemIsVisible(SortLevelhilo, false);
-            Shell.SetFlyoutItemIsVisible(SortMetDate, false);
-            Shell.SetFlyoutItemIsVisible(SortSpeciesName, false);
-            Shell.SetFlyoutItemIsVisible(SortShiny, false);
-            Shell.SetFlyoutItemIsVisible(SortRandom, false);
+            SetFlyoutItemIsVisible(SortSpecies, false);
+            SetFlyoutItemIsVisible(SortSpeciesReverse, false);
+            SetFlyoutItemIsVisible(SortLevellohi, false);
+            SetFlyoutItemIsVisible(SortLevelhilo, false);
+            SetFlyoutItemIsVisible(SortMetDate, false);
+            SetFlyoutItemIsVisible(SortSpeciesName, false);
+            SetFlyoutItemIsVisible(SortShiny, false);
+            SetFlyoutItemIsVisible(SortRandom, false);
             SortExpanded = false;
         }
         else
         {
-            Shell.SetFlyoutItemIsVisible(SortSpecies, true);
-            Shell.SetFlyoutItemIsVisible(SortSpeciesReverse, true);
-            Shell.SetFlyoutItemIsVisible(SortLevellohi, true);
-            Shell.SetFlyoutItemIsVisible(SortLevelhilo, true);
-            Shell.SetFlyoutItemIsVisible(SortMetDate, true);
-            Shell.SetFlyoutItemIsVisible(SortSpeciesName, true);
-            Shell.SetFlyoutItemIsVisible(SortShiny, true);
-            Shell.SetFlyoutItemIsVisible(SortRandom, true);
+            SetFlyoutItemIsVisible(SortSpecies, true);
+            SetFlyoutItemIsVisible(SortSpeciesReverse, true);
+            SetFlyoutItemIsVisible(SortLevellohi, true);
+            SetFlyoutItemIsVisible(SortLevelhilo, true);
+            SetFlyoutItemIsVisible(SortMetDate, true);
+            SetFlyoutItemIsVisible(SortSpeciesName, true);
+            SetFlyoutItemIsVisible(SortShiny, true);
+            SetFlyoutItemIsVisible(SortRandom, true);
             SortExpanded = true;
         }
     }
@@ -332,40 +348,40 @@ public partial class AppShell : Shell
     {
         if (SortAdvancedExpanded)
         {
-            Shell.SetFlyoutItemIsVisible(SortUsage, false);
-            Shell.SetFlyoutItemIsVisible(SortIV, false);
-            Shell.SetFlyoutItemIsVisible(SortEV, false);
-            Shell.SetFlyoutItemIsVisible(SortOwnership, false);
-            Shell.SetFlyoutItemIsVisible(SortType, false);
+            SetFlyoutItemIsVisible(SortUsage, false);
+            SetFlyoutItemIsVisible(SortIV, false);
+            SetFlyoutItemIsVisible(SortEV, false);
+            SetFlyoutItemIsVisible(SortOwnership, false);
+            SetFlyoutItemIsVisible(SortType, false);
             if (sav.Version == GameVersion.VL || sav.Version == GameVersion.SL)
-                Shell.SetFlyoutItemIsVisible(SortTera, false);
-            Shell.SetFlyoutItemIsVisible(SortVersion, false);
-            Shell.SetFlyoutItemIsVisible(SortBaseStat, false);
+                SetFlyoutItemIsVisible(SortTera, false);
+            SetFlyoutItemIsVisible(SortVersion, false);
+            SetFlyoutItemIsVisible(SortBaseStat, false);
             if (sav.Version == GameVersion.PLA || sav.Version == GameVersion.VL || sav.Version == GameVersion.SL)
-                Shell.SetFlyoutItemIsVisible(SortScale, false);
-            Shell.SetFlyoutItemIsVisible(SortRibbonCount, false);
-            Shell.SetFlyoutItemIsVisible(SortMarkCount, false);
-            Shell.SetFlyoutItemIsVisible(SortLegal, false);
-            Shell.SetFlyoutItemIsVisible(SortEncounter, false);
+                SetFlyoutItemIsVisible(SortScale, false);
+            SetFlyoutItemIsVisible(SortRibbonCount, false);
+            SetFlyoutItemIsVisible(SortMarkCount, false);
+            SetFlyoutItemIsVisible(SortLegal, false);
+            SetFlyoutItemIsVisible(SortEncounter, false);
             SortAdvancedExpanded = false;
         }
         else
         {
-            Shell.SetFlyoutItemIsVisible(SortUsage, true);
-            Shell.SetFlyoutItemIsVisible(SortIV, true);
-            Shell.SetFlyoutItemIsVisible(SortEV, true);
-            Shell.SetFlyoutItemIsVisible(SortOwnership, true);
-            Shell.SetFlyoutItemIsVisible(SortType, true);
-            Shell.SetFlyoutItemIsVisible(SortVersion, true);
-            Shell.SetFlyoutItemIsVisible(SortBaseStat, true);
+            SetFlyoutItemIsVisible(SortUsage, true);
+            SetFlyoutItemIsVisible(SortIV, true);
+            SetFlyoutItemIsVisible(SortEV, true);
+            SetFlyoutItemIsVisible(SortOwnership, true);
+            SetFlyoutItemIsVisible(SortType, true);
+            SetFlyoutItemIsVisible(SortVersion, true);
+            SetFlyoutItemIsVisible(SortBaseStat, true);
             if (sav.Version == GameVersion.PLA || sav.Version == GameVersion.VL || sav.Version == GameVersion.SL)
-                Shell.SetFlyoutItemIsVisible(SortScale, true);
+                SetFlyoutItemIsVisible(SortScale, true);
             if (sav.Version == GameVersion.VL || sav.Version == GameVersion.SL)
-                Shell.SetFlyoutItemIsVisible(SortTera, true);
-            Shell.SetFlyoutItemIsVisible(SortRibbonCount, true);
-            Shell.SetFlyoutItemIsVisible(SortMarkCount, true);
-            Shell.SetFlyoutItemIsVisible(SortLegal, true);
-            Shell.SetFlyoutItemIsVisible(SortEncounter, true);
+                SetFlyoutItemIsVisible(SortTera, true);
+            SetFlyoutItemIsVisible(SortRibbonCount, true);
+            SetFlyoutItemIsVisible(SortMarkCount, true);
+            SetFlyoutItemIsVisible(SortLegal, true);
+            SetFlyoutItemIsVisible(SortEncounter, true);
             SortAdvancedExpanded = true;
         }
     }
@@ -439,28 +455,28 @@ public partial class AppShell : Shell
     {
         if (ModifyExpanded)
         {
-            Shell.SetFlyoutItemIsVisible(HatchEggs, false);
-            Shell.SetFlyoutItemIsVisible(MaxFriendship, false);
-            Shell.SetFlyoutItemIsVisible(MaxLevel, false);
-            Shell.SetFlyoutItemIsVisible(ResetMoves, false);
-            Shell.SetFlyoutItemIsVisible(RandomizeMoves, false);
-            Shell.SetFlyoutItemIsVisible(HyperTrain, false);
-            Shell.SetFlyoutItemIsVisible(RemoveNicknames, false);
-            Shell.SetFlyoutItemIsVisible(DeleteHeldItem, false);
-            Shell.SetFlyoutItemIsVisible(Heal, false);
+            SetFlyoutItemIsVisible(HatchEggs, false);
+            SetFlyoutItemIsVisible(MaxFriendship, false);
+            SetFlyoutItemIsVisible(MaxLevel, false);
+            SetFlyoutItemIsVisible(ResetMoves, false);
+            SetFlyoutItemIsVisible(RandomizeMoves, false);
+            SetFlyoutItemIsVisible(HyperTrain, false);
+            SetFlyoutItemIsVisible(RemoveNicknames, false);
+            SetFlyoutItemIsVisible(DeleteHeldItem, false);
+            SetFlyoutItemIsVisible(Heal, false);
             ModifyExpanded = false;
         }
         else
         {
-            Shell.SetFlyoutItemIsVisible(HatchEggs, true);
-            Shell.SetFlyoutItemIsVisible(MaxFriendship, true);
-            Shell.SetFlyoutItemIsVisible(MaxLevel, true);
-            Shell.SetFlyoutItemIsVisible(ResetMoves, true);
-            Shell.SetFlyoutItemIsVisible(RandomizeMoves, true);
-            Shell.SetFlyoutItemIsVisible(HyperTrain, true);
-            Shell.SetFlyoutItemIsVisible(RemoveNicknames, true);
-            Shell.SetFlyoutItemIsVisible(DeleteHeldItem, true);
-            Shell.SetFlyoutItemIsVisible(Heal, true);
+            SetFlyoutItemIsVisible(HatchEggs, true);
+            SetFlyoutItemIsVisible(MaxFriendship, true);
+            SetFlyoutItemIsVisible(MaxLevel, true);
+            SetFlyoutItemIsVisible(ResetMoves, true);
+            SetFlyoutItemIsVisible(RandomizeMoves, true);
+            SetFlyoutItemIsVisible(HyperTrain, true);
+            SetFlyoutItemIsVisible(RemoveNicknames, true);
+            SetFlyoutItemIsVisible(DeleteHeldItem, true);
+            SetFlyoutItemIsVisible(Heal, true);
             ModifyExpanded = true;
         }
     }
@@ -572,6 +588,65 @@ public partial class AppShell : Shell
         TheShell.FlyoutIsPresented = false;
         ((MainPage)TheShell.CurrentPage).ExportShowdown(sender, e);
     }
+
+    private async void LoadBoxesClicked(object sender, EventArgs e)
+    {
+        var folder = await FolderPicker.PickAsync(CancellationToken.None);
+        if (folder.IsSuccessful)
+        {
+            foreach (var f in Directory.GetFiles(folder.Folder.Path))
+            {
+                PKM pkm = (PKM)FileUtil.GetSupportedFile(f);
+                if (pkm.GetType() != sav.PKMType)
+                {
+                    var newpkm = EntityConverter.ConvertToType(pkm, sav.PKMType, out var result);
+                    if (result.IsSuccess() || PSettings.AllowIncompatibleConversion)
+                    {
+                        sav.AdaptPKM(newpkm);
+                        sav.SetBoxSlotAtIndex(newpkm, sav.NextOpenBoxSlot());
+                        return;
+                    }
+                }
+                sav.AdaptPKM(pkm);
+                sav.SetBoxSlotAtIndex(pkm, sav.NextOpenBoxSlot());
+            }
+        }
+    }
+
+    private async void DumpBoxClicked(object sender, EventArgs e)
+    {
+        if (await DisplayAlert("Dump","Dump All Boxes?", "yes", "cancel"))
+        {
+            var result = await FolderPicker.PickAsync(CancellationToken.None);
+            if(result.IsSuccessful)
+                BoxExport.Export(sav, result.Folder.Path, BoxExportSettings.Default);
+            return;
+        }
+        else if(await DisplayAlert("Dump","Dump Current Box?", "yes", "cancel"))
+        {
+            var result = await FolderPicker.PickAsync(CancellationToken.None);
+            if (result.IsSuccessful)
+                BoxExport.Export(sav,result.Folder.Path, BoxExportSettings.Default with { Scope = BoxExportScope.Current });
+            return;
+        }
+
+    }
+
+    private async void SaveBoxDataClicked(object sender, EventArgs e)
+    {
+        if (await DisplayAlert("Dump", "Dump ALL Boxes?", "yes", "no"))
+        {
+            using MemoryStream boxstream = new(sav.GetPCBinary());
+            await FileSaver.SaveAsync("pcdata.bin", boxstream);
+            return;
+        }
+        if (await DisplayAlert("Dump", "Dump Current Box?", "yes", "cancel"))
+        {
+            using MemoryStream Cboxstream = new(sav.GetBoxBinary(sav.CurrentBox));
+            await FileSaver.SaveAsync($"boxdata {sav.CurrentBox}.bin", Cboxstream);
+            return;
+        }
+    }
 }
 public class BoxManipulatorMAUI : BoxManipulator
 {
@@ -588,7 +663,7 @@ public class BoxManipulatorMAUI : BoxManipulator
 }
 public class FlyoutCollectionSelector : DataTemplateSelector
 {
-    public DataTemplate FlyoutItemDataTemplate =  new DataTemplate(() =>
+    public DataTemplate FlyoutItemDataTemplate =  new(() =>
     {
         Grid grid = new() { Padding = 15 };
         grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
@@ -600,16 +675,25 @@ public class FlyoutCollectionSelector : DataTemplateSelector
         Image icon = new() { HorizontalOptions = LayoutOptions.Start, HeightRequest=25, WidthRequest=25 } ;
         icon.SetBinding(Image.SourceProperty, "Icon");
         grid.Add(icon);
-        ImageButton button = new() { BackgroundColor = Colors.White, HeightRequest=25, WidthRequest=25 };
-        button.Source = "dump.png";
+        ImageButton button = new()
+        {
+            BackgroundColor = Colors.White,
+            HeightRequest = 25,
+            WidthRequest = 25,
+            Source = "dump.png"
+        };
         button.SetBinding(ImageButton.CommandParameterProperty,"Title");
         button.Clicked += ((AppShell)AppShell.Current).DropdownExpansion;
         grid.Add(button, 1);
-        Border border = new() { Stroke = Colors.White, BackgroundColor = Colors.Transparent };
-        border.Content = grid;
+        Border border = new()
+        {
+            Stroke = Colors.White,
+            BackgroundColor = Colors.Transparent,
+            Content = grid
+        };
         return border;
     });
-    public DataTemplate MenuItemDataTemplate = new DataTemplate(() =>
+    public DataTemplate MenuItemDataTemplate = new(() =>
     {
         Grid grid = new() { Padding = 15};
         grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
@@ -621,25 +705,63 @@ public class FlyoutCollectionSelector : DataTemplateSelector
         Image icon = new() { HorizontalOptions = LayoutOptions.Start, HeightRequest = 25, WidthRequest = 25 };
         icon.SetBinding(Image.SourceProperty, "Icon");
         grid.Add(icon);
-        Border border = new() { Stroke = Colors.White, BackgroundColor = Colors.Transparent};
-        border.Content = grid;
+        Border border = new()
+        {
+            Stroke = Colors.White,
+            BackgroundColor = Colors.Transparent,
+            Content = grid
+        };
         return border;
     });
-    public DataTemplate MenuItemDataTemplate2 = new DataTemplate(() =>
+    public DataTemplate MenuItemDataTemplate2 = new(() =>
+    {
+        Grid grid = new() { Padding = 15 };
+        grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
+        grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+        Label label = new() { TextColor = Colors.White};
+        label.SetBinding(Label.TextProperty, "Title");
+        grid.Add(label);
+        Image icon = new() { HorizontalOptions = LayoutOptions.Start, HeightRequest = 25, WidthRequest = 25 };
+        icon.SetBinding(Image.SourceProperty, "Icon");
+        grid.Add(icon);
+        Border border = new()
+        {
+            Stroke = Colors.White,
+            BackgroundColor = Colors.Transparent,
+            Margin = new Thickness(20, 0, 20, 0),
+            Content = grid
+        };
+        return border;
+    });
+    public DataTemplate MenuItemDropdownDataTemplate = new(() =>
     {
         Grid grid = new() { Padding = 15 };
         grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
         grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
         grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
         Label label = new() { TextColor = Colors.White, HorizontalOptions = LayoutOptions.Center };
-        label.SetBinding(Label.TextProperty, "Title");
+        label.SetBinding(Label.TextProperty, "Text");
         grid.Add(label);
         Image icon = new() { HorizontalOptions = LayoutOptions.Start, HeightRequest = 25, WidthRequest = 25 };
         icon.SetBinding(Image.SourceProperty, "Icon");
         grid.Add(icon);
-        Border border = new() { Stroke = Colors.White, BackgroundColor = Colors.Transparent};
-        border.Margin = new Thickness(20, 0, 20, 0);
-        border.Content = grid;
+        ImageButton button = new()
+        {
+            BackgroundColor = Colors.White,
+            HeightRequest = 25,
+            WidthRequest = 25,
+            Source = "dump.png"
+        };
+        button.SetBinding(ImageButton.CommandParameterProperty, "Text");
+        button.Clicked += ((AppShell)AppShell.Current).DropdownExpansion;
+        grid.Add(button, 1);
+        Border border = new()
+        {
+            Stroke = Colors.White,
+            BackgroundColor = Colors.Transparent,
+            Content = grid
+        };
         return border;
     });
     protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
@@ -658,13 +780,15 @@ public class FlyoutCollectionSelector : DataTemplateSelector
             else
                 return MenuItemDataTemplate;
         }
-        else
+        if (item.GetType().GetProperty("Title").GetValue(item) is string s)
         {
-            return MenuItemDataTemplate2;
+            if(s == "File"|| s == "Data")
+            return MenuItemDropdownDataTemplate;
         }
+        return MenuItemDataTemplate2;
     }
 }
-public class tempPage : ContentPage
+public partial class tempPage : ContentPage
 {
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {

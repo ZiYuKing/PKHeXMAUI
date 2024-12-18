@@ -825,9 +825,12 @@ public partial class MainPage : ContentPage
         }
     }
 
-    public void ExportShowdown(object sender, EventArgs e)
+    public async void ExportShowdown(object sender, EventArgs e)
     {
-        Clipboard.SetTextAsync(ShowdownParsing.GetShowdownText(pk));
+        if (!await DisplayAlert("Showdown", "Export the current box?", "yes", "cancel"))
+            Clipboard.SetTextAsync(ShowdownParsing.GetShowdownText(pk));
+        else
+            Clipboard.SetTextAsync(ShowdownParsing.GetShowdownSets(sav.GetBoxData(sav.CurrentBox), "\n"));
     }
     private static async Task<bool> IsUpdateAvailable()
     {

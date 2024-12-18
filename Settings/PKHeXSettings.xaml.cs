@@ -213,7 +213,7 @@ public class GenericCollectionSelector : DataTemplateSelector
                     Preferences.Set(box.Placeholder, (int)version);
                 else if (box.SelectedItem is Severity severity)
                     Preferences.Set(box.Placeholder, (int)severity);
-                else if (box.SelectedItem is string v)
+                else if (box.SelectedItem is string)
                     Preferences.Set(box.Placeholder, box.SelectedIndex);
         }
         if (sender is Editor editor)

@@ -16,7 +16,7 @@ public static class MauiProgram
                         .ConfigureLifecycleEvents(events =>
                         {
 #if ANDROID
-                            events.AddAndroid(android => android.OnCreate((activity, bundle) => MakeStatusBarTranslucent(activity)));
+                            events.AddAndroid(android => android.OnCreate((activity, _) => MakeStatusBarTranslucent(activity)));
 
                             static void MakeStatusBarTranslucent(Android.App.Activity activity)
                             {
