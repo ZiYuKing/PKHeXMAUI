@@ -629,20 +629,19 @@ public partial class AppShell : Shell
                 BoxExport.Export(sav,result.Folder.Path, BoxExportSettings.Default with { Scope = BoxExportScope.Current });
             return;
         }
-
     }
 
     private async void SaveBoxDataClicked(object sender, EventArgs e)
     {
         if (await DisplayAlert("Dump", "Dump ALL Boxes?", "yes", "no"))
         {
-            using MemoryStream boxstream = new(sav.GetPCBinary());
+            await using MemoryStream boxstream = new(sav.GetPCBinary());
             await FileSaver.SaveAsync("pcdata.bin", boxstream);
             return;
         }
         if (await DisplayAlert("Dump", "Dump Current Box?", "yes", "cancel"))
         {
-            using MemoryStream Cboxstream = new(sav.GetBoxBinary(sav.CurrentBox));
+            await using MemoryStream Cboxstream = new(sav.GetBoxBinary(sav.CurrentBox));
             await FileSaver.SaveAsync($"boxdata {sav.CurrentBox}.bin", Cboxstream);
             return;
         }
