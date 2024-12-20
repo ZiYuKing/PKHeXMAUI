@@ -21,6 +21,7 @@ public partial class PKHeXSettings : ContentPage
     public PKHeXSettings()
 	{
 		InitializeComponent();
+        props = [];
         foreach (var p in new PSettings().GetType().GetProperties())
             props.Add(new GenericCollection(p));
         foreach (var p in new EncounterSettings().GetType().GetProperties())

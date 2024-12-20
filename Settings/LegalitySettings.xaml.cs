@@ -10,6 +10,7 @@ public partial class LegalitySettings : ContentPage
     public LegalitySettings()
 	{
 		InitializeComponent();
+        props = [];
         foreach (var p in new LegalSettings().GetType().GetProperties())
             props.Add(new GenericCollection(p));
         LegalitySettingsCollection.ItemTemplate = new GenericCollectionSelector();

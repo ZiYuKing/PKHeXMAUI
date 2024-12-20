@@ -14,6 +14,7 @@ public partial class ALMSettings : ContentPage
     public ALMSettings()
 	{
 		InitializeComponent();
+        props = [];
         foreach (var p in new PluginSettings().GetType().GetProperties())
             props.Add(new GenericCollection(p));
         ALMSettingsCollection.ItemTemplate = new GenericCollectionSelector();
