@@ -104,6 +104,7 @@ public partial class AppShell : Shell
                 SetFlyoutItemIsVisible(LoadBoxes, false);
                 SetFlyoutItemIsVisible(DumpBox, false);
                 SetFlyoutItemIsVisible(SaveBoxData, false);
+                dataexpanded = false;
             }
         }
     }
