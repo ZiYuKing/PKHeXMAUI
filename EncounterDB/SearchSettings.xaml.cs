@@ -1,5 +1,3 @@
-#nullable disable
-
 using static PKHeXMAUI.MainPage;
 using static PKHeXMAUI.EncounterDB;
 using PKHeX.Core;
@@ -32,7 +30,7 @@ public partial class SearchSettings : ContentPage
         EncVersion.ItemSource = EncVersionList;
         if(encSettings != null)
         {
-            EncSpecies.SelectedItem = datasourcefiltered.Species.FirstOrDefault(z => (ushort)z.Value == encSettings.Species);
+            EncSpecies.SelectedItem = datasourcefiltered.Species.First(z => (ushort)z.Value == encSettings.Species)??new ComboItem("(None)",0);
             if (encSettings.Moves.Count >0)
                 EncMove1.SelectedItem = EncMoveList.First(z => z.Value == encSettings.Moves[0]);
             if (encSettings.Moves.Count >1)
@@ -42,9 +40,9 @@ public partial class SearchSettings : ContentPage
             if (encSettings.Moves.Count>3)
                 EncMove4.SelectedItem = EncMoveList.First(z => z.Value == encSettings.Moves[3]);
 
-            EncVersion.SelectedItem = EncVersionList.FirstOrDefault(z=>z.Value == (int)encSettings.Version);
-            ShinyCheck.IsChecked = (bool)encSettings.SearchShiny;
-            EggCheck.IsChecked = (bool)encSettings.SearchEgg;
+            EncVersion.SelectedItem = EncVersionList.First(z => z.Value == (int)encSettings.Version) ?? new ComboItem("(None)", 0);
+            ShinyCheck.IsChecked = encSettings.SearchShiny??false;
+            EggCheck.IsChecked = encSettings.SearchEgg??false;
         }
     }
 

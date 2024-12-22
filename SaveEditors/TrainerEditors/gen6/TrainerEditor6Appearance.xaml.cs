@@ -1,4 +1,3 @@
-#nullable disable
 
 using PKHeX.Core;
 
@@ -32,7 +31,7 @@ public partial class TrainerEditor6Appearance : ContentPage
                     var pi = obj.GetType().GetProperty(prop);
                     try
                     {
-                        if (IsNumericType(pi.GetValue(obj)))
+                        if (IsNumericType(pi?.GetValue(obj)))
                         {
                             var propLabel = new Label() { Text = prop };
                             BlockStack.Add(propLabel, 0, row);
@@ -85,9 +84,9 @@ public partial class TrainerEditor6Appearance : ContentPage
             xystat.Nickname = TNickEntry.Text;
         }
     }
-    public static bool IsNumericType(object o)
+    public static bool IsNumericType(object? o)
     {
-        return Type.GetTypeCode(o.GetType()) switch
+        return Type.GetTypeCode(o?.GetType()) switch
         {
             TypeCode.Byte or TypeCode.SByte or TypeCode.UInt16 or TypeCode.UInt32 or TypeCode.UInt64 or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64 or TypeCode.Decimal or TypeCode.Double or TypeCode.Single => true,
             _ => false,

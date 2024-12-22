@@ -1,4 +1,3 @@
-#nullable disable
 
 using static PKHeXMAUI.MainPage;
 using static PKHeXMAUI.EventFlags2;
@@ -26,10 +25,10 @@ public partial class EventConstants2 : ContentPage
 			combo.SetBinding(Picker.ItemsSourceProperty, new Binding("Item2"));
 			combo.ItemDisplayBinding = new Binding("Text");
 			combo.SetBinding(Picker.SelectedItemProperty, new Binding("Item4"));
-            combo.SelectedIndexChanged += (object sender,EventArgs e) =>
+            combo.SelectedIndexChanged += (object? sender,EventArgs e) =>
             {
-                var index = ConstList.IndexOf(ConstList.Find(z => z.Item1 == ((Label)grid.Children[0]).Text));
-                ConstList[index] = (ConstList[index].Item1, ConstList[index].Item2, (byte)((ComboItem)((Picker)sender).SelectedItem).Value, ConstList[index].Item4).ToTuple();
+                var index = ConstList.IndexOf(ConstList.Find(z => z.Item1 == ((Label)grid.Children[0]).Text)??new Tuple<string, List<ComboItem>, byte, ComboItem>("", [],0,new ComboItem("",0)));
+                ConstList[index] = (ConstList[index].Item1, ConstList[index].Item2, (byte?)((ComboItem?)((Picker?)sender)?.SelectedItem)?.Value??0, ConstList[index].Item4).ToTuple();
             };
             grid.Add(label);
 			grid.Add(combo, 1);
@@ -52,7 +51,7 @@ public partial class EventConstants2 : ContentPage
         var labels = list.Work;
         for (int i = 0; i < labels.Count; i++)
         {
-            values[labels[i].Index] = ConstList.Find(z => z.Item1 == labels[i].Name).Item3;
+            values[labels[i].Index] = ConstList.Find(z => z.Item1 == labels[i].Name)?.Item3??0;
         }
 
         Editor.Save();

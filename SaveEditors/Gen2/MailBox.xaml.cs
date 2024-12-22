@@ -1,4 +1,3 @@
-#nullable disable
 
 using PKHeX.Core;
 using System.Collections.ObjectModel;
@@ -9,7 +8,7 @@ public partial class MailBox : ContentPage
     private readonly MailDetail[] m = null!;
     private readonly int[] MailItemID = null!;
     private readonly Label[] PKMLabels, PKMHeldItems;
-    private readonly Entry[] PKMNUDs, Miscs;
+    private readonly Entry[] PKMNUDs;
     private readonly int PartyBoxCount;
     private ObservableCollection<string> PartyBoxList = [];
     private ObservableCollection<string> PCBoxList = [];

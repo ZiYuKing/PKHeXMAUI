@@ -1,6 +1,3 @@
-
-#nullable disable
-
 using PKHeX.Core;
 using System.Runtime.CompilerServices;
 using static PKHeXMAUI.MainPage;
@@ -9,7 +6,7 @@ namespace PKHeXMAUI;
 
 public partial class EncounterDB : ContentPage
 {
-    public static PKHeX.Core.Searching.SearchSettings encSettings;
+    public static PKHeX.Core.Searching.SearchSettings encSettings = new() { Species = 0};
     public EncounterDB()
     {
         InitializeComponent();
@@ -55,9 +52,9 @@ public partial class EncounterDB : ContentPage
         });
         EncounterCollection.ItemsLayout = new GridItemsLayout(5, ItemsLayoutOrientation.Vertical);
     }
-    private async void ShowViewBox(object sender, TappedEventArgs e)
+    private async void ShowViewBox(object? sender, TappedEventArgs? e)
     {
-        EncounterCollection.SelectedItem = (EncounterSprite)e.Parameter;
+        EncounterCollection.SelectedItem = (EncounterSprite?)e?.Parameter;
         var view = await DisplayAlert("View Encounter", "View this encounter?", "view", "cancel");
         if (view)
             applyencpk(sender, e);
@@ -68,11 +65,11 @@ public partial class EncounterDB : ContentPage
         Navigation.PushModalAsync(new SearchSettings());
     }
 
-    public void applyencpk(object sender, EventArgs e)
+    public void applyencpk(object? sender, EventArgs? e)
     {
         IEncounterInfo enc = ((EncounterSprite)EncounterCollection.SelectedItem).EncounterInfo;
         var pkm = enc.ConvertToPKM(sav, EncounterCriteria.Unrestricted);
-        pk = EntityConverter.ConvertToType(pkm, sav.PKMType, out _);
+        pk = EntityConverter.ConvertToType(pkm, sav.PKMType, out _)??EntityBlank.GetBlank(sav.Generation);
         if (pk.Species == (ushort)Species.Manaphy && pk.IsEgg)
             pk.IsNicknamed = false;
     }
@@ -148,7 +145,7 @@ public partial class EncounterDB : ContentPage
 }
 public class ReferenceComparer<T> : IEqualityComparer<T> where T : class
 {
-    public bool Equals(T x, T y)
+    public bool Equals(T? x, T? y)
     {
         if (x == null)
             return false;
@@ -166,7 +163,7 @@ public class EncounterSprite
     public string url { get; set; }
     public int[] NoFormSpriteSpecies = [664, 665, 744, 982, 855, 854, 869, 892, 1012, 1013];
     public bool Alpha { get; set; }
-    public string BallUrl { get; set; }
+    public string? BallUrl { get; set; }
     public bool Mighty { get; set; }
     public bool GMax { get; set; }
     public Color EncColor { get; set; }

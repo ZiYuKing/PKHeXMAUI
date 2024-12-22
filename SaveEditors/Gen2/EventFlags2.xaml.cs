@@ -1,4 +1,3 @@
-#nullable disable
 
 using static PKHeXMAUI.MainPage;
 using PKHeX.Core;
@@ -48,9 +47,9 @@ public partial class EventFlags2 : ContentPage
         FlagCollection.ItemsSource = ValueDict;
     }
 #nullable enable
-    public void tapp(object g, TappedEventArgs? e)
+    public void tapp(object? g, TappedEventArgs? e)
     {
-        Grid gr = (Grid)g;
+        Grid gr = (Grid?)g??[];
         var chs = ((CheckBox)gr.Children[0]).IsChecked;
         ((CheckBox)gr.Children[0]).IsChecked = !chs;
         ValueDict[((Label)gr.Children[1]).Text] = !chs;

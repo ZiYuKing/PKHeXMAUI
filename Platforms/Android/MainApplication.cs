@@ -1,5 +1,4 @@
-﻿#nullable disable
-
+﻿
 using Android.App;
 using Android.Runtime;
 

@@ -1,4 +1,3 @@
-#nullable disable
 
 using PKHeX.Core;
 
@@ -7,8 +6,8 @@ namespace PKHeXMAUI;
 public partial class MiscRecords : ContentPage
 {
 	public bool setting = false;
-	public static Record3 records;
-	public static List<ComboItem> items;
+	public static Record3 records = new((SAV3)SaveUtil.GetBlankSAV(EntityContext.Gen3,""));
+	public static List<ComboItem> items = [];
 	public MiscRecords(SAV3 sav)
 	{
 		InitializeComponent();

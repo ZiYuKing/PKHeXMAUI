@@ -1,4 +1,3 @@
-#nullable disable
 
 using static PKHeXMAUI.MainPage;
 using PKHeX.Core;
@@ -26,12 +25,12 @@ public partial class Items : TabbedPage
             {
                 switch (sav)
                 {
-                    case SAV9SV s: data.ToArray()[0].CopyTo(s.Items.Data.ToArray(), 0); break;
-                    case SAV8LA la: data.ToArray()[0].CopyTo(la.Items.Data.ToArray(), 0); break;
-                    case SAV8BS bs: data.ToArray()[0].CopyTo(bs.Items.Data.ToArray(), 0); break;
-                    case SAV8SWSH sw: data.ToArray()[0].CopyTo(sw.Items.Data.ToArray(), 0); break;
-                    case SAV7 s7: data.ToArray()[0].CopyTo(s7.Items.Data.ToArray(), 0); break;
-                    case SAV6 s6: data.ToArray()[0].CopyTo(s6.Items.Data.ToArray(), 0); break;
+                    case SAV9SV s: data?.ToArray()[0].CopyTo(s.Items.Data.ToArray(), 0); break;
+                    case SAV8LA la: data?.ToArray()[0].CopyTo(la.Items.Data.ToArray(), 0); break;
+                    case SAV8BS bs: data?.ToArray()[0].CopyTo(bs.Items.Data.ToArray(), 0); break;
+                    case SAV8SWSH sw: data?.ToArray()[0].CopyTo(sw.Items.Data.ToArray(), 0); break;
+                    case SAV7 s7: data?.ToArray()[0].CopyTo(s7.Items.Data.ToArray(), 0); break;
+                    case SAV6 s6: data?.ToArray()[0].CopyTo(s6.Items.Data.ToArray(), 0); break;
                 }
             }
             else
@@ -135,7 +134,7 @@ public partial class Items : TabbedPage
         }
         ItemsMain.CurrentPageChanged += SetCount;
     }
-    private void ClearAll_Clicked(object sender, EventArgs e)
+    private void ClearAll_Clicked(object? sender, EventArgs? e)
     {
         var pindex = Array.IndexOf([.. ItemsMain.Children], ItemsMain.CurrentPage) - 1;
         var list = SourceList[pindex];
@@ -148,7 +147,7 @@ public partial class Items : TabbedPage
         }
         SourceList[pindex] = list;
     }
-    private void SetCount(object sender, EventArgs e)
+    private void SetCount(object? sender, EventArgs? e)
     {
         if (sender is Editor ed)
         {
@@ -161,7 +160,7 @@ public partial class Items : TabbedPage
             currentcount = 995;
         }
     }
-    private void GiveAll_Clicked(object sender, EventArgs e)
+    private void GiveAll_Clicked(object? sender, EventArgs? e)
     {
         var pindex = Array.IndexOf([.. ItemsMain.Children], ItemsMain.CurrentPage)-1;
         var list = SourceList[pindex];
@@ -175,7 +174,7 @@ public partial class Items : TabbedPage
         }
         SourceList[pindex] = list;
     }
-    private void ModifyAll_Clicked(object sender, EventArgs e)
+    private void ModifyAll_Clicked(object? sender, EventArgs? e)
     {
         var pindex = Array.IndexOf([.. ItemsMain.Children], ItemsMain.CurrentPage) - 1;
         var list = SourceList[pindex];
@@ -263,16 +262,16 @@ public partial class Items : TabbedPage
                 pouch.Items[i] = pouch.GetEmpty(); // Empty Slots at the end
     }
 
-    private void CloseItems(object sender, EventArgs e)
+    private void CloseItems(object? sender, EventArgs? e)
     {
         Navigation.PopModalAsync();
     }
 #nullable enable
-    private void ChangeItemSprite(object sender, EventArgs e)
+    private void ChangeItemSprite(object? sender, EventArgs? e)
     {
         var pindex = Array.IndexOf([.. ItemsMain.Children], ItemsMain.CurrentPage) - 1;
         var CurrentSource = SourceList[pindex];
-        itemInfo? CurrentItem = CurrentSource.Find(z => z.name == (string)((comboBox)sender).SelectedItem);
+        itemInfo? CurrentItem = CurrentSource.Find(z => z.name == (string?)((comboBox?)sender)?.SelectedItem);
         if (CurrentItem is not null)
         {
             var lump = HeldItemLumpUtil.GetIsLump(CurrentItem.InvItem.Index, sav.Context);

@@ -1,4 +1,3 @@
-#nullable disable
 
 using PKHeX.Core;
 using static PKHeXMAUI.MainPage;
@@ -6,14 +5,14 @@ namespace PKHeXMAUI;
 
 public partial class MiscTab : TabbedPage
 {
-	public static MiscMainEditor MME;
-	public static MiscRecords MRE;
-	public static MiscPokeblock MPB;
-	public static MiscDecorations MDE;
-	public static MiscPaintings MPE;
-	public static MiscJoyful MJE;
-	public static MiscFerry MFE;
-	public static MiscBattleFrontier MBF;
+	public static MiscMainEditor? MME;
+	public static MiscRecords? MRE;
+	public static MiscPokeblock? MPB;
+	public static MiscDecorations? MDE;
+	public static MiscPaintings? MPE;
+	public static MiscJoyful? MJE;
+	public static MiscFerry? MFE;
+	public static MiscBattleFrontier? MBF;
 	public MiscTab()
 	{
 		InitializeComponent();
@@ -57,8 +56,8 @@ public partial class Misc3Save : ContentPage
 	}
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
 	{
-		MiscTab.MPB.Save();
-		MiscTab.MJE.SaveJoyful();
+		MiscTab.MPB?.Save();
+		MiscTab.MJE?.SaveJoyful();
 		Navigation.PopModalAsync();
 	}
 }

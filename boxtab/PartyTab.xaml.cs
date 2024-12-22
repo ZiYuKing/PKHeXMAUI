@@ -1,5 +1,3 @@
-#nullable disable
-
 using PKHeX.Core;
 using System.Windows.Input;
 using static PKHeXMAUI.MainPage;
@@ -44,11 +42,11 @@ public partial class PartyTab : ContentPage
         PartyRefresh.Command = refreshCommand;
         fillParty();
     }
-    private async void Tapety(object sender, TappedEventArgs e)
+    private async void Tapety(object? sender, TappedEventArgs? e)
     {
-        PartyView.SelectedItem = e.Parameter;
+        PartyView.SelectedItem = e?.Parameter;
 
-        var result = await DisplayActionSheet($"Slot {((boxsprite)e.Parameter).SlotNumber}", "cancel", "Delete", ["View", "Set"]);
+        var result = await DisplayActionSheet($"Slot {((boxsprite?)e?.Parameter)?.SlotNumber}", "cancel", "Delete", ["View", "Set"]);
         switch (result)
         {
             case "Delete": del(sender, e); break;
@@ -56,19 +54,19 @@ public partial class PartyTab : ContentPage
             case "Set": inject(sender, e); break;
         }
     }
-    private async void ApplyPKFromParty(object sender, EventArgs e)
+    private async void ApplyPKFromParty(object? sender, EventArgs? e)
     {
         boxsprite b = (boxsprite)PartyView.SelectedItem;
         pk = b.pkm;
         fillParty();
     }
-    private async void inject(object sender, EventArgs e)
+    private async void inject(object? sender, EventArgs? e)
     {
         boxsprite b = (boxsprite)PartyView.SelectedItem;
         sav.SetPartySlotAtIndex(pk, int.Parse(b.SlotNumber));
         fillParty();
     }
-    private async void del(object sender, EventArgs e)
+    private async void del(object? sender, EventArgs? e)
     {
         boxsprite b = (boxsprite)PartyView.SelectedItem;
         sav.DeletePartySlot(int.Parse(b.SlotNumber));

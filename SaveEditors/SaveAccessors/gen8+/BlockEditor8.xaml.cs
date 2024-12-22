@@ -1,4 +1,3 @@
-#nullable disable
 
 using CommunityToolkit.Maui.Storage;
 using PKHeX.Core;
@@ -9,7 +8,7 @@ namespace PKHeXMAUI
     {
         private readonly ISCBlockArray SAV;
         private readonly SCBlockMetadata Metadata;
-        public static ComboItem[] SortedBlockKeys;
+        public static ComboItem[] SortedBlockKeys = [];
 
         private SCBlock CurrentBlock = null!;
 
@@ -108,11 +107,11 @@ namespace PKHeXMAUI
             }
         }
 
-        private void CB_TypeToggle_SelectionChanged(object sender, EventArgs e)
+        private void CB_TypeToggle_SelectionChanged(object? sender, EventArgs? e)
         {
             var block = CurrentBlock;
             var cType = block.Type;
-            var cValue = (SCTypeCode)((ComboItem)((comboBox)sender).SelectedItem).Value;
+            var cValue = (SCTypeCode?)((ComboItem?)((comboBox?)sender)?.SelectedItem)?.Value??0;
             if (cType == cValue)
                 return;
             block.ChangeBooleanType(cValue);
@@ -126,9 +125,12 @@ namespace PKHeXMAUI
         private async void ExportBlocksFolder(object sender, EventArgs e)
         {
             var FolderResults = await FolderPicker.PickAsync(CancellationToken.None);
-            var path = FolderResults.Folder.Path;
-            var blocks = SAV.AllBlocks;
-            ExportAllBlocks(blocks, path);
+            if (FolderResults.IsSuccessful)
+            {
+                var path = FolderResults.Folder.Path;
+                var blocks = SAV.AllBlocks;
+                ExportAllBlocks(blocks, path);
+            }
         }
         private static void ExportAllBlocks(IEnumerable<SCBlock> blocks, string path)
         {
@@ -211,24 +213,24 @@ namespace PKHeXMAUI
     }
     public static class BlockDataFilter
     {
-        public static void GetMatchingIndexes(object sender, TextChangedEventArgs filterInfo)
+        public static void GetMatchingIndexes(object? sender, TextChangedEventArgs? filterInfo)
         {
-            comboBox source = (comboBox)sender;
+            comboBox source = (comboBox?)sender??new();
             List<int> filteredlist = [];
             List<ComboItem> SourceList = [.. ((ComboItem[])source.ItemSource)];
-            var text = filterInfo.NewTextValue;
+            var text = filterInfo?.NewTextValue??"";
             if (text.Length == 8)
             {
                 var hex = (int)Util.GetHexValue(text);
                 if (hex != 0)
                 {
                     // Input is hexadecimal number, select the item
-                    filteredlist.Add(BlockEditor8.SortedBlockKeys.ToList().IndexOf(BlockEditor8.SortedBlockKeys.ToList().Find(z => z.Value == hex)));
+                    filteredlist.Add(BlockEditor8.SortedBlockKeys.ToList().IndexOf(BlockEditor8.SortedBlockKeys.ToList().Find(z => z.Value == hex)??new ComboItem("",0)));
                     source.ItemSource = filteredlist;
                     return;
                 }
             }
-            filteredlist.AddRange(from ComboItem item in BlockEditor8.SortedBlockKeys where item.Text.Contains(filterInfo.NewTextValue, StringComparison.InvariantCultureIgnoreCase) select BlockEditor8.SortedBlockKeys.ToList().IndexOf(item));
+            filteredlist.AddRange(from ComboItem item in BlockEditor8.SortedBlockKeys where item.Text.Contains(filterInfo?.NewTextValue??"", StringComparison.InvariantCultureIgnoreCase) select BlockEditor8.SortedBlockKeys.ToList().IndexOf(item));
             source.ItemSource= filteredlist;
             return;
         }

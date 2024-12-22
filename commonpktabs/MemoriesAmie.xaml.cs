@@ -1,5 +1,3 @@
-#nullable disable
-
 using PKHeX.Core;
 
 using static PKHeXMAUI.MainPage;
@@ -66,8 +64,8 @@ public partial class MemoriesAmie : TabbedPage
             HTTextVarBox.SelectedIndexChanged += UpdateMemoryString;
 
             HTTextVar.Text = GetMemoryCategory(HTmemindex, pk.Format);
-            OTTextVarBox.SelectedItem = argvals.Find(z => z.Value == mems.OriginalTrainerMemoryVariable);
-            HTTextVarBox.SelectedItem = HTargvals.Find(z => z.Value == mems.HandlingTrainerMemoryVariable);
+            OTTextVarBox.SelectedItem = argvals.Find(z => z.Value == mems.OriginalTrainerMemoryVariable)??new ComboItem("(None)",0);
+            HTTextVarBox.SelectedItem = HTargvals.Find(z => z.Value == mems.HandlingTrainerMemoryVariable) ?? new ComboItem("(None)", 0);
             OTMemoryStack.Insert(5, TextVar);
             OTMemoryStack.Insert(6, OTTextVarBox);
             OTMemoryStack.Insert(7, Intense);
@@ -206,13 +204,13 @@ public partial class MemoriesAmie : TabbedPage
         MemoryArgType.Item => "Item:",
         _ => string.Empty,
     };
-    private void UpdateMemoryString(object sender, EventArgs e)
+    private void UpdateMemoryString(object? sender, EventArgs? e)
     {
         var memindex = Memories.GetMemoryArgType((byte)MemoryTypePicker.SelectedIndex, pk.Format);
         var argvals = memorytext.GetArgumentStrings(memindex, pk.Format);
-        if ((comboBox)sender == OTTextVarBox || (comboBox)sender == MoreThanAFeelingbox || (comboBox)sender == Intensebox)
+        if ((comboBox?)sender == OTTextVarBox || (comboBox?)sender == MoreThanAFeelingbox || (comboBox?)sender == Intensebox)
             MemoryString.Text = string.Format(memorytext.Memory[MemoryTypePicker.SelectedIndex].Text, pk.Nickname, pk.OriginalTrainerName, (ComboItem)OTTextVarBox.SelectedItem != null ? ((ComboItem)OTTextVarBox.SelectedItem).Text : argvals[0].Text, (string)Intensebox.SelectedItem, (string)MoreThanAFeelingbox.SelectedItem);
-        if ((comboBox)sender == HTTextVarBox || (comboBox)sender == HTMoreThanAFeelingbox || (comboBox)sender == HTIntenseBox)
+        if ((comboBox?)sender == HTTextVarBox || (comboBox?)sender == HTMoreThanAFeelingbox || (comboBox?)sender == HTIntenseBox)
         {
             memindex = Memories.GetMemoryArgType((byte)HTMemoryTypePicker.SelectedIndex, pk.Format);
             argvals = memorytext.GetArgumentStrings(memindex, pk.Format);

@@ -1,4 +1,3 @@
-#nullable disable
 
 using Octokit;
 using PKHeX.Core;
@@ -254,7 +253,7 @@ public partial class TrainerEditor1 : ContentPage
                 RegionItems = Util.GetCountryRegionList("gen4_sr_default", GameInfo.CurrentLanguage);
             RegionPicker.ItemsSource = RegionItems;
             RegionPicker.ItemDisplayBinding = new Binding("Text");
-            RegionPicker.SelectedItem = (ComboItem)RegionItems.Find(z => z.Value == sav4.Region);
+            RegionPicker.SelectedItem = RegionItems.Find(z => z.Value == sav4.Region)??new ComboItem("",0);
         }
         if(SAV is SAV5 sav5)
         {
@@ -264,7 +263,7 @@ public partial class TrainerEditor1 : ContentPage
                 RegionItems = Util.GetCountryRegionList("gen5_sr_default", GameInfo.CurrentLanguage);
             RegionPicker.ItemsSource = RegionItems;
             RegionPicker.ItemDisplayBinding = new Binding("Text");
-            RegionPicker.SelectedItem = (ComboItem)RegionItems.Find(z => z.Value == sav5.Region);
+            RegionPicker.SelectedItem = RegionItems.Find(z => z.Value == sav5.Region) ?? new ComboItem("", 0);
         }
     }
 }

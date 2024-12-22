@@ -1,4 +1,3 @@
-#nullable disable
 
 using PKHeX.Core;
 using System;
@@ -43,12 +42,12 @@ public partial class MiscPokeblock : ContentPage
         PokeBlockStack.Add(buttongrid);
 	}
 
-    private void B_delAll_Clicked(object sender, EventArgs e)
+    private void B_delAll_Clicked(object? sender, EventArgs? e)
     {
         Case.DeleteAll();
     }
 
-    private void B_GiveAll_Clicked(object sender, EventArgs e)
+    private void B_GiveAll_Clicked(object? sender, EventArgs? e)
     {
         Case.MaximizeAll(true);
     }

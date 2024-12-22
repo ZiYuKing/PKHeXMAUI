@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Windows.Input;
 using PKHeX.Core;
 using static PKHeXMAUI.MainPage;
@@ -96,7 +94,7 @@ public partial class OTTab : ContentPage
         {
             countrylabel.IsVisible = true;
             CountryPicker.IsVisible = true;
-            var selectedCountry = Util.GetCountryRegionList("countries", GameInfo.CurrentLanguage).Find(z => z.Value == regionOrigin.Country);
+            var selectedCountry = Util.GetCountryRegionList("countries", GameInfo.CurrentLanguage).Find(z => z.Value == regionOrigin.Country)??new ComboItem("United States",49);
             CountryPicker.SelectedItem = selectedCountry;
             subregionlabel.IsVisible = true;
             subregionPicker.IsVisible = true;
@@ -280,7 +278,7 @@ public partial class OTTab : ContentPage
             regionOrigin.ConsoleRegion = (byte)subregion.Value;
         }
     }
-    public async void OpenTrashEditor(object sender, TappedEventArgs e)
+    public async void OpenTrashEditor(object? sender, TappedEventArgs? e)
     {
         TrashWindow = new TextEditor(otdisplay.Text, pk.OriginalTrainerTrash, MainPage.sav, MainPage.sav.Generation);
         await Navigation.PushModalAsync(TrashWindow);
@@ -294,7 +292,7 @@ public partial class OTTab : ContentPage
         pk.OriginalTrainerName = TrashWindow.FinalString;
         applyotinfo(pk);
     }
-    public async void OpenHiddenTrashEditor(object sender, TappedEventArgs e)
+    public async void OpenHiddenTrashEditor(object? sender, TappedEventArgs? e)
     {
         TrashWindow = new TextEditor(htname.Text, pk.HandlingTrainerTrash, MainPage.sav, MainPage.sav.Generation);
         await Navigation.PushModalAsync(TrashWindow);

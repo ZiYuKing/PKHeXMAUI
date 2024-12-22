@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-using PKHeX.Core;
+﻿using PKHeX.Core;
 using static PKHeXMAUI.MainPage;
 namespace PKHeXMAUI;
 
@@ -11,7 +9,7 @@ public partial class App : Application
         //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NGaF1cXGFCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWXZedXVTRmFfWEZxXkE=");
         InitializeComponent();
     }
-    protected override Window CreateWindow(IActivationState activationState)
+    protected override Window CreateWindow(IActivationState? activationState)
     {
         var Version = Preferences.Default.Get("SaveFile", 50);
         Window window = new(PSettings.RememberLastSave

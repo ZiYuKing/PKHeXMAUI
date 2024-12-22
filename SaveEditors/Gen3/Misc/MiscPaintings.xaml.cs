@@ -19,12 +19,10 @@ public partial class MiscPaintings : ContentPage
     private int PaintingIndex = -1;
     private void CurrentPaintingChanged(object sender, EventArgs e)
     {
-        
         var index = (int)CurrentPaintingEntry.Number;
         if (index == PaintingIndex) return;
         SavePainting(PaintingIndex);
         LoadPainting(index);
-        
     }
     private void LoadPainting(int index)
     {
@@ -35,7 +33,7 @@ public partial class MiscPaintings : ContentPage
 
         CurrentPaintingView.IsVisible = PaintingEnabledCheck.IsChecked = SAV.GetEventFlag(Paintings3.GetFlagIndexContestStat(index));
 
-        Speciesbox.SelectedItem = filteredspecies.Find(z=>z.Value== (int)painting.Species);
+        Speciesbox.SelectedItem = filteredspecies.Find(z=>z.Value== (int)painting.Species)??new ComboItem("",0);
         Captionentry.Number = (ulong)painting.GetCaptionRelative(index);
         TIDEntry.Text = painting.TID.ToString();
         SIDEntry.Text = painting.SID.ToString();

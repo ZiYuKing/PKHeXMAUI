@@ -148,7 +148,7 @@ public partial class LiveHex : ContentPage
                 await DisplayAlert("Invalid", "Invalid Slot number", "cancel");
                 return;
             }
-            pk = EntityFormat.GetFromBytes(Remote.ReadSlot(box - 1, slot - 1));
+            pk = EntityFormat.GetFromBytes(Remote.ReadSlot(box - 1, slot - 1))??EntityBlank.GetBlank(sav.Generation);
         }
     }
 

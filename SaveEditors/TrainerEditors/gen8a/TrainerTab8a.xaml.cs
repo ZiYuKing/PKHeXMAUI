@@ -1,11 +1,10 @@
-#nullable disable
 
 namespace PKHeXMAUI;
 
 public partial class TrainerTab8a : TabbedPage
 {
-    public static TrainerEditor8a TE8a;
-    public static TrainerEditor8aMap TE8aM;
+    public static TrainerEditor8a? TE8a;
+    public static TrainerEditor8aMap? TE8aM;
 	public TrainerTab8a()
 	{
 		InitializeComponent();
@@ -28,8 +27,8 @@ public partial class SavePage8a : ContentPage
     }
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
-        TrainerTab8a.TE8a.SaveTE8a();
-        TrainerTab8a.TE8aM.SaveTE8aMap();
+        TrainerTab8a.TE8a?.SaveTE8a();
+        TrainerTab8a.TE8aM?.SaveTE8aMap();
         Navigation.PopModalAsync();
     }
 }

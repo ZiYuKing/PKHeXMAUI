@@ -1,4 +1,3 @@
-#nullable disable
 
 using PKHeX.Core;
 using PKHeX.Core.AutoMod;
@@ -20,34 +19,34 @@ public partial class ALMSettings : ContentPage
         ALMSettingsCollection.ItemTemplate = new GenericCollectionSelector();
         ALMSettingsCollection.ItemsSource = props;
     }
-    public async void TapTapTap(object sender, TappedEventArgs e)
+    public async void TapTapTap(object? sender, TappedEventArgs? e)
     {
         PKHeXSettings.skipevent = true;
-        GenericCollectionSelector.Options.SelectedItem = e.Parameter;
+        GenericCollectionSelector.Options.SelectedItem = e?.Parameter;
         var result = await DisplayActionSheet("Add Type", "cancel", null, ["Add"]);
         switch (result)
         {
             case "cancel": break;
-            case "Add": GenericCollectionSelector.SelectedSource.Add((MoveType)e.Parameter);
+            case "Add": GenericCollectionSelector.SelectedSource.Add((MoveType?)e?.Parameter??0);
                 Preferences.Set("RandomTypes", JsonSerializer.Serialize(GenericCollectionSelector.SelectedSource));
                 APILegality.RandTypes = [.. GenericCollectionSelector.SelectedSource];
-                GenericCollectionSelector.MoveTypeOptionsSource.Remove((MoveType)e.Parameter);
+                GenericCollectionSelector.MoveTypeOptionsSource.Remove((MoveType?)e?.Parameter??0);
                 break;
 
         }
         PKHeXSettings.skipevent = false;
     }
-    public async void RemoveTap(object sender, TappedEventArgs e)
+    public async void RemoveTap(object? sender, TappedEventArgs? e)
     {
-        GenericCollectionSelector.Selected.SelectedItem = e.Parameter;
+        GenericCollectionSelector.Selected.SelectedItem = e?.Parameter;
         var result = await DisplayActionSheet("Remove Type", "cancel", null, ["Remove"]);
         switch (result)
         {
             case "cancel": break;
-            case "Remove": GenericCollectionSelector.SelectedSource.Remove((MoveType)e.Parameter);
+            case "Remove": GenericCollectionSelector.SelectedSource.Remove((MoveType?)e?.Parameter ?? 0);
                 Preferences.Set("RandomTypes", JsonSerializer.Serialize(GenericCollectionSelector.SelectedSource));
                 APILegality.RandTypes = [.. GenericCollectionSelector.SelectedSource];
-                GenericCollectionSelector.MoveTypeOptionsSource.Add((MoveType)e.Parameter); break;
+                GenericCollectionSelector.MoveTypeOptionsSource.Add((MoveType?)e?.Parameter ?? 0); break;
         }
     }
 }
@@ -70,5 +69,5 @@ public class PluginSettings
     public static bool LivingDexNativeOnly { get => Preferences.Get("LivingDexNativeOnly", false); }
     public static bool LivingDexSetAlpha { get => Preferences.Get("LivingDexSetAlpha", false); }
     public static bool LivingDexSetShiny { get => Preferences.Get("LivingDexSetShiny", false); }
-    public static ObservableCollection<MoveType> RandomTypes { get => JsonSerializer.Deserialize<ObservableCollection<MoveType>>(Preferences.Get("RandomTypes", string.Empty)); }
+    public static ObservableCollection<MoveType>? RandomTypes { get => JsonSerializer.Deserialize<ObservableCollection<MoveType>>(Preferences.Get("RandomTypes", string.Empty)); }
 }

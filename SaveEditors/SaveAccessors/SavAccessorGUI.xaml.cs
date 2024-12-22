@@ -1,4 +1,3 @@
-#nullable disable
 
 using CommunityToolkit.Maui.Storage;
 using PKHeX.Core;
@@ -7,8 +6,8 @@ namespace PKHeXMAUI;
 
 public partial class SavAccessorGUI : ContentPage
 {
-    private readonly SaveBlockMetadata<BlockInfo> Metadata;
-    private IDataIndirect CurrentBlock = null!;
+    private readonly SaveBlockMetadata<BlockInfo>? Metadata;
+    private IDataIndirect? CurrentBlock = null;
 #nullable enable
     public SavAccessorGUI(SaveFile sav, ISaveBlockAccessor<BlockInfo>? accessor)
 	{
@@ -25,7 +24,7 @@ public partial class SavAccessorGUI : ContentPage
         }
         BlockKey_Picker.TextChanged +=(s,e)=> BlockDataFilter.GetMatchingIndexes(s,(TextChangedEventArgs)e);
     }
-    private void UpdateBlockSummaryControls(IDataIndirect obj)
+    private void UpdateBlockSummaryControls(IDataIndirect? obj)
     {
         BlockStack.Clear();
         if (obj != null)
@@ -151,7 +150,7 @@ public partial class SavAccessorGUI : ContentPage
         if (((comboBox)sender).SelectedItem is not null)
         {
             if (((comboBox)sender).SelectedItem is not string name) { BlockStack.Clear(); return; }
-            CurrentBlock = Metadata.GetBlock(name);
+            CurrentBlock = Metadata?.GetBlock(name);
                 UpdateBlockSummaryControls(CurrentBlock);
         }
         else

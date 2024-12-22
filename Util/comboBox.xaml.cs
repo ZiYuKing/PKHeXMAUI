@@ -1,6 +1,3 @@
-
-#nullable disable
-
 #if ANDROID
 using Android.Widget;
 #endif
@@ -26,8 +23,8 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     /// <summary>Bindable property for <see cref="SelectedIndex"/> </summary>
     public static BindableProperty SelectedIndexProperty = BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(comboBox),propertyChanged: SetSelectedIndex);
     /// <summary>Bindable property for <see cref="SelectedIndex"/> </summary>
-    public event EventHandler SelectedIndexChanged;
-    public event EventHandler TextChanged = (s, e) => ((comboBox)s).entry_textChanged(s, (TextChangedEventArgs)e);
+    public event EventHandler? SelectedIndexChanged;
+    public event EventHandler? TextChanged;
    /// <summary>Gets or sets the Binding Path for displaying the object. Default is ".". This is a bindable Property. </summary>
     public string DisplayMemberPath { get => (string)GetValue(DisplayMemberPathProperty); set { SetValue(DisplayMemberPathProperty, value); } }
     /// <summary>Gets or sets the Title of the comboBox. This is a bindable property. Default is null.</summary>
@@ -95,15 +92,15 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     {
         if (DisplayMemberPath == ".")
         {
-            if (item != null)
+            if (item is not null)
             {
-                return item.ToString();
+                return item.ToString()??"";
             }
 
             return string.Empty;
         }
-        var result = (item.GetType().GetProperty(DisplayMemberPath).GetValue(item)).ToString();
-        return result;
+        var result = (item.GetType().GetProperty(DisplayMemberPath)?.GetValue(item))?.ToString();
+        return result ?? "";
     }
     /// <summary>
     /// Filter's the items in the ListView based on the text in the entry.
@@ -117,30 +114,31 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
         if (popupWindow?.IsShowing == false) ShowDropdown();
 #endif
         IList tempsource = Items.Where(z=>z.StartsWith(entry.Text,StringComparison.OrdinalIgnoreCase)).ToList();
-        picker.ItemsSource = ItemSource.Cast<object>().Where(z => tempsource.Contains(z.GetType().GetProperty(DisplayMemberPath) is null?z.ToString():z.GetType().GetProperty(DisplayMemberPath).GetValue(z).ToString())).ToList();
+        picker.ItemsSource = ItemSource.Cast<object>().Where(z => tempsource.Contains(z.GetType().GetProperty(DisplayMemberPath) is null?z.ToString():z.GetType().GetProperty(DisplayMemberPath)?.GetValue(z)?.ToString())).ToList();
+        TextChanged?.Invoke(this, e);
     }
-    private string SelectedItemText;
+    private string SelectedItemText = "";
     /// <summary>
     /// Changes the displayed text in the entry control, calls the bindable SelectedIndexChanged Event
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void IndexChanged(object sender, EventArgs e)
+    private void IndexChanged(object? sender, EventArgs? e)
     {
         if (picker.SelectedItem.GetType().GetProperty(DisplayMemberPath) is null)
-            SelectedItemText = picker.SelectedItem.ToString();
+            SelectedItemText = picker.SelectedItem.ToString()??"";
         else
-            SelectedItemText = picker.SelectedItem.GetType().GetProperty(DisplayMemberPath).GetValue(picker.SelectedItem).ToString();
+            SelectedItemText = picker.SelectedItem.GetType().GetProperty(DisplayMemberPath)?.GetValue(picker.SelectedItem)?.ToString()??"";
 
         entry.Text = SelectedItemText;
         SelectedItem = picker.SelectedItem;
         SelectedIndex = ItemSource.Cast<object>().ToList().IndexOf(SelectedItem);
-        SelectedIndexChanged?.Invoke(this, e);
+        SelectedIndexChanged?.Invoke(this, e!);
 #if ANDROID
         popupWindow?.Dismiss();
 #endif
     }
-    public void ForceSelection(object sender, EventArgs e) => picker.SelectedItem = SelectedItem;
+    public void ForceSelection(object? sender, EventArgs? e) => picker.SelectedItem = SelectedItem;
     static void SetSelectedItem(BindableObject bindable, object oldValue, object newValue)
     {
         ((comboBox)bindable).SetSelectedItem(newValue);
@@ -181,16 +179,16 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     private void AutoCompleteText(object sender, EventArgs e)
     {
         IList tempsource = Items.Where(z => z.StartsWith(entry.Text, StringComparison.CurrentCultureIgnoreCase)).ToList();
-        var item = ItemSource.Cast<object>().First(z => tempsource.Contains(z.GetType().GetProperty(DisplayMemberPath) is null ? z.ToString() : z.GetType().GetProperty(DisplayMemberPath).GetValue(z).ToString()));
+        var item = ItemSource.Cast<object>().First(z => tempsource.Contains(z.GetType().GetProperty(DisplayMemberPath) is null ? z.ToString() : z.GetType().GetProperty(DisplayMemberPath)?.GetValue(z)?.ToString() ?? ""));
         if (item.GetType().GetProperty(DisplayMemberPath) is null)
-            SelectedItemText = picker.SelectedItem.ToString();
+            SelectedItemText = picker.SelectedItem.ToString() ?? "";
         else
-            SelectedItemText = item.GetType().GetProperty(DisplayMemberPath).GetValue(item).ToString();
+            SelectedItemText = item.GetType().GetProperty(DisplayMemberPath)?.GetValue(item)?.ToString() ?? "";
         entry.Text = SelectedItemText;
         picker.SelectedItem = item;
     }
 #if ANDROID
-    private PopupWindow popupWindow;
+    private PopupWindow popupWindow = new();
 #endif
     /// <summary>
     /// Shows the dropdown Listview. Currently for Android Only. To-Do: All Other Platforms.

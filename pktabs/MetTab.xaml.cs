@@ -1,7 +1,4 @@
 
-#nullable disable
-
-using System.ComponentModel;
 using System.Windows.Input;
 using PKHeX.Core;
 
@@ -46,7 +43,7 @@ public partial class MetTab : ContentPage
         applymetinfo(pk);
         FirstLoad = false;
     }
-    public static string ballspriteurl;
+    public static string ballspriteurl = "ball4.png";
     public async Task applymetinfo(PKM pkm)
     {
         SkipEvent = true;
@@ -80,7 +77,7 @@ public partial class MetTab : ContentPage
             battleversionpicker.SelectedIndex = (int)bv.BattleVersion;
         }
 
-        metlocationpicker.SelectedItem = GameInfo.GetLocationList((GameVersion)pkm.Version, pkm.Context).FirstOrDefault(z=>z.Value == pkm.MetLocation);
+        metlocationpicker.SelectedItem = GameInfo.GetLocationList((GameVersion)pkm.Version, pkm.Context).First(z=>z.Value == pkm.MetLocation)??new ComboItem("(None)",0);
         ballpicker.SelectedItem = pkm.Ball > 0 ? (Ball)pkm.Ball : Ball.None;
         ballspriteurl = $"{(pkm.Ball>0?$"ball{pkm.Ball}":"ball4")}.png";
         ballimage.Source = ballspriteurl;
@@ -101,7 +98,7 @@ public partial class MetTab : ContentPage
         eggdatepicker.Date = pkm.EggMetDate != null?eggmetdate.ToDateTime(TimeOnly.Parse("10:00 PM")):DateTime.Now;
         if(pkm.EggLocation==0)
         {
-            eggmetpicker.SelectedItem = GameInfo.GetLocationList((GameVersion)sav.Version, sav.Context,true).FirstOrDefault(z => z.Value == pkm.EggLocation);
+            eggmetpicker.SelectedItem = GameInfo.GetLocationList((GameVersion)sav.Version, sav.Context,true).First(z => z.Value == pkm.EggLocation)??new ComboItem("(None)",0);
         }
         SkipEvent = false;
     }

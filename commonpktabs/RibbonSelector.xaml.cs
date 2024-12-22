@@ -1,4 +1,3 @@
-#nullable disable
 
 using PKHeX.Core;
 using static PKHeXMAUI.MainPage;
@@ -119,7 +118,7 @@ public partial class RibbonSelector : ContentPage
         }
         ribboncollection.ScrollTo(0);
     }
-    private void AffixRibbon(object sender,EventArgs e)
+    private void AffixRibbon(object? sender,EventArgs? e)
     {
         if (ribboncollection.SelectedItem == null)
             return;

@@ -1,4 +1,3 @@
-#nullable disable
 
 using PKHeX.Core;
 
@@ -6,9 +5,9 @@ namespace PKHeXMAUI;
 
 public partial class TrainerTab9 : TabbedPage
 {
-    public static TrainerEditor9 TE9;
-    public static TrainerEditor9Blueberry TE9B;
-    public static TrainerEditor9Misc TE9M;
+    public static TrainerEditor9? TE9;
+    public static TrainerEditor9Blueberry? TE9B;
+    public static TrainerEditor9Misc? TE9M;
 	public TrainerTab9()
 	{
 		InitializeComponent();
@@ -47,10 +46,10 @@ public partial class SavePage9 : ContentPage
     }
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
-        TrainerTab9.TE9.SaveTrainerEditor9();
-        TrainerTab9.TE9M.SaveTEMisc();
+        TrainerTab9.TE9?.SaveTrainerEditor9();
+        TrainerTab9.TE9M?.SaveTEMisc();
         if (((SAV9SV)MainPage.sav).SaveRevision >= 2)
-            TrainerTab9.TE9B.SaveTE9Blueberry();
+            TrainerTab9.TE9B?.SaveTE9Blueberry();
         Navigation.PopModalAsync();
     }
 }

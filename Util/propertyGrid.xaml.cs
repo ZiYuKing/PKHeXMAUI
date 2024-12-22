@@ -1,8 +1,5 @@
-﻿#nullable disable
-
-using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.Views;
 using System.ComponentModel;
-using System.Globalization;
 using System.Reflection;
 
 namespace PKHeXMAUI;
@@ -10,7 +7,7 @@ namespace PKHeXMAUI;
 public partial class propertyGrid : ContentView
 {
     public BindableProperty CurrentItemProperty = BindableProperty.Create(nameof(CurrentItem), typeof(object), typeof(propertyGrid),propertyChanged: OnPChanged);
-    public static Dictionary<string, List<PropertyInfo>> Categories;
+    public static Dictionary<string, List<PropertyInfo>>? Categories;
     public object CurrentItem { get=>GetValue(CurrentItemProperty); set=>SetValue(CurrentItemProperty,value); }
     public propertyGrid(object item)
     {
@@ -22,7 +19,7 @@ public partial class propertyGrid : ContentView
         foreach (var prop in props)
         {
             CategoryAttribute att = prop.GetCustomAttribute<CategoryAttribute>() ?? new CategoryAttribute("Misc");
-            if (Categories.TryGetValue(att.Category, out List<PropertyInfo> value))
+            if (Categories.TryGetValue(att.Category, out List<PropertyInfo>? value))
                 value.Add(prop);
             else
                 Categories.Add(att.Category,[prop]);
@@ -46,16 +43,16 @@ public partial class propertyGrid : ContentView
                     comboBox cb = new()
                     {
                         ItemSource = Enum.GetValues(pi.PropertyType),
-                        SelectedItem = pi.GetValue(CurrentItem)
+                        SelectedItem = pi?.GetValue(CurrentItem)??new()
                     };
-                    cb.SelectedIndexChanged += (_, _) => pi.SetValue(CurrentItem, cb.SelectedItem);
+                    cb.SelectedIndexChanged += (_, _) => pi?.SetValue(CurrentItem, cb.SelectedItem);
                     stack.Add(cb, 1, i);
                 }
                 else
                 {
                     Entry pentry = new()
                     {
-                        Text = pi.GetValue(CurrentItem).ToString()
+                        Text = pi.GetValue(CurrentItem)?.ToString()
                     };
                     stack.Add(pentry, 1, i);
                     pentry.TextChanged += (_, _) =>
@@ -88,7 +85,7 @@ public partial class propertyGrid : ContentView
         foreach (var prop in props)
         {
             CategoryAttribute att = prop.GetCustomAttribute<CategoryAttribute>() ?? new CategoryAttribute("Misc");
-            if (Categories.TryGetValue(att.Category, out List<PropertyInfo> value))
+            if (Categories.TryGetValue(att.Category, out List<PropertyInfo>? value))
                 value.Add(prop);
             else
                 Categories.Add(att.Category, [prop]);
@@ -112,16 +109,16 @@ public partial class propertyGrid : ContentView
                     comboBox cb = new()
                     {
                         ItemSource = Enum.GetValues(pi.PropertyType),
-                        SelectedItem = pi.GetValue(CurrentItem)
+                        SelectedItem = pi?.GetValue(CurrentItem)??new()
                     };
-                    cb.SelectedIndexChanged += (_, _) => pi.SetValue(CurrentItem, cb.SelectedItem);
+                    cb.SelectedIndexChanged += (_, _) => pi?.SetValue(CurrentItem, cb.SelectedItem);
                     stack.Add(cb, 1, i);
                 }
                 else
                 {
                     Entry pentry = new()
                     {
-                        Text = pi.GetValue(CurrentItem).ToString()
+                        Text = pi.GetValue(CurrentItem)?.ToString()
                     };
                     stack.Add(pentry, 1, i);
                     pentry.TextChanged += (_, _) =>

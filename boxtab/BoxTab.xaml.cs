@@ -1,6 +1,3 @@
-
-#nullable disable
-
 using System.Windows.Input;
 using PKHeX.Core;
 using PKHeX.Core.AutoMod;
@@ -106,11 +103,11 @@ public partial class BoxTab : ContentPage
         boxview.ItemsLayout = new GridItemsLayout(6, ItemsLayoutOrientation.Vertical);
         boxview.ItemsSource = boxsprites;
     }
-    private async void Tapety(object sender, TappedEventArgs e)
+    private async void Tapety(object? sender, TappedEventArgs? e)
     {
-        boxview.SelectedItem = e.Parameter;
+        boxview.SelectedItem = e?.Parameter;
 
-        var result = await DisplayActionSheet($"Slot {((boxsprite)e.Parameter).SlotNumber}", "cancel", "Delete", ["View", "Set"]);
+        var result = await DisplayActionSheet($"Slot {((boxsprite?)e?.Parameter)?.SlotNumber}", "cancel", "Delete", ["View", "Set"]);
         switch (result)
         {
             case "Delete": del(sender,e); break;
@@ -144,11 +141,11 @@ public partial class BoxTab : ContentPage
         Sharer.IsVisible = true;
         LB_Share.IsVisible = true;
     }
-    private async void DragStop(object sender, DropEventArgs e)
+    private async void DragStop(object? sender, DropEventArgs? e)
     {
-        Grid theG = (sender as Element)?.Parent as Grid;
-        Label Replace = (Label)theG.Children.FirstOrDefault(x => x is Label);
-        var toreplace = boxsprites.FirstOrDefault(x=>x.SlotNumber == Replace.Text);
+        Grid theG = (sender as Element)?.Parent as Grid??[];
+        Label Replace = (Label)theG.Children.First(x => x is Label)??new();
+        var toreplace = boxsprites.First(x=>x.SlotNumber == Replace.Text)??new boxsprite(EntityBlank.GetBlank(sav.Generation),0);
         var toreplaceindex = boxsprites.IndexOf((boxsprite)toreplace);
         if (boxview.SelectedItem is not null)
         {
@@ -164,19 +161,19 @@ public partial class BoxTab : ContentPage
             }
             catch (Exception)
             {
-                sav.SetBoxSlotAtIndex((PKM)e.Data.Properties["PKM"], boxnum.SelectedIndex, toreplaceindex);
+                sav.SetBoxSlotAtIndex((PKM?)e?.Data?.Properties["PKM"]??EntityBlank.GetBlank(sav.Generation), boxnum.SelectedIndex, toreplaceindex);
                 if (Remote.Connected && InjectinSlot)
                 {
-                    Remote.SendSlot(((PKM)e.Data.Properties["PKM"]).EncryptedPartyData, boxnum.SelectedIndex, toreplaceindex);
+                    Remote.SendSlot(((PKM?)e?.Data?.Properties["PKM"])?.EncryptedPartyData, boxnum.SelectedIndex, toreplaceindex);
                 }
             }
         }
         else
         {
-            sav.SetBoxSlotAtIndex((PKM)e.Data.Properties["PKM"], boxnum.SelectedIndex, toreplaceindex);
+            sav.SetBoxSlotAtIndex((PKM?)e?.Data?.Properties["PKM"]??EntityBlank.GetBlank(sav.Generation), boxnum.SelectedIndex, toreplaceindex);
             if(Remote.Connected && InjectinSlot)
             {
-                Remote.SendSlot(((PKM)e.Data.Properties["PKM"]).EncryptedPartyData, boxnum.SelectedIndex, toreplaceindex);
+                Remote.SendSlot(((PKM?)e?.Data?.Properties["PKM"])?.EncryptedPartyData, boxnum.SelectedIndex, toreplaceindex);
             }
         }
         deleter.IsVisible = false;
@@ -187,14 +184,14 @@ public partial class BoxTab : ContentPage
         LB_Share.IsVisible = false;
         fillbox();
     }
-    private async void applypkfrombox(object sender, EventArgs e)
+    private async void applypkfrombox(object? sender, EventArgs? e)
     {
             if (((boxsprite)boxview.SelectedItem).pkm.Species != 0)
             {
                 pk = ((boxsprite)boxview.SelectedItem).pkm;
             }
     }
-    private async void applypkfromboxDrop(object sender, DropEventArgs e)
+    private async void applypkfromboxDrop(object? sender, DropEventArgs? e)
     {
         if (boxview.SelectedItem is not null)
         {
@@ -210,7 +207,7 @@ public partial class BoxTab : ContentPage
             Sharer.IsVisible = false;
             LB_Share.IsVisible = false;
     }
-    private async void inject(object sender, EventArgs e)
+    private async void inject(object? sender, EventArgs? e)
     {
         try
         {
@@ -228,7 +225,7 @@ public partial class BoxTab : ContentPage
             fillbox();
         }
     }
-    private async void del(object sender, EventArgs e)
+    private async void del(object? sender, EventArgs? e)
     {
         try
         {
@@ -245,7 +242,7 @@ public partial class BoxTab : ContentPage
             fillbox();
         }
     }
-    private async void delDrop(object sender, DropEventArgs e)
+    private async void delDrop(object? sender, DropEventArgs? e)
     {
         if (boxview.SelectedItem is not null)
         {
@@ -271,9 +268,9 @@ public partial class BoxTab : ContentPage
             Sharer.IsVisible = false;
             LB_Share.IsVisible = false;
     }
-    private async void ShareDrop(object sender, DropEventArgs e)
+    private async void ShareDrop(object? sender, DropEventArgs? e)
     {
-        PKM pkm = boxview.SelectedItem is not null ? ((boxsprite)boxview.SelectedItem).pkm : (PKM)e.Data.Properties["PKM"];
+        PKM pkm = boxview.SelectedItem is not null ? ((boxsprite)boxview.SelectedItem).pkm : (PKM?)e?.Data?.Properties["PKM"]??EntityBlank.GetBlank(sav.Generation);
         var TempPath = Path.Combine(FileSystem.CacheDirectory, pkm.FileName);
         File.WriteAllBytes(TempPath, pkm.Data);
         await Share.RequestAsync(new ShareFileRequest()

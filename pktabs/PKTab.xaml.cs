@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-using System.Collections;
+﻿using System.Collections;
 using PKHeX.Core;
 using System.Net.Sockets;
 using PKHeX.Core.AutoMod;
@@ -13,17 +11,24 @@ namespace PKHeXMAUI;
 public partial class MainPage : ContentPage
 {
     public static string Version = "v24.12.19";
+    public static PKM pk = EntityBlank.GetBlank(9);
+    public static LegalityAnalysis la = new(pk);
+    public static SaveFile sav = AppShell.AppSaveFile!;
+    public static FilteredGameDataSource datasourcefiltered = new(sav, GameInfo.Sources);
+    public static Socket SwitchConnection = new(SocketType.Stream, ProtocolType.Tcp);
+    public static string spriteurl = "iconp.png";
+    public static string ipaddy = "";
+    public static string itemspriteurl = "";
     public bool SkipTextChange = false;
     public static int[] NoFormSpriteSpecies = [664, 665, 744, 982, 855, 854, 869,892,1012,1013];
     public bool FirstLoad = true;
-    public static PokeSysBotMini Remote;
+    public static PokeSysBotMini Remote = new(LiveHeXVersion.Unknown, new SysBotMini(), false);
     public static bool ReadonChangeBox = Preferences.Get("ReadonChangeBox", true);
     public static bool InjectinSlot = Preferences.Get("InjectinSlot", true);
-    public static TextEditor TrashWindow;
+    public static TextEditor TrashWindow = new("", [], SaveUtil.GetBlankSAV(EntityContext.Gen9,""), 9);
     public static bool EditingTrash = false;
     public MainPage()
 	{
-        sav = AppShell.AppSaveFile;
         GameInfo.FilteredSources = new FilteredGameDataSource(sav, GameInfo.Sources);
         datasourcefiltered = GameInfo.FilteredSources;
         pk = EntityBlank.GetBlank(sav.Generation,(GameVersion)sav.Version);
@@ -85,15 +90,6 @@ public partial class MainPage : ContentPage
             }
         }
     }
-    public static LegalityAnalysis la;
-
-    public static PKM pk;
-    public static SaveFile sav;
-    public static FilteredGameDataSource datasourcefiltered;
-    public static Socket SwitchConnection = new(SocketType.Stream, ProtocolType.Tcp);
-    public static string spriteurl = "iconp.png";
-    public static string ipaddy = "";
-    public static string itemspriteurl = "";
     public static void SetSettings()
     {
         APILegality.SetAllLegalRibbons = PluginSettings.SetAllLegalRibbons;
@@ -135,7 +131,7 @@ public partial class MainPage : ContentPage
 
                     byte[] data = File.ReadAllBytes(file);
                     EntityContext contextFromExtension = EntityFileExtension.GetContextFromExtension(file);
-                    PKM fromBytes = EntityFormat.GetFromBytes(data, contextFromExtension);
+                    PKM fromBytes = EntityFormat.GetFromBytes(data, contextFromExtension)??EntityBlank.GetBlank(contextFromExtension.Generation());
                     if (fromBytes != null)
                     {
                         TrainerSettings.Register(new PokeTrainerDetails(fromBytes.Clone()));
@@ -180,7 +176,8 @@ public partial class MainPage : ContentPage
     private async void opensavefile(SaveFile savefile, string path)
     {
         savefile.Metadata.SetExtraInfo(path);
-        App.Current.Windows[0].Page = new AppShell(savefile);
+        if(App.Current is not null)
+            App.Current.Windows[0].Page = new AppShell(savefile);
     }
     public async void OpenPCBoxBin(IEnumerable<byte[]> pkms)
     {
@@ -252,7 +249,7 @@ public partial class MainPage : ContentPage
         if (pkm.GetType() != sav.PKMType)
         {
             var newpkm = EntityConverter.ConvertToType(pkm, sav.PKMType, out var result);
-            if (result.IsSuccess() || PSettings.AllowIncompatibleConversion)
+            if ((result.IsSuccess() && newpkm is not null) || (PSettings.AllowIncompatibleConversion && newpkm is not null))
             {
                 sav.AdaptPKM(newpkm);
                 applymainpkinfo(newpkm);
@@ -284,7 +281,7 @@ public partial class MainPage : ContentPage
         if (pkm.IsShiny)
             shinybutton.Text = "★";
 
-        specieslabel.SelectedItem = datasourcefiltered.Species.FirstOrDefault(z => z.Text== SpeciesName.GetSpeciesName(pkm.Species,2));
+        specieslabel.SelectedItem = datasourcefiltered.Species.FirstOrDefault(z => z.Text== SpeciesName.GetSpeciesName(pkm.Species,2))??new ComboItem(SpeciesName.GetSpeciesName(sav.MaxSpeciesID,2),sav.MaxSpeciesID);
         displaypid.Text = $"{pkm.PID:X}";
         nickname.Text = pkm.IsNicknamed ? pkm.Nickname : SpeciesName.GetSpeciesName(pkm.Species, pk.Language);
         exp.Text = $"{pkm.EXP}";
@@ -308,7 +305,7 @@ public partial class MainPage : ContentPage
         abilitypicker.SelectedIndex =pkm.AbilityNumber == 4? 2: pkm.AbilityNumber;
         Friendshipdisplay.Text = $"{pkm.CurrentFriendship}";
         genderdisplay.Source = $"gender_{pkm.Gender}.png";
-        helditempicker.SelectedItem = datasourcefiltered.Items.FirstOrDefault(z=>z.Value == pkm.HeldItem);
+        helditempicker.SelectedItem = datasourcefiltered.Items.First(z=>z.Value == pkm.HeldItem)??new ComboItem("(None)",0);
         if (pkm.HeldItem > 0)
         {
             itemsprite.IsVisible = true;
@@ -834,10 +831,8 @@ public partial class MainPage : ContentPage
     }
     private static async Task<bool> IsUpdateAvailable()
     {
-        try
-        {
             var currentVersion = ParseVersion(Version);
-            var latestVersion = ParseVersion(await GetLatestVersion());
+            var latestVersion = ParseVersion(await GetLatest());
 
             if (latestVersion[0] > currentVersion[0])
             {
@@ -856,19 +851,6 @@ public partial class MainPage : ContentPage
                 }
             }
             return false;
-        }
-        catch { return false; }
-    }
-    private static async Task<string> GetLatestVersion()
-    {
-        try
-        {
-            return await GetLatest();
-        }
-        catch (Exception)
-        {
-            return "0.0.0";
-        }
     }
 
     private static async Task<string> GetLatest()
@@ -914,7 +896,7 @@ public partial class MainPage : ContentPage
         e.Data.Properties.Add("PKM", pk);
         Shell.Current.GoToAsync("//BoxShell/boxtab/BoxPage");
     }
-    public async void OpenTrashEditor(object sender, TappedEventArgs e)
+    public async void OpenTrashEditor(object? sender, TappedEventArgs? e)
     {
         TrashWindow = new TextEditor(nickname.Text, pk.NicknameTrash, MainPage.sav, MainPage.sav.Generation);
         await Navigation.PushModalAsync(TrashWindow);

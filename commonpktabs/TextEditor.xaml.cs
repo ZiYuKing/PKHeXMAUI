@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-using PKHeX.Core;
+﻿using PKHeX.Core;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
@@ -119,14 +117,14 @@ public partial class TextEditor : ContentPage
     public void SetOrientation()
     {
         #if ANDROID
-        Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.RequestedOrientation =    Android.Content.PM.ScreenOrientation.Locked;
+        Microsoft.Maui.ApplicationModel.Platform.CurrentActivity!.RequestedOrientation =    Android.Content.PM.ScreenOrientation.Locked;
         Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
         #endif
     }
     public void RestSetOrientation()
     {
         #if ANDROID
-        Microsoft.Maui.ApplicationModel.Platform.CurrentActivity.RequestedOrientation =    Android.Content.PM.ScreenOrientation.User;
+        Microsoft.Maui.ApplicationModel.Platform.CurrentActivity!.RequestedOrientation =    Android.Content.PM.ScreenOrientation.User;
         #endif
     }
 
@@ -303,7 +301,7 @@ public class trashclass(int index, byte data)
 }
 public class CharConverter : IValueConverter
 {
-    object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    object? IValueConverter.Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is null)
             return value;
@@ -318,8 +316,8 @@ public class CharConverter : IValueConverter
         }
     }
 
-    object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return ushort.Parse(value.ToString());
+        return ushort.Parse(value?.ToString()??"0");
     }
 }

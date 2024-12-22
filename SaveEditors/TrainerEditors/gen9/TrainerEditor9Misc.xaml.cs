@@ -1,4 +1,3 @@
-#nullable disable
 
 using PKHeX.Core;
 using static PKHeX.Core.SaveBlockAccessor9SV;

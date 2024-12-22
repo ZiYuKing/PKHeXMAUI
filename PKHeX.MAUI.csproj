@@ -125,8 +125,8 @@
 		<PackageReference Include="PKHeX.Core" Version="24.11.12" />
 		<PackageReference Include="SkiaSharp" Version="3.116.1" />
 		<PackageReference Include="System.Drawing.Common" Version="9.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.14" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.1" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.21" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="10.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

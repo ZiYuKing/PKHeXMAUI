@@ -1,6 +1,4 @@
 ﻿
-#nullable disable
-
 using CommunityToolkit.Maui.Storage;
 using PKHeX.Core;
 using PKHeX.Core.AutoMod;
@@ -18,16 +16,16 @@ public partial class AppShell : Shell
         TheShell.ItemTemplate = new FlyoutCollectionSelector();
         TheShell.MenuItemTemplate = new FlyoutCollectionSelector();
     }
-	public static SaveFile AppSaveFile { get; set; }
+	public static SaveFile? AppSaveFile { get; set; }
     public BoxManipulator manip = new BoxManipulatorMAUI();
     public static bool boxexpanded = false;
     public static bool pkexpanded = false;
     public static bool fileexpanded = false;
     public static bool dataexpanded = false;
-    public static Shell Shelltest;
-    public async void DropdownExpansion(object sender, EventArgs e)
+    public static Shell? Shelltest;
+    public async void DropdownExpansion(object? sender, EventArgs? e)
     {
-        if (((string)((ImageButton)sender).CommandParameter) == "Box/Party")
+        if (((string?)((ImageButton?)sender)?.CommandParameter) == "Box/Party")
         {
             if (!boxexpanded)
             {
@@ -55,7 +53,7 @@ public partial class AppShell : Shell
             }
             return;
         }
-        if (((string)((ImageButton)sender).CommandParameter) == "pk editor")
+        if (((string?)((ImageButton?)sender)?.CommandParameter) == "pk editor")
         {
             if (!pkexpanded)
             {
@@ -73,7 +71,7 @@ public partial class AppShell : Shell
             }
             return;
         }
-        if (((string)((ImageButton)sender).CommandParameter) == "File")
+        if (((string?)((ImageButton?)sender)?.CommandParameter) == "File")
         {
             if (!fileexpanded)
             {
@@ -90,7 +88,7 @@ public partial class AppShell : Shell
                 fileexpanded = false;
             }
         }
-        if (((string)((ImageButton)sender).CommandParameter) == "Data")
+        if (((string?)((ImageButton?)sender)?.CommandParameter) == "Data")
         {
             if (!dataexpanded)
             {
@@ -154,7 +152,7 @@ public partial class AppShell : Shell
     public bool DeleteExpanded = false;
     public bool SortAdvancedExpanded = false;
     public bool ModifyExpanded = false;
-    private void DeleteClicked(object sender, EventArgs e)
+    private void DeleteClicked(object? sender, EventArgs? e)
     {
         if (DeleteExpanded)
         {
@@ -219,7 +217,7 @@ public partial class AppShell : Shell
         HideAllFlyoutItems(manipType.GetManipCategoryName());
     }
 
-    private void HideAllFlyoutItems(string Menu)
+    private void HideAllFlyoutItems(string? Menu)
     {
         if (Menu == "Delete")
         {
@@ -279,7 +277,7 @@ public partial class AppShell : Shell
         if(Shell.Current is not null)
             Shell.Current.FlyoutIsPresented = false;
     }
-    private void SortClick(object sender, EventArgs e)
+    private void SortClick(object? sender, EventArgs? e)
     {
         if (SortExpanded)
         {
@@ -345,7 +343,7 @@ public partial class AppShell : Shell
         await ManipulateBoxes("Sort", "Would you like to Sort All boxes by Random", "Would you like to Sort the Current box by Random", BoxManipType.SortRandom);
     }
 
-    private void SortBoxesAdvancedClicked(object sender, EventArgs e)
+    private void SortBoxesAdvancedClicked(object? sender, EventArgs? e)
     {
         if (SortAdvancedExpanded)
         {
@@ -452,7 +450,7 @@ public partial class AppShell : Shell
         ManipulateBoxes("Sort Advanced", "Would you like to Sort All boxes by Tera Type", "Would you like to Sort the Current box by Tera Type", BoxManipType.SortTypeTera);
     }
 
-    private void ModifyBoxesClicked(object sender, EventArgs e)
+    private void ModifyBoxesClicked(object? sender, EventArgs? e)
     {
         if (ModifyExpanded)
         {
@@ -556,7 +554,7 @@ public partial class AppShell : Shell
         var ext = sav.Metadata.GetSuggestedExtension();
         var flags = sav.Metadata.GetSuggestedFlags(ext);
         await using var LiveStream = new MemoryStream(sav.Write(flags));
-        var result = await FileSaver.Default.SaveAsync(sav.Metadata.FileName, LiveStream, CancellationToken.None);
+        var result = await FileSaver.Default.SaveAsync(sav.Metadata.FileName??"", LiveStream, CancellationToken.None);
         if (result.IsSuccessful)
             await DisplayAlert("Success", $"Save file was exported to {result.FilePath}", "cancel");
         else
@@ -597,10 +595,10 @@ public partial class AppShell : Shell
         {
             foreach (var f in Directory.GetFiles(folder.Folder.Path))
             {
-                PKM pkm = (PKM)FileUtil.GetSupportedFile(f);
+                PKM pkm = (PKM?)FileUtil.GetSupportedFile(f)??EntityBlank.GetBlank(sav.Generation);
                 if (pkm.GetType() != sav.PKMType)
                 {
-                    var newpkm = EntityConverter.ConvertToType(pkm, sav.PKMType, out var result);
+                    var newpkm = EntityConverter.ConvertToType(pkm, sav.PKMType, out var result)??EntityBlank.GetBlank(sav.Generation);
                     if (result.IsSuccess() || PSettings.AllowIncompatibleConversion)
                     {
                         sav.AdaptPKM(newpkm);
@@ -780,7 +778,7 @@ public class FlyoutCollectionSelector : DataTemplateSelector
             else
                 return MenuItemDataTemplate;
         }
-        if (item.GetType().GetProperty("Title").GetValue(item) is string s)
+        if (item.GetType().GetProperty("Title")?.GetValue(item) is string s)
         {
             if(s == "File"|| s == "Data")
             return MenuItemDropdownDataTemplate;
@@ -792,7 +790,7 @@ public partial class tempPage : ContentPage
 {
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
-        AppShell.Shelltest.GoToAsync("///pkeditortab");
-        AppShell.Shelltest.FlyoutIsPresented = false;
+        AppShell.Shelltest?.GoToAsync("///pkeditortab");
+        AppShell.Shelltest!.FlyoutIsPresented = false;
     }
 }

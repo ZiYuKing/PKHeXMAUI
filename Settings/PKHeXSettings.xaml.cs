@@ -1,6 +1,4 @@
 
-#nullable disable
-
 using System.Reflection;
 using PKHeX.Core;
 using PKHeX.Core.AutoMod;
@@ -29,7 +27,7 @@ public partial class PKHeXSettings : ContentPage
         PKHeXSettingsCollection.ItemTemplate = new GenericCollectionSelector();
         try
         {
-            GenericCollectionSelector.SelectedSource = JsonSerializer.Deserialize<ObservableCollection<MoveType>>(Preferences.Get("RandomTypes", string.Empty));
+            GenericCollectionSelector.SelectedSource = JsonSerializer.Deserialize<ObservableCollection<MoveType>>(Preferences.Get("RandomTypes", string.Empty))??[];
             foreach (var removeType in GenericCollectionSelector.SelectedSource)
                 GenericCollectionSelector.MoveTypeOptionsSource.Remove(removeType);
         }
@@ -54,7 +52,7 @@ public partial class PKHeXSettings : ContentPage
             Preferences.Set("SaveFile", selected.Value);
             var blanksav = SaveUtil.GetBlankSAV((GameVersion)selected.Value, "PKHeX");
 
-            App.Current.Windows[0].Page = new AppShell(blanksav);
+            App.Current!.Windows[0].Page = new AppShell(blanksav);
         }
     }
     public string LastBox = "";
@@ -165,7 +163,7 @@ public class GenericCollectionSelector : DataTemplateSelector
             Label type = new();
             type.SetBinding(Label.TextProperty, ".");
             TapGestureRecognizer Taping = new();
-            Taping.Tapped += ((ALMSettings)AppShell.Current.CurrentPage).RemoveTap;
+            Taping.Tapped += ((ALMSettings)AppShell.Current!.CurrentPage).RemoveTap;
             grid.GestureRecognizers.Add(Taping);
             grid.Add(type);
             return grid;
@@ -177,7 +175,7 @@ public class GenericCollectionSelector : DataTemplateSelector
             Label type = new();
             type.SetBinding(Label.TextProperty,".");
             TapGestureRecognizer NotAddedTap = new();
-            NotAddedTap.Tapped += ((ALMSettings)AppShell.Current.CurrentPage).TapTapTap;
+            NotAddedTap.Tapped += ((ALMSettings)AppShell.Current!.CurrentPage).TapTapTap;
             NotAddedTap.SetBinding(TapGestureRecognizer.CommandParameterProperty, ".");
             grid.GestureRecognizers.Add(NotAddedTap);
             grid.Add(type);
@@ -204,7 +202,7 @@ public class GenericCollectionSelector : DataTemplateSelector
         else
             return ComboTemplate;
     }
-    public static void ApplySettingBool(object sender, EventArgs e)
+    public static void ApplySettingBool(object? sender, EventArgs? e)
     {
         if (sender is comboBox box)
         {
@@ -239,7 +237,7 @@ public class GenericCollectionSelector : DataTemplateSelector
         MainPage.SetSettings();
     }
     public static string LastBox = "";
-    public static void GetSettingBool(object sender, EventArgs e)
+    public static void GetSettingBool(object? sender, EventArgs? e)
     {
         try
         {
@@ -282,6 +280,7 @@ public class GenericCollectionSelector : DataTemplateSelector
                             {
                                 var path = await FolderPicker.PickAsync(CancellationToken.None);
                                 if (!path.IsSuccessful) return;
+                                if (s is null) return;
                                 ((Editor)s).Text = $"{path.Folder.Path}/";
                             };
                             editor.GestureRecognizers.Add(tap);
