@@ -20,7 +20,7 @@ public partial class TrainerEditor6Multiplayer : ContentPage
         MSPicker.ItemDisplayBinding = new Binding("Text");
         if (SAV is IMultiplayerSprite ms)
         {
-            MSPicker.SelectedItem = data.First(z => z.Value == ms.MultiplayerSpriteID);
+            MSPicker.SelectedItem = data.FirstOrDefault(z => z.Value == ms.MultiplayerSpriteID);
             string file = $"tr_{ms.MultiplayerSpriteID:00}.png";
             MSSprite.Source = file;
         }

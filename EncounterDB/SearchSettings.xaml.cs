@@ -30,17 +30,17 @@ public partial class SearchSettings : ContentPage
         EncVersion.ItemSource = EncVersionList;
         if(encSettings != null)
         {
-            EncSpecies.SelectedItem = datasourcefiltered.Species.First(z => (ushort)z.Value == encSettings.Species)??new ComboItem("(None)",0);
+            EncSpecies.SelectedItem = datasourcefiltered.Species.FirstOrDefault(z => (ushort)z.Value == encSettings.Species)??new ComboItem("(None)",0);
             if (encSettings.Moves.Count >0)
-                EncMove1.SelectedItem = EncMoveList.First(z => z.Value == encSettings.Moves[0]);
+                EncMove1.SelectedItem = EncMoveList.FirstOrDefault(z => z.Value == encSettings.Moves[0])??new("(None)",0);
             if (encSettings.Moves.Count >1)
-                EncMove2.SelectedItem = EncMoveList.First(z => z.Value == encSettings.Moves[1]);
+                EncMove2.SelectedItem = EncMoveList.FirstOrDefault(z => z.Value == encSettings.Moves[1])?? new("(None)", 0);
             if (encSettings.Moves.Count>2)
-                EncMove3.SelectedItem = EncMoveList.First(z => z.Value == encSettings.Moves[2]);
+                EncMove3.SelectedItem = EncMoveList.FirstOrDefault(z => z.Value == encSettings.Moves[2]) ?? new("(None)", 0);
             if (encSettings.Moves.Count>3)
-                EncMove4.SelectedItem = EncMoveList.First(z => z.Value == encSettings.Moves[3]);
+                EncMove4.SelectedItem = EncMoveList.FirstOrDefault(z => z.Value == encSettings.Moves[3]) ?? new("(None)", 0);
 
-            EncVersion.SelectedItem = EncVersionList.First(z => z.Value == (int)encSettings.Version) ?? new ComboItem("(None)", 0);
+            EncVersion.SelectedItem = EncVersionList.FirstOrDefault(z => z.Value == (int)encSettings.Version) ?? new ComboItem("(None)", 0);
             ShinyCheck.IsChecked = encSettings.SearchShiny??false;
             EggCheck.IsChecked = encSettings.SearchEgg??false;
         }

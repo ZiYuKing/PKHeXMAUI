@@ -144,8 +144,8 @@ public partial class BoxTab : ContentPage
     private async void DragStop(object? sender, DropEventArgs? e)
     {
         Grid theG = (sender as Element)?.Parent as Grid??[];
-        Label Replace = (Label)theG.Children.First(x => x is Label)??new();
-        var toreplace = boxsprites.First(x=>x.SlotNumber == Replace.Text)??new boxsprite(EntityBlank.GetBlank(sav.Generation),0);
+        Label Replace = (Label?)theG.Children.FirstOrDefault(x => x is Label)??new();
+        var toreplace = boxsprites.FirstOrDefault(x=>x.SlotNumber == Replace.Text)??new boxsprite(EntityBlank.GetBlank(sav.Generation),0);
         var toreplaceindex = boxsprites.IndexOf((boxsprite)toreplace);
         if (boxview.SelectedItem is not null)
         {
@@ -332,6 +332,12 @@ public partial class BoxTab : ContentPage
         Navigation.PushModalAsync(new BatchEditor());
     }
     private void displayOpts(object sender, DragEventArgs e) => DisplayOptions();
+
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
+    {
+        base.OnNavigatedTo(args);
+        fillbox();
+    }
 }
 public class boxsprite
 {

@@ -90,7 +90,7 @@ public partial class TrainerEditor7Map : ContentPage
         for (int i = 0, u = 0, m = FlyDestNameIndex.Length - (SAV is SAV7USUM ? 0 : 6); i < m; i++)
         {
             var dest = FlyDestNameIndex[i];
-            var name = dest < 0 ? FlyDestAltName[u++] : metLocationList.First(v => v.Value == dest).Text;
+            var name = dest < 0 ? FlyDestAltName[u++] : metLocationList.FirstOrDefault(v => v.Value == dest)?.Text??"";
             var state = SAV.EventWork.GetEventFlag(SkipFlag + FlyDestFlagOfs[i]);
             FlyMapData.Add(new WhyYouNoTakeGenericsDataTemplate(name, state));
         }
@@ -115,7 +115,7 @@ public partial class TrainerEditor7Map : ContentPage
         for (int i = 0, u = 0, m = MapUnmaskNameIndex.Length - (SAV is SAV7USUM ? 0 : 4); i < m; i++)
         {
             var dest = MapUnmaskNameIndex[i];
-            var name = dest < 0 ? MapUnmaskAltName[u++] : metLocationList.First(v => v.Value == dest).Text;
+            var name = dest < 0 ? MapUnmaskAltName[u++] : metLocationList.FirstOrDefault(v => v.Value == dest)?.Text??"";
             var state = SAV.EventWork.GetEventFlag(SkipFlag + MapUnmaskFlagOfs[i]);
             UnmaskData.Add(new WhyYouNoTakeGenericsDataTemplate(name, state));
         }

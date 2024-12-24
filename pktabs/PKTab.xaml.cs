@@ -13,7 +13,7 @@ public partial class MainPage : ContentPage
     public static string Version = "v24.12.19";
     public static PKM pk = EntityBlank.GetBlank(9);
     public static LegalityAnalysis la = new(pk);
-    public static SaveFile sav = AppShell.AppSaveFile!;
+    public static SaveFile sav = AppShell.AppSaveFile;
     public static FilteredGameDataSource datasourcefiltered = new(sav, GameInfo.Sources);
     public static Socket SwitchConnection = new(SocketType.Stream, ProtocolType.Tcp);
     public static string spriteurl = "iconp.png";
@@ -22,13 +22,14 @@ public partial class MainPage : ContentPage
     public bool SkipTextChange = false;
     public static int[] NoFormSpriteSpecies = [664, 665, 744, 982, 855, 854, 869,892,1012,1013];
     public bool FirstLoad = true;
-    public static PokeSysBotMini Remote = new(LiveHeXVersion.Unknown, new SysBotMini(), false);
+    public static PokeSysBotMini Remote = new(LiveHeXVersion.SV_v301, new SysBotMini(), false);
     public static bool ReadonChangeBox = Preferences.Get("ReadonChangeBox", true);
     public static bool InjectinSlot = Preferences.Get("InjectinSlot", true);
     public static TextEditor TrashWindow = new("", [], SaveUtil.GetBlankSAV(EntityContext.Gen9,""), 9);
     public static bool EditingTrash = false;
     public MainPage()
 	{
+        sav = AppShell.AppSaveFile;
         GameInfo.FilteredSources = new FilteredGameDataSource(sav, GameInfo.Sources);
         datasourcefiltered = GameInfo.FilteredSources;
         pk = EntityBlank.GetBlank(sav.Generation,(GameVersion)sav.Version);
@@ -79,6 +80,7 @@ public partial class MainPage : ContentPage
         checklegality();
         CheckForUpdate();
         FirstLoad = false;
+        applymainpkinfo(pk);
         if(PSettings.StartupPage != 0)
         {
             switch (PSettings.StartupPage)
@@ -160,17 +162,18 @@ public partial class MainPage : ContentPage
         var pkfile = await FilePicker.PickAsync();
         if (pkfile is null)
             return;
-
-        var obj = FileUtil.GetSupportedFile(pkfile.FullPath);
+        var input = File.ReadAllBytes(pkfile.FullPath);
+        var obj = FileUtil.GetSupportedFile(input,pkfile.ContentType,sav);
         if(obj is null) return;
         switch (obj)
         {
             case PKM pkm: OpenPKMFile(pkm);return;
+            case SaveFile s: opensavefile(s, pkfile.FullPath); return;
             case IPokeGroup b: OpenGroup(b); return;
             case MysteryGift g: OpenMG(g); return;
-            case IEnumerable<byte[]> pkms: OpenPCBoxBin(pkms); return;
+            case ConcatenatedEntitySet pkms: OpenPCBoxBin(pkms); return;
             case IEncounterConvertible enc: OpenPKMFile(enc.ConvertToPKM(sav));return;
-            case SaveFile s: opensavefile(s, pkfile.FullPath);return;
+            
         }
     }
     private async void opensavefile(SaveFile savefile, string path)
@@ -179,9 +182,9 @@ public partial class MainPage : ContentPage
         if(App.Current is not null)
             App.Current.Windows[0].Page = new AppShell(savefile);
     }
-    public async void OpenPCBoxBin(IEnumerable<byte[]> pkms)
+    public async void OpenPCBoxBin(ConcatenatedEntitySet pkms)
     {
-        var data = pkms.SelectMany(z => z).ToArray();
+        var data = pkms.Data.Span;
         if (sav.GetPCBinary().Length == data.Length)
         {
             if (sav.IsAnySlotLockedInBox(0, sav.BoxCount - 1))
@@ -286,8 +289,8 @@ public partial class MainPage : ContentPage
         nickname.Text = pkm.IsNicknamed ? pkm.Nickname : SpeciesName.GetSpeciesName(pkm.Species, pk.Language);
         exp.Text = $"{pkm.EXP}";
         leveldisplay.Text = $"{Experience.GetLevel(pkm.EXP, pkm.PersonalInfo.EXPGrowth)}";
-        naturepicker.SelectedItem = datasourcefiltered.Natures.First(z => z.Value == (int)pkm.Nature);
-        statnaturepicker.SelectedItem = datasourcefiltered.Natures.First(z => z.Value == (int)pkm.StatNature);
+        naturepicker.SelectedItem = datasourcefiltered.Natures.FirstOrDefault(z => z.Value == (int)pkm.Nature)??new ComboItem("Hardy",0);
+        statnaturepicker.SelectedItem = datasourcefiltered.Natures.FirstOrDefault(z => z.Value == (int)pkm.StatNature) ?? new ComboItem("Hardy", 0);
         iseggcheck.IsChecked = pkm.IsEgg;
         infectedcheck.IsChecked = pkm.IsPokerusInfected;
         curedcheck.IsChecked = pkm.IsPokerusCured;
@@ -305,7 +308,7 @@ public partial class MainPage : ContentPage
         abilitypicker.SelectedIndex =pkm.AbilityNumber == 4? 2: pkm.AbilityNumber;
         Friendshipdisplay.Text = $"{pkm.CurrentFriendship}";
         genderdisplay.Source = $"gender_{pkm.Gender}.png";
-        helditempicker.SelectedItem = datasourcefiltered.Items.First(z=>z.Value == pkm.HeldItem)??new ComboItem("(None)",0);
+        helditempicker.SelectedItem = datasourcefiltered.Items.FirstOrDefault(z=>z.Value == pkm.HeldItem)??new ComboItem("(None)",0);
         if (pkm.HeldItem > 0)
         {
             itemsprite.IsVisible = true;
@@ -385,7 +388,7 @@ public partial class MainPage : ContentPage
     public async void pk9saver_Clicked(object sender, EventArgs e)
     {
         pk.ResetPartyStats();
-        await using var CrossedStreams = new MemoryStream(pk.DecryptedPartyData);
+        using var CrossedStreams = new MemoryStream(pk.DecryptedPartyData);
         var result = await FileSaver.Default.SaveAsync(pk.FileName, CrossedStreams, CancellationToken.None);
         if (result.IsSuccessful)
             await DisplayAlert("Success", $"PK File saved at {result.FilePath}", "cancel");

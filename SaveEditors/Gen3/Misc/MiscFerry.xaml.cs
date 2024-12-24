@@ -41,7 +41,7 @@ public partial class MiscFerry : ContentPage
         var itemlist = GameInfo.Strings.GetItemStrings(SAV.Context, SAV.Version);
 
         var tickets = TicketItemIDs;
-        var p = Pouches.First(z => z.Type == InventoryType.KeyItems);
+        var p = Pouches.FirstOrDefault(z => z.Type == InventoryType.KeyItems)??Pouches[0];
         bool hasOldSea = Array.Exists(p.Items, static z => z.Index == ItemIDOldSeaMap);
         if (!hasOldSea && !SAV.Japanese && DisplayAlert("Non Japanese Save", $"Non Japanese save file. Add {itemlist[ItemIDOldSeaMap]} (unreleased)?","Yes","No").Result)
             tickets = tickets[..^1]; // remove old sea map

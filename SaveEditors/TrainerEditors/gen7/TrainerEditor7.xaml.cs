@@ -32,7 +32,7 @@ public partial class TrainerEditor7 : ContentPage
             recordlist.Add(name);
         }
         TrainerPropPicker.ItemsSource = recordlist;
-        TrainerPropPicker.SelectedIndex = recordres.First().Key;
+        TrainerPropPicker.SelectedIndex = recordres.FirstOrDefault().Key;
         dsRegionPicker.ItemsSource = (System.Collections.IList)GameInfo.Regions;
         dsRegionPicker.ItemDisplayBinding = new Binding("Text");
         LanguagePicker.ItemsSource = (System.Collections.IList)GameInfo.LanguageDataSource(SAV.Generation);
@@ -45,10 +45,10 @@ public partial class TrainerEditor7 : ContentPage
         TIDEntry.Text = SAV.DisplayTID.ToString("000000");
         SIDEntry.Text = SAV.DisplaySID.ToString("0000");
         OTMoneyEntry.Text = SAV.Money.ToString();
-        CountryPicker.SelectedItem = Util.GetCountryRegionList("countries", GameInfo.CurrentLanguage).First(z => z.Value == SAV.Country);
-        dsRegionPicker.SelectedItem = GameInfo.Regions.First(z => z.Value == SAV.ConsoleRegion);
-        var index = ((ComboItem)CountryPicker.SelectedItem).Value;
-        RegionPicker.SelectedItem = Util.GetCountryRegionList($"sr_{index:000}", GameInfo.CurrentLanguage).First(z => z.Value == SAV.Region);
+        CountryPicker.SelectedItem = Util.GetCountryRegionList("countries", GameInfo.CurrentLanguage).FirstOrDefault(z => z.Value == SAV.Country);
+        dsRegionPicker.SelectedItem = GameInfo.Regions.FirstOrDefault(z => z.Value == SAV.ConsoleRegion);
+        var index = ((ComboItem?)CountryPicker.SelectedItem)?.Value??0;
+        RegionPicker.SelectedItem = Util.GetCountryRegionList($"sr_{index:000}", GameInfo.CurrentLanguage).FirstOrDefault(z => z.Value == SAV.Region);
         LanguagePicker.SelectedIndex = SAV.Language - 1;
         BPEntry.Text = SAV.Misc.BP.ToString();
         FCEntry.Text = SAV.Festa.FestaCoins.ToString();
