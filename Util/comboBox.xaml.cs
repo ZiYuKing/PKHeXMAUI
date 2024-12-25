@@ -2,7 +2,9 @@
 using Android.Widget;
 #endif
 using Microsoft.Maui.Platform;
+using PKHeX.Core;
 using System.Collections;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PKHeXMAUI;
 /// <summary>
@@ -48,7 +50,8 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     /// <summary>
     /// Gets or sets the selected item in the comboBox. Default is null. This is a bindable property.
     /// </summary>
-	public object SelectedItem { get => GetValue(SelectedItemProperty); set { picker.SelectedItem = value; SetValue(SelectedItemProperty, value); } }
+	public object? SelectedItem { get => GetValue(SelectedItemProperty); set { picker.SelectedItem = value; SetValue(SelectedItemProperty, value); } }
+    private string OGDisplayMemberPath = "";
     public Microsoft.Maui.Controls.ListView picker;
     public comboBox()
     {
@@ -78,6 +81,7 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     static void OnItemsCollectionChanged(BindableObject bindable, object oldValue, object newValue)
     {
         ((comboBox)bindable).OnItemsCollectionChanged(bindable,EventArgs.Empty);
+        ((comboBox)bindable).OGDisplayMemberPath = ((comboBox)bindable).DisplayMemberPath;
     }
     public void OnItemsCollectionChanged(object sender, EventArgs e)
     {
@@ -113,6 +117,18 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
 #if ANDROID
         if (popupWindow?.IsShowing == false) ShowDropdown();
 #endif
+        if (entry.Text.Length == 8)
+        {
+            List<ComboItem> filteredlist = [];
+            var hex = (int)Util.GetHexValue(entry.Text);
+            if (hex != 0)
+            {
+                // Input is hexadecimal number, select the item
+                filteredlist = [BlockEditor8.SortedBlockKeys.ToList().Find(z => z.Value == hex) ?? new ComboItem("Error", 0)];
+                picker.ItemsSource = filteredlist;
+                return;
+            }
+        }
         IList tempsource = Items.Where(z=>z.StartsWith(entry.Text,StringComparison.OrdinalIgnoreCase)).ToList();
         picker.ItemsSource = ItemSource.Cast<object>().Where(z => tempsource.Contains(z.GetType().GetProperty(DisplayMemberPath) is null?z.ToString():z.GetType().GetProperty(DisplayMemberPath)?.GetValue(z)?.ToString())).ToList();
         TextChanged?.Invoke(this, e);

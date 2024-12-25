@@ -22,7 +22,7 @@ public partial class SavAccessorGUI : ContentPage
             BlockKey_Picker.IsVisible = false;
             UpdateSimpleBlockSummaryControls(sav);
         }
-        BlockKey_Picker.TextChanged +=(s,e)=> BlockDataFilter.GetMatchingIndexes(s,(TextChangedEventArgs)e);
+        BlockKey_Picker.TextChanged +=(s,e)=> GetMatchingIndexes(s,(TextChangedEventArgs)e);
     }
     private void UpdateBlockSummaryControls(IDataIndirect? obj)
     {
@@ -165,5 +165,21 @@ public partial class SavAccessorGUI : ContentPage
             TypeCode.Byte or TypeCode.SByte or TypeCode.UInt16 or TypeCode.UInt32 or TypeCode.UInt64 or TypeCode.Int16 or TypeCode.Int32 or TypeCode.Int64 or TypeCode.Decimal or TypeCode.Double or TypeCode.Single => true,
             _ => false,
         };
+    }
+    public void GetMatchingIndexes(object? sender, TextChangedEventArgs? filterInfo)
+    {
+        List<int> filteredlist = [];
+        var text = filterInfo?.NewTextValue ?? "";
+        if (text.Length == 8)
+        {
+            var hex = (int)Util.GetHexValue(text);
+            if (hex != 0)
+            {
+                // Input is hexadecimal number, select the item
+                filteredlist.Add(BlockEditor8.SortedBlockKeys.ToList().IndexOf(BlockEditor8.SortedBlockKeys.ToList().Find(z => z.Value == hex) ?? new ComboItem("", 0)));
+                BlockKey_Picker.ItemSource = filteredlist;
+                return;
+            }
+        }
     }
 }

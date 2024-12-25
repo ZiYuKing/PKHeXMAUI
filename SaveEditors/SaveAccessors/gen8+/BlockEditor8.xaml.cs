@@ -19,14 +19,14 @@ namespace PKHeXMAUI
             Metadata = new SCBlockMetadata(sav.Accessor, [], []);
             SortedBlockKeys = Metadata.GetSortedBlockKeyList().ToArray();
             BlockKey_Picker.ItemSource = SortedBlockKeys;
-            BlockKey_Picker.TextChanged += (s, e) => BlockDataFilter.GetMatchingIndexes(s, (TextChangedEventArgs)e);
+            BlockKey_Picker.DisplayMemberPath = "Text";
         }
 
         private void Update_BlockCV(object sender, EventArgs e)
         {
             if (BlockKey_Picker.SelectedItem != null)
             {
-                var key = (uint)((ComboItem)BlockKey_Picker.SelectedItem).Value;
+                var key = (uint?)((ComboItem?)BlockKey_Picker.SelectedItem)?.Value??0;
                 CurrentBlock = SAV.Accessor.GetBlock(key);
                 UpdateBlockSummaryControls();
             }
@@ -210,29 +210,6 @@ namespace PKHeXMAUI
                 option |= SCBlockExportOption.FakeHeader;
             return option;
         }
-    }
-    public static class BlockDataFilter
-    {
-        public static void GetMatchingIndexes(object? sender, TextChangedEventArgs? filterInfo)
-        {
-            comboBox source = (comboBox?)sender??new();
-            List<int> filteredlist = [];
-            List<ComboItem> SourceList = [.. ((ComboItem[])source.ItemSource)];
-            var text = filterInfo?.NewTextValue??"";
-            if (text.Length == 8)
-            {
-                var hex = (int)Util.GetHexValue(text);
-                if (hex != 0)
-                {
-                    // Input is hexadecimal number, select the item
-                    filteredlist.Add(BlockEditor8.SortedBlockKeys.ToList().IndexOf(BlockEditor8.SortedBlockKeys.ToList().Find(z => z.Value == hex)??new ComboItem("",0)));
-                    source.ItemSource = filteredlist;
-                    return;
-                }
-            }
-            filteredlist.AddRange(from ComboItem item in BlockEditor8.SortedBlockKeys where item.Text.Contains(filterInfo?.NewTextValue??"", StringComparison.InvariantCultureIgnoreCase) select BlockEditor8.SortedBlockKeys.ToList().IndexOf(item));
-            source.ItemSource= filteredlist;
-            return;
-        }
+      
     }
 }

@@ -553,7 +553,7 @@ public partial class AppShell : Shell
             sav.CurrentBox = BoxTab.CurrentBox;
         var ext = sav.Metadata.GetSuggestedExtension();
         var flags = sav.Metadata.GetSuggestedFlags(ext);
-        using var LiveStream = new MemoryStream(sav.Write(flags));
+        await using var LiveStream = new MemoryStream(sav.Write(flags));
         var result = await FileSaver.Default.SaveAsync(sav.Metadata.FileName??"", LiveStream, CancellationToken.None);
         if (result.IsSuccessful)
             await DisplayAlert("Success", $"Save file was exported to {result.FilePath}", "cancel");
@@ -634,13 +634,13 @@ public partial class AppShell : Shell
     {
         if (await DisplayAlert("Dump", "Dump ALL Boxes?", "yes", "no"))
         {
-            using MemoryStream boxstream = new(sav.GetPCBinary());
+            await using MemoryStream boxstream = new(sav.GetPCBinary());
             await FileSaver.SaveAsync("pcdata.bin", boxstream);
             return;
         }
         if (await DisplayAlert("Dump", "Dump Current Box?", "yes", "cancel"))
         {
-            using MemoryStream Cboxstream = new(sav.GetBoxBinary(sav.CurrentBox));
+            await using MemoryStream Cboxstream = new(sav.GetBoxBinary(sav.CurrentBox));
             await FileSaver.SaveAsync($"boxdata {sav.CurrentBox}.bin", Cboxstream);
             return;
         }

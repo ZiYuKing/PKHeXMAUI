@@ -173,7 +173,6 @@ public partial class MainPage : ContentPage
             case MysteryGift g: OpenMG(g); return;
             case ConcatenatedEntitySet pkms: OpenPCBoxBin(pkms); return;
             case IEncounterConvertible enc: OpenPKMFile(enc.ConvertToPKM(sav));return;
-            
         }
     }
     private async void opensavefile(SaveFile savefile, string path)
@@ -388,7 +387,7 @@ public partial class MainPage : ContentPage
     public async void pk9saver_Clicked(object sender, EventArgs e)
     {
         pk.ResetPartyStats();
-        using var CrossedStreams = new MemoryStream(pk.DecryptedPartyData);
+        await using var CrossedStreams = new MemoryStream(pk.DecryptedPartyData);
         var result = await FileSaver.Default.SaveAsync(pk.FileName, CrossedStreams, CancellationToken.None);
         if (result.IsSuccessful)
             await DisplayAlert("Success", $"PK File saved at {result.FilePath}", "cancel");
