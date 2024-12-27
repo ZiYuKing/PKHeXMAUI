@@ -210,6 +210,5 @@ namespace PKHeXMAUI
                 option |= SCBlockExportOption.FakeHeader;
             return option;
         }
-      
     }
 }

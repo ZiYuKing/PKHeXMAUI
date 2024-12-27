@@ -9,10 +9,10 @@ public partial class TrainerEditor9Misc : ContentPage
 	public TrainerEditor9Misc()
 	{
 		InitializeComponent();
-		TrainerXCoordinateEditor.Text = SAV.X.ToString();
-		TrainerYCoordinateEditor.Text = SAV.Y.ToString();
-		TrainerZCoordinateEditor.Text = SAV.Z.ToString();
-		TrainerRotationEditor.Text = (Math.Atan2(SAV.RZ, SAV.RW) * 360.0 / Math.PI).ToString();
+		TrainerXCoordinateEditor.Number = (decimal)SAV.X;
+		TrainerYCoordinateEditor.Number = (decimal)SAV.Y;
+		TrainerZCoordinateEditor.Number = (decimal)SAV.Z;
+		TrainerRotationEditor.Number = (decimal)(Math.Atan2(SAV.RZ, SAV.RW) * 360.0 / Math.PI);
     }
 
     private void UnlockFlyLocations(object sender, EventArgs e)
@@ -188,11 +188,8 @@ public partial class TrainerEditor9Misc : ContentPage
 
     public void SaveTEMisc()
     {
-        var parsed = float.TryParse(TrainerXCoordinateEditor.Text, out var result);
-        SAV.X = parsed ? result : SAV.X;
-        parsed = float.TryParse(TrainerYCoordinateEditor.Text, out result);
-        SAV.Y = parsed ? result : SAV.Y;
-        parsed = float.TryParse(TrainerZCoordinateEditor.Text, out result);
-        SAV.Z = parsed ? result : SAV.Z;
+        SAV.X = (float)TrainerXCoordinateEditor.Number;
+        SAV.Y = (float)TrainerYCoordinateEditor.Number;
+        SAV.Z = (float)TrainerZCoordinateEditor.Number;
     }
 }

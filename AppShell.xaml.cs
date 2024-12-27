@@ -95,6 +95,7 @@ public partial class AppShell : Shell
                 SetFlyoutItemIsVisible(LoadBoxes,true);
                 SetFlyoutItemIsVisible(DumpBox,true);
                 SetFlyoutItemIsVisible(SaveBoxData, true);
+                SetFlyoutItemIsVisible(MenuBatchEditor, true);
                 dataexpanded = true;
             }
             else
@@ -102,6 +103,7 @@ public partial class AppShell : Shell
                 SetFlyoutItemIsVisible(LoadBoxes, false);
                 SetFlyoutItemIsVisible(DumpBox, false);
                 SetFlyoutItemIsVisible(SaveBoxData, false);
+                SetFlyoutItemIsVisible(MenuBatchEditor, false);
                 dataexpanded = false;
             }
         }
@@ -644,6 +646,11 @@ public partial class AppShell : Shell
             await FileSaver.SaveAsync($"boxdata {sav.CurrentBox}.bin", Cboxstream);
             return;
         }
+    }
+
+    private void OpenBatchEditorClick(object sender, EventArgs e)
+    {
+        Navigation.PushModalAsync(new BatchEditor());
     }
 }
 public class BoxManipulatorMAUI : BoxManipulator

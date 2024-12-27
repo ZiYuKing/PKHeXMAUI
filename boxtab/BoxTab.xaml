@@ -31,7 +31,6 @@
                         </CollectionView.GestureRecognizers>
                     </CollectionView>
                 </Grid>
-                <Button x:Name="BatchEditorOpenButton" Text="Batch Editor" Clicked="openBatchEditor"/>
                 <Button x:Name="RandomTeamButton" Text="Generate Random Team" Clicked="GenerateRandomTeam"/>
             </StackLayout>
         </ScrollView>

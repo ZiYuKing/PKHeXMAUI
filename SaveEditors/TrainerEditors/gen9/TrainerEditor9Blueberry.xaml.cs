@@ -9,8 +9,8 @@ public partial class TrainerEditor9Blueberry : ContentPage
 	{
 		InitializeComponent();
         BPEditor.Text = SAV.BlueberryPoints.ToString();
-        SQEditor.Text = SAV.BlueberryQuestRecord.QuestsDoneSolo.ToString();
-        GQEditor.Text = SAV.BlueberryQuestRecord.QuestsDoneGroup.ToString();
+        SQEditor.Number = (decimal)SAV.BlueberryQuestRecord.QuestsDoneSolo;
+        GQEditor.Number = (decimal)SAV.BlueberryQuestRecord.QuestsDoneGroup;
         ThrowStylePicker.ItemsSource = Util.GetStringList("throw_styles","en");
         ThrowStylePicker.SelectedIndex = (int)SAV.ThrowStyle - 1;
     }
@@ -19,24 +19,6 @@ public partial class TrainerEditor9Blueberry : ContentPage
     {
 		BPEditor.Text = (SAV.BlueberryPoints = (uint)SAV.MaxMoney).ToString();
     }
-
-    private void AddSQ(object sender, EventArgs e)
-    {
-        SQEditor.Text = (SAV.BlueberryQuestRecord.QuestsDoneSolo++).ToString();
-    }
-    private void SubtractSQ(object sender, EventArgs e)
-    {
-        SQEditor.Text = (SAV.BlueberryQuestRecord.QuestsDoneSolo--).ToString();
-    }
-    private void AddGQ(object sender, EventArgs e)
-    {
-        GQEditor.Text = (SAV.BlueberryQuestRecord.QuestsDoneGroup++).ToString();
-    }
-    private void SubtractGQ(object sender, EventArgs e)
-    {
-        GQEditor.Text = (SAV.BlueberryQuestRecord.QuestsDoneGroup--).ToString();
-    }
-
     private void UnlockLegends(object sender, EventArgs e)
     {
         SAV.ActivateSnacksworthLegendaries();
@@ -62,10 +44,8 @@ public partial class TrainerEditor9Blueberry : ContentPage
     {
         var parsed = uint.TryParse(BPEditor.Text, out var result);
         SAV.BlueberryPoints = parsed ? result : SAV.BlueberryPoints;
-        parsed = uint.TryParse(SQEditor.Text, out result);
-        SAV.BlueberryQuestRecord.QuestsDoneSolo = parsed ? result : SAV.BlueberryQuestRecord.QuestsDoneSolo;
-        parsed = uint.TryParse(GQEditor.Text, out result);
-        SAV.BlueberryQuestRecord.QuestsDoneGroup = parsed ? result : SAV.BlueberryQuestRecord.QuestsDoneGroup;
+        SAV.BlueberryQuestRecord.QuestsDoneSolo = (uint)SQEditor.Number;
+        SAV.BlueberryQuestRecord.QuestsDoneGroup = (uint)GQEditor.Number;
         SAV.ThrowStyle = (ThrowStyle9)ThrowStylePicker.SelectedIndex + 1;
     }
 }

@@ -33,8 +33,20 @@ public partial class SaveEditors : ContentPage
             case SAV7USUM s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
             case SAV7b s: Navigation.PushModalAsync(new SavAccessorGUI(s, s.Blocks)); break;
             case ISCBlockArray: Navigation.PushModalAsync(new BlockDataTab()); break;
+            default: Navigation.PushModalAsync(GetPropertyForm(sav)); break;
 
         }
+    }
+    private static ContentPage GetPropertyForm(object sav)
+    {
+        var form = new ContentPage
+        {
+            Title = "Simple Editor",
+        };
+        var pg = new propertyGrid(sav);
+        ScrollView scroll = new() { Content = pg };
+        form.Content = scroll;
+        return form;
     }
     private void ToggleControls()
     {

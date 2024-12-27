@@ -326,11 +326,6 @@ public partial class BoxTab : ContentPage
         }
         catch (Exception) { fillbox(); }
     }
-
-    private void openBatchEditor(object sender, EventArgs e)
-    {
-        Navigation.PushModalAsync(new BatchEditor());
-    }
     private void displayOpts(object sender, DragEventArgs e) => DisplayOptions();
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)

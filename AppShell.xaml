@@ -23,6 +23,7 @@
     <MenuItem Text="    - Load Box" x:Name="LoadBoxes" Shell.FlyoutItemIsVisible="False" Clicked="LoadBoxesClicked"/>
     <MenuItem Text="    - Dump Box" x:Name="DumpBox" Shell.FlyoutItemIsVisible="False" Clicked="DumpBoxClicked"/>
     <MenuItem Text="    - Save Box Data++" x:Name="SaveBoxData" Shell.FlyoutItemIsVisible="False" Clicked="SaveBoxDataClicked"/>
+    <MenuItem Text="    - Batch Editor" x:Name="MenuBatchEditor" Shell.FlyoutItemIsVisible="False" Clicked="OpenBatchEditorClick"/>
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Shell.TabBarIsVisible="False" x:Name="PKShell" Route="PKShell">
 
         <Tab x:Name="pkeditortab" Title="pk editor" Icon="bag_pcitems.png" Route="pkeditortab">

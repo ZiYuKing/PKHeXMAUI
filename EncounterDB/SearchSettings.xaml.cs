@@ -55,19 +55,19 @@ public partial class SearchSettings : ContentPage
     {
         encSettings = new()
         {
-            Species = (ushort)((ComboItem)EncSpecies.SelectedItem??Any).Value,
+            Species = (ushort)((ComboItem?)EncSpecies.SelectedItem??Any).Value,
             Format = sav.Generation,
             Generation = sav.Generation,
-            Version = (GameVersion)((ComboItem)EncVersion.SelectedItem??Any).Value,
+            Version = (GameVersion)((ComboItem?)EncVersion.SelectedItem??Any).Value,
             Nature = (EncounterSettings.UsePkEditorAsCriteria ? pk.Nature : 0),
             Ability = (EncounterSettings.UsePkEditorAsCriteria ? pk.Ability : 0),
             Level = (EncounterSettings.UsePkEditorAsCriteria ? pk.CurrentLevel : 0),
             Item = (EncounterSettings.UsePkEditorAsCriteria ? pk.HeldItem : 0)
         };
-        encSettings.AddMove((ushort)((ComboItem)EncMove1.SelectedItem??Any).Value);
-        encSettings.AddMove((ushort)((ComboItem)EncMove2.SelectedItem??Any).Value);
-        encSettings.AddMove((ushort)((ComboItem)EncMove3.SelectedItem??Any).Value);
-        encSettings.AddMove((ushort)((ComboItem)EncMove4.SelectedItem??Any).Value);
+        encSettings.AddMove((ushort)((ComboItem?)EncMove1.SelectedItem??Any).Value);
+        encSettings.AddMove((ushort)((ComboItem?)EncMove2.SelectedItem??Any).Value);
+        encSettings.AddMove((ushort)((ComboItem?)EncMove3.SelectedItem??Any).Value);
+        encSettings.AddMove((ushort)((ComboItem?)EncMove4.SelectedItem??Any).Value);
         encSettings.SearchShiny = ShinyCheck.IsChecked;
         encSettings.SearchEgg= EggCheck.IsChecked;
         EncounterMovesetGenerator.PriorityList = GetTypes();

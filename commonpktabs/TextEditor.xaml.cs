@@ -144,13 +144,13 @@ public partial class TextEditor : ContentPage
     }
     private string GetTrashString()
     {
-        var species = (ushort)((ComboItem)SpeciesCombo.SelectedItem).Value;
+        var species = (ushort?)((ComboItem?)SpeciesCombo.SelectedItem)?.Value??0;
         var language = (LanguageID)LanguagePicker.SelectedItem;
         var gen = (byte)(int)GenerationPicker.SelectedItem;
         string text = SpeciesName.GetSpeciesNameGeneration(species, (int)language, gen);
 
         if (string.IsNullOrEmpty(text)) // no result
-            text = ((ComboItem)SpeciesCombo.SelectedItem).Text;
+            text = ((ComboItem?)SpeciesCombo.SelectedItem)?.Text??"";
         return text;
     }
     private byte[] SetString(ReadOnlySpan<char> text)

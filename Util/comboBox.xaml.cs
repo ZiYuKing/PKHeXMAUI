@@ -51,7 +51,6 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     /// Gets or sets the selected item in the comboBox. Default is null. This is a bindable property.
     /// </summary>
 	public object? SelectedItem { get => GetValue(SelectedItemProperty); set { picker.SelectedItem = value; SetValue(SelectedItemProperty, value); } }
-    private string OGDisplayMemberPath = "";
     public Microsoft.Maui.Controls.ListView picker;
     public comboBox()
     {
@@ -81,7 +80,6 @@ public partial class comboBox : Microsoft.Maui.Controls.ContentView
     static void OnItemsCollectionChanged(BindableObject bindable, object oldValue, object newValue)
     {
         ((comboBox)bindable).OnItemsCollectionChanged(bindable,EventArgs.Empty);
-        ((comboBox)bindable).OGDisplayMemberPath = ((comboBox)bindable).DisplayMemberPath;
     }
     public void OnItemsCollectionChanged(object sender, EventArgs e)
     {

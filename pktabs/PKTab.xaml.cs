@@ -13,7 +13,7 @@ public partial class MainPage : ContentPage
     public static string Version = "v24.12.19";
     public static PKM pk = EntityBlank.GetBlank(9);
     public static LegalityAnalysis la = new(pk);
-    public static SaveFile sav = AppShell.AppSaveFile;
+    public static SaveFile sav = AppShell.AppSaveFile??SaveUtil.GetBlankSAV(EntityContext.Gen9,"");
     public static FilteredGameDataSource datasourcefiltered = new(sav, GameInfo.Sources);
     public static Socket SwitchConnection = new(SocketType.Stream, ProtocolType.Tcp);
     public static string spriteurl = "iconp.png";
@@ -29,7 +29,7 @@ public partial class MainPage : ContentPage
     public static bool EditingTrash = false;
     public MainPage()
 	{
-        sav = AppShell.AppSaveFile;
+        sav = AppShell.AppSaveFile??SaveUtil.GetBlankSAV(EntityContext.Gen9,"");
         GameInfo.FilteredSources = new FilteredGameDataSource(sav, GameInfo.Sources);
         datasourcefiltered = GameInfo.FilteredSources;
         pk = EntityBlank.GetBlank(sav.Generation,(GameVersion)sav.Version);
@@ -707,7 +707,7 @@ public partial class MainPage : ContentPage
     private void applystatnature(object sender, EventArgs e)
     {
         if(!SkipTextChange)
-            pk.StatNature = (Nature)((ComboItem)statnaturepicker.SelectedItem).Value;
+            pk.StatNature = (Nature?)((ComboItem?)statnaturepicker.SelectedItem)?.Value??Nature.Hardy;
         checklegality();
     }
 

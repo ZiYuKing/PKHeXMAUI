@@ -9,6 +9,7 @@ public partial class propertyGrid : ContentView
     public BindableProperty CurrentItemProperty = BindableProperty.Create(nameof(CurrentItem), typeof(object), typeof(propertyGrid),propertyChanged: OnPChanged);
     public static Dictionary<string, List<PropertyInfo>>? Categories;
     public object CurrentItem { get=>GetValue(CurrentItemProperty); set=>SetValue(CurrentItemProperty,value); }
+    private bool init = true;
     public propertyGrid(object item)
     {
         InitializeComponent();
@@ -45,15 +46,17 @@ public partial class propertyGrid : ContentView
                         ItemSource = Enum.GetValues(pi.PropertyType),
                         SelectedItem = pi?.GetValue(CurrentItem)??new()
                     };
-                    cb.SelectedIndexChanged += (_, _) => pi?.SetValue(CurrentItem, cb.SelectedItem);
+                    cb.SelectedIndexChanged += (_, _) => { try { pi?.SetValue(CurrentItem, cb.SelectedItem); } catch (Exception) { } };
                     stack.Add(cb, 1, i);
                 }
                 else
                 {
-                    Entry pentry = new()
+                    Entry pentry = new();
+                    try
                     {
-                        Text = pi.GetValue(CurrentItem)?.ToString()
-                    };
+                        pentry.Text = pi.GetValue(CurrentItem)?.ToString();
+                    }
+                    catch (Exception) { pentry.Text = "Method is not Supported"; }
                     stack.Add(pentry, 1, i);
                     pentry.TextChanged += (_, _) =>
                     {
@@ -72,6 +75,7 @@ public partial class propertyGrid : ContentView
             PGrid.Add(expander,row:p);
             p++;
         }
+        init = false;
     }
     static void OnPChanged(BindableObject bindable,object oldValue, object newValue)
     {
@@ -79,6 +83,7 @@ public partial class propertyGrid : ContentView
     }
     public void PChanged()
     {
+        if (init) return;
         Categories = [];
         PGrid.Clear();
         var props = CurrentItem.GetType().GetProperties();
@@ -116,10 +121,12 @@ public partial class propertyGrid : ContentView
                 }
                 else
                 {
-                    Entry pentry = new()
+                    Entry pentry = new();
+                    try
                     {
-                        Text = pi.GetValue(CurrentItem)?.ToString()
-                    };
+                        pentry.Text = pi.GetValue(CurrentItem)?.ToString();
+                    }
+                    catch (Exception) { pentry.Text = "Method is not Supported"; }
                     stack.Add(pentry, 1, i);
                     pentry.TextChanged += (_, _) =>
                     {

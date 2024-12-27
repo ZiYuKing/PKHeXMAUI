@@ -4,10 +4,12 @@ namespace PKHeXMAUI;
 
 public partial class NumericUpDown : ContentView
 {
-    public static BindableProperty MaxValueProperty = BindableProperty.Create(nameof(MaxValue), typeof(ulong), typeof(NumericUpDown), ulong.MaxValue);
-	public static BindableProperty NumberProperty = BindableProperty.Create(nameof(Number), typeof(object), typeof(NumericUpDown), (ulong)0, propertyChanged: SetEntryNumber);
-	public ulong Number { get => (ulong)GetValue(NumberProperty); set=>SetValue(NumberProperty,value); }
-    public ulong MaxValue { get=>(ulong)GetValue(MaxValueProperty); set=>SetValue(MaxValueProperty,value); }
+    public static BindableProperty MaxValueProperty = BindableProperty.Create(nameof(MaxValue), typeof(decimal), typeof(NumericUpDown), decimal.MaxValue);
+    public static BindableProperty MinValueProperty = BindableProperty.Create(nameof(MinValue), typeof(decimal), typeof(NumericUpDown), decimal.MinValue);
+	public static BindableProperty NumberProperty = BindableProperty.Create(nameof(Number), typeof(decimal), typeof(NumericUpDown), (decimal)0, propertyChanged: SetEntryNumber);
+	public decimal Number { get => (decimal)GetValue(NumberProperty); set=>SetValue(NumberProperty,value); }
+    public decimal MaxValue { get=>(decimal)GetValue(MaxValueProperty); set=>SetValue(MaxValueProperty,value); }
+    public decimal MinValue { get => (decimal)GetValue(MinValueProperty); set => SetValue(MinValueProperty, value); }
     public event EventHandler? ValueChanged;
 	public NumericUpDown()
 	{
@@ -16,17 +18,17 @@ public partial class NumericUpDown : ContentView
 	}
 	public static void SetEntryNumber(object bindable, object oldValue,object newValue)
 	{
-        if((ulong)newValue+1>((NumericUpDown)bindable).MaxValue)
+        if((decimal)newValue+1>((NumericUpDown)bindable).MaxValue)
             newValue = ((NumericUpDown)bindable).MaxValue;
-        if ((ulong)newValue < 1)
-            newValue = 0;
+        if ((decimal)newValue < ((NumericUpDown)bindable).MinValue)
+            newValue = ((NumericUpDown)bindable).MinValue;
         ((NumericUpDown)bindable).E_Number.Text = newValue.ToString();
         ((NumericUpDown)bindable).ValueChanged?.Invoke(null, EventArgs.Empty);
 	}
 
     private void Increase(object sender, EventArgs e)
     {
-        if ((ulong)Number+1 > MaxValue)
+        if (Number+1 > MaxValue)
             Number = MaxValue;
         else
             Number++;
@@ -34,18 +36,18 @@ public partial class NumericUpDown : ContentView
 
     private void Decrease(object sender, EventArgs e)
     {
-        if (Number < 1)
-            Number = 0;
+        if (Number < MinValue)
+            Number = MinValue;
         else
             Number--;
     }
 
     private void EnforceLimitations(object sender, TextChangedEventArgs e)
     {
-        if ((ulong)Number + 1 > MaxValue)
+        if (Number + 1 > MaxValue)
             Number = MaxValue;
-        if (Number < 1)
-            Number = 0;
+        if (Number < MinValue)
+            Number = MinValue;
     }
 }
 public class intConverter : IValueConverter
@@ -57,7 +59,7 @@ public class intConverter : IValueConverter
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (ulong.TryParse(value?.ToString(), out ulong result))
+        if (decimal.TryParse(value?.ToString()?.ToCharArray() ?? [], out var result))
             return result;
         return value;
     }
