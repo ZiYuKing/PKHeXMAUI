@@ -41,13 +41,7 @@ public partial class propertyGrid : ContentView
                 stack.Add(plabel, 0, i);
                 if (pi.PropertyType.IsEnum)
                 {
-                    comboBox cb = new()
-                    {
-                        ItemSource = Enum.GetValues(pi.PropertyType),
-                        SelectedItem = pi?.GetValue(CurrentItem)??new()
-                    };
-                    cb.SelectedIndexChanged += (_, _) => { try { pi?.SetValue(CurrentItem, cb.SelectedItem); } catch (Exception) { } };
-                    stack.Add(cb, 1, i);
+                    stack.Add(GetEnumCombo(pi), 1, i);
                 }
                 else if (pi.PropertyType.IsClass)
                 {
@@ -65,33 +59,14 @@ public partial class propertyGrid : ContentView
                             G_stack.Add(L_prop, 0, o);
                             if (pr.PropertyType.IsEnum)
                             {
-                                comboBox cb = new()
-                                {
-                                    ItemSource = Enum.GetValues(pr.PropertyType),
-                                    SelectedItem = pr?.GetValue(pi?.GetValue(CurrentItem)) ?? null
-                                };
-                                cb.SelectedIndexChanged += (_, _) => { try { pr?.SetValue(pi?.GetValue(CurrentItem), cb.SelectedItem); } catch (Exception) { } };
-                                G_stack.Add(cb, 1, o);
+                               
+                                G_stack.Add(GetClassEnumCombo(pi,pr), 1, o);
                             }
                             else
                             {
-                                Entry pentry = new();
-                                try
-                                {
-                                    pentry.Text = pr.GetValue(pi?.GetValue(CurrentItem))?.ToString();
-                                }
-                                catch (Exception) { pentry.Text = "Method is not Supported"; }
-                                G_stack.Add(pentry, 1, o);
-                                pentry.TextChanged += (_, _) =>
-                                {
-                                    try
-                                    {
-                                        if (string.IsNullOrEmpty(pentry.Text)) return;
-                                        var value = Convert.ChangeType(pentry.Text, pr.PropertyType);
-                                        pr.SetValue(pi?.GetValue(CurrentItem), value);
-                                    }
-                                    catch (Exception) { }
-                                };
+                               
+                                G_stack.Add(GetClassPropertyEntry(pi,pr), 1, o);
+                               
                             }
                             o++;
                         }
@@ -102,23 +77,9 @@ public partial class propertyGrid : ContentView
                 }
                 else
                 {
-                    Entry pentry = new();
-                    try
-                    {
-                        pentry.Text = pi.GetValue(CurrentItem)?.ToString();
-                    }
-                    catch (Exception) { pentry.Text = "Method is not Supported"; }
-                    stack.Add(pentry, 1, i);
-                    pentry.TextChanged += (_, _) =>
-                    {
-                        try
-                        {
-                            if (string.IsNullOrEmpty(pentry.Text)) return;
-                            var value = Convert.ChangeType(pentry.Text, pi.PropertyType);
-                            pi.SetValue(CurrentItem, value);
-                        }
-                        catch (Exception) { }
-                    };
+                   
+                    stack.Add(GetPropertyEntry(pi), 1, i);
+                    
                 }
             }
             expander.Content = stack;
@@ -153,7 +114,7 @@ public partial class propertyGrid : ContentView
             {
                 Text = cat.Key + "▽"
             };
-            Expander expander = new() { Header = label, Margin = 20  };
+            Expander expander = new() { Header = label, Margin = 20 };
             var stack = new Grid();
             for (int i = 0; i < cat.Value.Count; i++)
             {
@@ -162,33 +123,45 @@ public partial class propertyGrid : ContentView
                 stack.Add(plabel, 0, i);
                 if (pi.PropertyType.IsEnum)
                 {
-                    comboBox cb = new()
-                    {
-                        ItemSource = Enum.GetValues(pi.PropertyType),
-                        SelectedItem = pi?.GetValue(CurrentItem)??new()
-                    };
-                    cb.SelectedIndexChanged += (_, _) => pi?.SetValue(CurrentItem, cb.SelectedItem);
-                    stack.Add(cb, 1, i);
+                    stack.Add(GetEnumCombo(pi), 1, i);
                 }
-                else
+                else if (pi.PropertyType.IsClass)
                 {
-                    Entry pentry = new();
-                    try
-                    {
-                        pentry.Text = pi.GetValue(CurrentItem)?.ToString();
-                    }
-                    catch (Exception) { pentry.Text = "Method is not Supported"; }
-                    stack.Add(pentry, 1, i);
-                    pentry.TextChanged += (_, _) =>
+                    Label L_intern = new() { Text = pi.PropertyType.ToString() + "▽" };
+                    Expander E_intern = new() { Header = L_intern, Margin = 20 };
+                    Grid G_stack = [];
+                    int o = 0;
+
+                    foreach (var pr in pi.PropertyType.GetProperties())
                     {
                         try
                         {
-                            if (string.IsNullOrEmpty(pentry.Text)) return;
-                            var value = Convert.ChangeType(pentry.Text, pi.PropertyType);
-                            pi.SetValue(CurrentItem, value);
+                            if (pi.PropertyType.GetCustomAttribute<TypeConverterAttribute>() == null) { L_intern.Text = pi.PropertyType.ToString(); break; };
+                            Label L_prop = new() { Text = pr.Name };
+                            G_stack.Add(L_prop, 0, o);
+                            if (pr.PropertyType.IsEnum)
+                            {
+
+                                G_stack.Add(GetClassEnumCombo(pi, pr), 1, o);
+                            }
+                            else
+                            {
+
+                                G_stack.Add(GetClassPropertyEntry(pi, pr), 1, o);
+
+                            }
+                            o++;
                         }
-                        catch (Exception) { }
-                    };
+                        catch (Exception) { continue; }
+                    }
+                    E_intern.Content = G_stack;
+                    stack.Add(E_intern, 1, i);
+                }
+                else
+                {
+
+                    stack.Add(GetPropertyEntry(pi), 1, i);
+
                 }
             }
             expander.Content = stack;
@@ -196,5 +169,65 @@ public partial class propertyGrid : ContentView
             PGrid.Add(expander, row: p);
             p++;
         }
+    }
+    public comboBox GetEnumCombo(PropertyInfo CurrentProperty)
+    {
+        comboBox cb = new()
+        {
+            ItemSource = Enum.GetValues(CurrentProperty.PropertyType),
+            SelectedItem = CurrentProperty?.GetValue(CurrentItem) ?? new()
+        };
+        cb.SelectedIndexChanged += (_, _) => { try { CurrentProperty?.SetValue(CurrentItem, cb.SelectedItem); } catch (Exception) { } };
+        return cb;
+    }
+    public comboBox GetClassEnumCombo(PropertyInfo upperProperty, PropertyInfo LowerProperty)
+    {
+        comboBox cb = new()
+        {
+            ItemSource = Enum.GetValues(LowerProperty.PropertyType),
+            SelectedItem = LowerProperty?.GetValue(upperProperty?.GetValue(CurrentItem)) ?? null
+        };
+        cb.SelectedIndexChanged += (_, _) => { LowerProperty?.SetValue(upperProperty?.GetValue(CurrentItem), cb.SelectedItem); };
+        return cb;
+    }
+    public Entry GetPropertyEntry(PropertyInfo CurrentProperty)
+    {
+        Entry pentry = new();
+        try
+        {
+            pentry.Text = CurrentProperty.GetValue(CurrentItem)?.ToString();
+        }
+        catch (Exception) { pentry.Text = "Method is not Supported"; }
+        pentry.TextChanged += (_, _) =>
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(pentry.Text)) return;
+                var value = Convert.ChangeType(pentry.Text, CurrentProperty.PropertyType);
+                CurrentProperty.SetValue(CurrentItem, value);
+            }
+            catch (Exception) { }
+        };
+        return pentry;
+    }
+    public Entry GetClassPropertyEntry(PropertyInfo UpperProperty, PropertyInfo LowerProperty)
+    {
+        Entry pentry = new();
+        try
+        {
+            pentry.Text = LowerProperty.GetValue(UpperProperty?.GetValue(CurrentItem))?.ToString();
+        }
+        catch (Exception) { pentry.Text = "Method is not Supported"; }
+        pentry.TextChanged += (_, _) =>
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(pentry.Text)) return;
+                var value = Convert.ChangeType(pentry.Text, LowerProperty.PropertyType);
+                LowerProperty.SetValue(UpperProperty?.GetValue(CurrentItem), value);
+            }
+            catch (Exception) { }
+        };
+        return pentry;
     }
 }
