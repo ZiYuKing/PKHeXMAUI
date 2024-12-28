@@ -49,6 +49,57 @@ public partial class propertyGrid : ContentView
                     cb.SelectedIndexChanged += (_, _) => { try { pi?.SetValue(CurrentItem, cb.SelectedItem); } catch (Exception) { } };
                     stack.Add(cb, 1, i);
                 }
+                else if (pi.PropertyType.IsClass)
+                {
+                    Label L_intern = new() { Text = pi.PropertyType.ToString()+ "▽" };
+                    Expander E_intern = new() { Header = L_intern, Margin = 20 };
+                    Grid G_stack = [];
+                    int o = 0;
+                    
+                    foreach (var pr in pi.PropertyType.GetProperties())
+                    {
+                        try
+                        {
+                            if (pi.PropertyType.GetCustomAttribute<TypeConverterAttribute>() == null) { L_intern.Text = pi.PropertyType.ToString(); break; };
+                            Label L_prop = new() { Text = pr.Name };
+                            G_stack.Add(L_prop, 0, o);
+                            if (pr.PropertyType.IsEnum)
+                            {
+                                comboBox cb = new()
+                                {
+                                    ItemSource = Enum.GetValues(pr.PropertyType),
+                                    SelectedItem = pr?.GetValue(pi?.GetValue(CurrentItem)) ?? null
+                                };
+                                cb.SelectedIndexChanged += (_, _) => { try { pr?.SetValue(pi?.GetValue(CurrentItem), cb.SelectedItem); } catch (Exception) { } };
+                                G_stack.Add(cb, 1, o);
+                            }
+                            else
+                            {
+                                Entry pentry = new();
+                                try
+                                {
+                                    pentry.Text = pr.GetValue(pi?.GetValue(CurrentItem))?.ToString();
+                                }
+                                catch (Exception) { pentry.Text = "Method is not Supported"; }
+                                G_stack.Add(pentry, 1, o);
+                                pentry.TextChanged += (_, _) =>
+                                {
+                                    try
+                                    {
+                                        if (string.IsNullOrEmpty(pentry.Text)) return;
+                                        var value = Convert.ChangeType(pentry.Text, pr.PropertyType);
+                                        pr.SetValue(pi?.GetValue(CurrentItem), value);
+                                    }
+                                    catch (Exception) { }
+                                };
+                            }
+                            o++;
+                        }
+                        catch (Exception) { continue; }
+                    }
+                    E_intern.Content = G_stack;
+                    stack.Add(E_intern, 1, i);
+                }
                 else
                 {
                     Entry pentry = new();
