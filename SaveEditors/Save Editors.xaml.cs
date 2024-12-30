@@ -44,7 +44,7 @@ public partial class SaveEditors : ContentPage
             Title = "Simple Editor",
         };
         var pg = new propertyGrid(sav);
-        ScrollView scroll = new() { Content = pg };
+        ScrollView scroll = new() { Content = pg, Orientation = ScrollOrientation.Both };
         form.Content = scroll;
         return form;
     }

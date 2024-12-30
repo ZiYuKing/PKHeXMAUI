@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Maui.Views;
+using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -16,7 +18,7 @@ public partial class propertyGrid : ContentView
         Categories = [];
         CurrentItem = item;
         PGrid.Clear();
-        var props = item.GetType().GetProperties();
+        var props = item.GetType().GetProperties().OrderBy(z=>z.Name);
         foreach (var prop in props)
         {
             CategoryAttribute att = prop.GetCustomAttribute<CategoryAttribute>() ?? new CategoryAttribute("Misc");
@@ -32,7 +34,7 @@ public partial class propertyGrid : ContentView
             {
                 Text = cat.Key+ "▽"
             };
-            Expander expander = new() { Header = label, Margin=20 };
+            Expander expander = new() { Header = label };
             var stack = new Grid();
             for (int i = 0; i < cat.Value.Count; i++)
             {
@@ -45,35 +47,12 @@ public partial class propertyGrid : ContentView
                 }
                 else if (pi.PropertyType.IsClass)
                 {
-                    Label L_intern = new() { Text = pi.PropertyType.ToString()+ "▽" };
-                    Expander E_intern = new() { Header = L_intern, Margin = 20 };
-                    Grid G_stack = [];
-                    int o = 0;
-                    
-                    foreach (var pr in pi.PropertyType.GetProperties())
-                    {
-                        try
-                        {
-                            if (pi.PropertyType.GetCustomAttribute<TypeConverterAttribute>() == null) { L_intern.Text = pi.PropertyType.ToString(); break; };
-                            Label L_prop = new() { Text = pr.Name };
-                            G_stack.Add(L_prop, 0, o);
-                            if (pr.PropertyType.IsEnum)
-                            {
-                               
-                                G_stack.Add(GetClassEnumCombo(pi,pr), 1, o);
-                            }
-                            else
-                            {
-                               
-                                G_stack.Add(GetClassPropertyEntry(pi,pr), 1, o);
-                               
-                            }
-                            o++;
-                        }
-                        catch (Exception) { continue; }
-                    }
-                    E_intern.Content = G_stack;
-                    stack.Add(E_intern, 1, i);
+
+                    stack.Add(GetClassExpander(pi), 1, i);
+                }
+                else if (pi.PropertyType.IsSZArray)
+                {
+                    stack.Add(GetArrayExpander(pi), 1, i);
                 }
                 else
                 {
@@ -98,7 +77,7 @@ public partial class propertyGrid : ContentView
         if (init) return;
         Categories = [];
         PGrid.Clear();
-        var props = CurrentItem.GetType().GetProperties();
+        var props = CurrentItem.GetType().GetProperties().OrderBy(z=>z.Name);
         foreach (var prop in props)
         {
             CategoryAttribute att = prop.GetCustomAttribute<CategoryAttribute>() ?? new CategoryAttribute("Misc");
@@ -114,7 +93,7 @@ public partial class propertyGrid : ContentView
             {
                 Text = cat.Key + "▽"
             };
-            Expander expander = new() { Header = label, Margin = 20 };
+            Expander expander = new() { Header = label };
             var stack = new Grid();
             for (int i = 0; i < cat.Value.Count; i++)
             {
@@ -132,7 +111,7 @@ public partial class propertyGrid : ContentView
                     Grid G_stack = [];
                     int o = 0;
 
-                    foreach (var pr in pi.PropertyType.GetProperties())
+                    foreach (var pr in pi.PropertyType.GetProperties().OrderBy(z=>z.Name))
                     {
                         try
                         {
@@ -142,12 +121,12 @@ public partial class propertyGrid : ContentView
                             if (pr.PropertyType.IsEnum)
                             {
 
-                                G_stack.Add(GetClassEnumCombo(pi, pr), 1, o);
+                                G_stack.Add(GetEnumCombo(pi, pr), 1, o);
                             }
                             else
                             {
 
-                                G_stack.Add(GetClassPropertyEntry(pi, pr), 1, o);
+                                G_stack.Add(GetPropertyEntry(pi, pr), 1, o);
 
                             }
                             o++;
@@ -165,8 +144,7 @@ public partial class propertyGrid : ContentView
                 }
             }
             expander.Content = stack;
-            PGrid.RowDefinitions.Add(new() { Height = GridLength.Star });
-            PGrid.Add(expander, row: p);
+            PGrid.Add(expander,0, p);
             p++;
         }
     }
@@ -177,17 +155,38 @@ public partial class propertyGrid : ContentView
             ItemSource = Enum.GetValues(CurrentProperty.PropertyType),
             SelectedItem = CurrentProperty?.GetValue(CurrentItem) ?? new()
         };
-        cb.SelectedIndexChanged += (_, _) => { try { CurrentProperty?.SetValue(CurrentItem, cb.SelectedItem); } catch (Exception) { } };
+        cb.SelectedIndexChanged += (_, _) => CurrentProperty?.SetValue(CurrentItem, cb.SelectedItem); 
         return cb;
     }
-    public comboBox GetClassEnumCombo(PropertyInfo upperProperty, PropertyInfo LowerProperty)
+    public comboBox GetEnumCombo(PropertyInfo upperProperty, PropertyInfo LowerProperty)
     {
         comboBox cb = new()
         {
             ItemSource = Enum.GetValues(LowerProperty.PropertyType),
             SelectedItem = LowerProperty?.GetValue(upperProperty?.GetValue(CurrentItem)) ?? null
         };
-        cb.SelectedIndexChanged += (_, _) => { LowerProperty?.SetValue(upperProperty?.GetValue(CurrentItem), cb.SelectedItem); };
+        cb.SelectedIndexChanged += (_, _) => LowerProperty?.SetValue(upperProperty?.GetValue(CurrentItem), cb.SelectedItem);
+        return cb;
+    }
+    public comboBox GetEnumCombo(object Value, PropertyInfo CurrentProperty)
+    {
+        comboBox cb = new()
+        {
+            ItemSource = Enum.GetValues(CurrentProperty.PropertyType),
+            SelectedItem = CurrentProperty?.GetValue(Value) ?? new()
+        };
+        cb.SelectedIndexChanged += (_, _) => CurrentProperty?.SetValue(Value, cb.SelectedItem); 
+        return cb;
+
+    }
+    public comboBox GetEnumCombo(object value)
+    {
+        comboBox cb = new()
+        {
+            ItemSource = Enum.GetValues(value.GetType()),
+            SelectedItem = value
+        };
+        cb.SelectedIndexChanged += (_, _) => value = cb.SelectedItem;
         return cb;
     }
     public Entry GetPropertyEntry(PropertyInfo CurrentProperty)
@@ -210,7 +209,7 @@ public partial class propertyGrid : ContentView
         };
         return pentry;
     }
-    public Entry GetClassPropertyEntry(PropertyInfo UpperProperty, PropertyInfo LowerProperty)
+    public Entry GetPropertyEntry(PropertyInfo UpperProperty, PropertyInfo LowerProperty)
     {
         Entry pentry = new();
         try
@@ -229,5 +228,155 @@ public partial class propertyGrid : ContentView
             catch (Exception) { }
         };
         return pentry;
+    }
+    public Entry GetPropertyEntry(object? Value, PropertyInfo CurrentProperty)
+    {
+        Entry pentry = new();
+        try
+        {
+            pentry.Text = CurrentProperty.GetValue(Value)?.ToString();
+        }
+        catch (Exception) { pentry.Text = "Method is not Supported"; }
+        pentry.TextChanged += (_, _) =>
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(pentry.Text)) return;
+                var value = Convert.ChangeType(pentry.Text, CurrentProperty.PropertyType);
+                CurrentProperty.SetValue(Value, value);
+            }
+            catch (Exception) { }
+        };
+        return pentry;
+    }
+    public Expander GetClassExpander(PropertyInfo CurrentProperty)
+    {
+        Label L_intern = new() { Text = CurrentProperty.PropertyType.ToString() + "▽" };
+        Expander E_intern = new() { Header = L_intern };
+        Grid G_stack = [];
+        int o = 0;
+        foreach (var pr in CurrentProperty.PropertyType.GetProperties().OrderBy(z=>z.Name))
+        {
+            
+                if (CurrentProperty.PropertyType.GetCustomAttribute<TypeConverterAttribute>() == null) { L_intern.Text = CurrentProperty.PropertyType.ToString(); break; };
+                Label L_prop = new() { Text = pr.Name };
+                G_stack.Add(L_prop, 0, o);
+                if (pr.PropertyType.IsEnum)
+                {
+
+                    G_stack.Add(GetEnumCombo(CurrentProperty, pr), 1, o);
+                }
+                else if (pr.PropertyType.IsSZArray)
+                {
+                    G_stack.Add(GetArrayExpander(CurrentProperty?.GetValue(CurrentItem), pr), 1, o);
+                }
+                else
+                {
+
+                    G_stack.Add(GetPropertyEntry(CurrentProperty, pr), 1, o);
+
+                }
+                o++;
+            
+  
+        }
+        E_intern.Content = G_stack;
+        return E_intern;
+    }
+    public Expander GetClassExpander(object currentobj)
+    {
+        Label L_intern = new() { Text = currentobj.GetType().ToString() + "▽" };
+        Expander E_intern = new() { Header = L_intern};
+        Grid G_stack = [];
+        int o = 0;
+        foreach (var pr in currentobj.GetType().GetProperties().OrderBy(z=>z.Name))
+        {
+
+            
+            Label L_prop = new() { Text = pr.Name };
+            G_stack.Add(L_prop, 0, o);
+            if (pr.PropertyType.IsEnum)
+            {
+
+                G_stack.Add(GetEnumCombo(currentobj), 1, o);
+            }
+            else if (pr.PropertyType.IsSZArray)
+            {
+                G_stack.Add(GetArrayExpander(currentobj, pr), 1, o);
+            }
+            else
+            {
+
+                G_stack.Add(GetPropertyEntry(currentobj, pr), 1, o);
+
+            }
+            o++;
+
+
+        }
+        E_intern.Content = G_stack;
+        return E_intern;
+    }
+    public Expander GetArrayExpander(PropertyInfo CurrentProperty)
+    {
+        Label L_intern = new() { Text = CurrentProperty.PropertyType.ToString() + "▽" };
+        Expander E_intern = new() { Header = L_intern };
+        Grid A_stack = [];
+        IEnumerable PropertyArray = (IEnumerable?)CurrentProperty?.GetValue(CurrentItem) ?? new List<object>();
+        for (int i =0;i<PropertyArray.Cast<object>().Count();i++)
+        {
+            var PropertyArrayItem = PropertyArray.Cast<object>().ToArray()[i];
+           var PAItemProperties = PropertyArrayItem.GetType().GetProperties().OrderBy(z=>z.Name).ToArray();
+           for (int a =0;a<PAItemProperties.Length;a++)
+            {
+                var PAItemProperty = PAItemProperties[a];
+                Label L_prop = new() { Text = PAItemProperty.Name };
+                A_stack.Add(L_prop, 0, a);
+                if (PAItemProperty.PropertyType.IsEnum)
+                {
+                   A_stack.Add(GetEnumCombo(PropertyArrayItem,PAItemProperty), 1, a);
+                }
+                else if (PAItemProperty.PropertyType.IsClass)
+                {
+                    A_stack.Add(GetClassExpander(PAItemProperty), 1, a);
+                }
+                else
+                {
+                    A_stack.Add(GetPropertyEntry(PropertyArrayItem, PAItemProperty), 1, a);
+                }
+            }
+        }
+        E_intern.Content = A_stack;
+        return E_intern;
+    }
+    public Expander GetArrayExpander(object? Value,PropertyInfo CurrentProperty)
+    {
+        
+        Label L_intern = new() { Text = CurrentProperty.PropertyType.ToString() + "▽" };
+        Expander E_intern = new() { Header = L_intern };
+        if (Value == null) return E_intern;
+        Grid A_stack = [];
+        IEnumerable PropertyArray = (IEnumerable?)CurrentProperty?.GetValue(Value) ?? new List<object>();
+        for (int i = 0; i < PropertyArray.Cast<object>().Count(); i++)
+        {
+            var PropertyArrayItem = PropertyArray.Cast<object>().ToList()[i];
+            
+                Label L_prop = new() { Text = PropertyArrayItem.ToString() };
+                A_stack.Add(L_prop, 0, i);
+                if (PropertyArrayItem.GetType().IsEnum)
+                {
+                    A_stack.Add(GetEnumCombo(PropertyArrayItem), 1, i);
+                }
+                else if (PropertyArrayItem.GetType().IsClass)
+                {
+                    A_stack.Add(GetClassExpander(PropertyArrayItem), 1, i);
+                }
+                else
+                {
+                    A_stack.Add(GetPropertyEntry(PropertyArrayItem, CurrentProperty), 1, i);
+                }
+        }
+        E_intern.Content = A_stack;
+        return E_intern;
     }
 }
